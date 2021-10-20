@@ -1,0 +1,28 @@
+#+TITLE: A test of all element types the parser knows
+
+This is a section before the first headline
+* Level one headline
+<2021-09-27 Mon>
+* TODO [#A] Level one todo headline with priority
+ text in the todo headline
+
+* DONE Level one todo headline that is done :tag4:
+
+** Level two headline with tags :tag1:tag2:
+
+* Source code block
+#+BEGIN_SRC powershell
+Get-ChildItem -Path "."
+#+END_SRC
+* Example block
+#+BEGIN_EXAMPLE
+an Example
+#+END_EXAMPLE
+
+* Planning data headlines
+** Scheduled for next year
+SCHEDULED: <2022-10-01 Sat -2d>
+** Deadline on january 1
+DEADLINE: <2022-01-01 Sat -10d>
+** DONE Closed item
+CLOSED: <2021-10-05 Tue 10:32>
