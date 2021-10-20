@@ -7,7 +7,11 @@ classes\OrgProperty.ps1
 classes\OrgRepeater.ps1
 classes\OrgWarning.ps1
 classes\OrgTimeStamp.ps1
+classes\OrgHeadline.ps1
+private\Add-OrgElement.ps1
+private\ConvertFrom-OrgHeadline.ps1
 private\ConvertFrom-OrgTimeStamp.ps1
+private\Get-OrgElement.ps1
 private\Get-OrgType.ps1
 private\New-OrgElement.ps1
 public\Property\Add-OrgProperty.ps1

@@ -21,6 +21,10 @@ Function New-OrgElement {
     process {
         Write-Debug "Creating new $Type"
         switch ($Type) {
+            headline {
+                $e = [OrgHeadline]::new()
+                continue
+            }
             Default {$e = [OrgElement]::new(); $e.Type = $Type }
         }
     }
