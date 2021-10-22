@@ -7,12 +7,11 @@ enum OrgBaseType {
 }
 
 enum OrgType {
-    unknown                 = 0x000
-    any                     = 0x001
+    unknown                 = [OrgBaseType]::base + 0x0000
 
     # Generic types
-    orgdata                 = 0x002
-    plaintext               = 0x004
+    orgdata                 = [OrgBaseType]::base + 0x0002
+    plaintext               = [OrgBaseType]::base + 0x0004
 
     # 'Greater Elements' are made up of (only) elements
     headline            = [OrgBaseType]::greater + 0x0001
