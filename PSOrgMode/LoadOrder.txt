@@ -18,6 +18,11 @@ private\New-OrgElement.ps1
 private\Add-OrgElement.ps1
 private\Get-OrgElement.ps1
 
+private\RegexPatterns\Build-OrgTimeStampRegex.ps1
+private\RegexPatterns\Build-OrgHeadlineRegex.ps1
+private\RegexPatterns\Build-OrgPlainTextRegex.ps1
+private\Get-OrgModeRegexPattern.ps1
+
 private\ConvertFrom-OrgHeadline.ps1
 private\ConvertFrom-OrgTimeStamp.ps1
 

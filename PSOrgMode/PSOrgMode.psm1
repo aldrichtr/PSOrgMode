@@ -5,14 +5,30 @@ $import_options = @{
     ErrorAction = 'Stop'
 }
 
+Function Resolve-UnLoaded {
+    [CmdletBinding()]
+    param()
+    $custom = Get-Content "$PSScriptRoot\LoadOrder.txt"
+
+    Get-ChildItem @import_options -Recurse | ForEach-Object {
+       $rel = $_.FullName.Replace("$PSScriptRoot\",'')
+       if ($rel -notin $custom) {
+            Write-Warning "$rel is not listed in custom"
+       }
+    }
+
+}
+
 if (Test-Path "$PSScriptRoot\LoadOrder.txt") {
-    try{
+    Write-Host "Using custom load order"
+    Resolve-UnLoaded
+    try {
         Get-Content "$PSScriptRoot\LoadOrder.txt" | ForEach-Object {
             switch -Regex ($_) {
                 '^\s*$' {
                     # blank line, skip
                     continue
-                 }
+                }
                 '^\s*#$' {
                     # Comment line, skip
                     continue
@@ -31,14 +47,15 @@ if (Test-Path "$PSScriptRoot\LoadOrder.txt") {
     } catch {
         Write-Error "Custom load order $_"
     }
-}
-try {
-    foreach ($type in 'enum', 'classes', 'private', 'public') {
-        $import_options.Path = "$PSScriptRoot\$type"
-        Get-ChildItem @import_options | ForEach-Object {
-            . $_.FullName
+} else {
+    try {
+        foreach ($type in 'enum', 'classes', 'private', 'public') {
+            $import_options.Path = "$PSScriptRoot\$type"
+            Get-ChildItem @import_options | ForEach-Object {
+                . $_.FullName
+            }
         }
+    } catch {
+        throw "An error occured during the dot-sourcing of module .ps1 files:`n$_"
     }
-} catch {
-    throw "An error occured during the dot-sourcing of module .ps1 files:`n$_"
 }
