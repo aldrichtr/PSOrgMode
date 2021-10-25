@@ -1,5 +1,10 @@
 
-Describe "Test-OrgProperty function" -Tags 'unit', 'orgproperty', 'function' {
+Describe "Testing public Property function Test-OrgProperty" -Tags @('unit', 'OrgProperty', 'Test' ) {
+    Context "Basic functionality" {
+        It "Should load without error" {
+            {Get-Help Test-OrgProperty -ErrorAction Stop} | Should -Not -Throw
+        }
+    }
     Context "When the given Property exists" {
         BeforeAll {
             $e = New-OrgElement -Type section

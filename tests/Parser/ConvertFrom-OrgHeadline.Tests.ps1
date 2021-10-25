@@ -1,6 +1,11 @@
 
 
-Describe "ConvertFrom-OrgHeadline function" -Tags "unit", "convertfrom" {
+Describe "Testing private Parser function ConvertFrom-OrgHeadline" -Tags @('unit', 'OrgHeadline', 'ConvertFrom' ) {
+    Context "Basic functionality" {
+        It "Should load without error" {
+            {Get-Help ConvertFrom-OrgHeadline -ErrorAction Stop} | Should -Not -Throw
+        }
+    }
     Context "When '<Line>' is given" -Foreach @(
         @{
             Line     = '* This is a simple headline'
