@@ -1,30 +1,32 @@
+# Custom load order for PSOrgMode source files
+
 # Enum Types
-enum\OrgType.ps1
-enum\OrgTimeUnit.ps1
-enum\OrgRepeatType.ps1
-enum\OrgWarningType.ps1
+enum\OrgMode\OrgType.ps1
+enum\OrgMode\OrgTimeUnit.ps1
+enum\OrgMode\OrgRepeatType.ps1
+enum\OrgMode\OrgWarningType.ps1
 
 # Base classes need to be loaded first
-classes\OrgElement.ps1
-classes\OrgProperty.ps1
-classes\OrgRepeater.ps1
-classes\OrgWarning.ps1
-classes\OrgTimeStamp.ps1
-classes\OrgHeadline.ps1
+classes\OrgMode\OrgElement.ps1
+classes\OrgMode\OrgProperty.ps1
+classes\OrgMode\OrgRepeater.ps1
+classes\OrgMode\OrgWarning.ps1
+classes\OrgMode\OrgTimeStamp.ps1
+classes\OrgMode\OrgHeadline.ps1
 
 # private functions loaded next
 private\Get-OrgType.ps1
-private\New-OrgElement.ps1
-private\Add-OrgElement.ps1
-private\Get-OrgElement.ps1
+private\Element\New-OrgElement.ps1
+private\Element\Add-OrgElement.ps1
+private\Element\Get-OrgElement.ps1
 
-private\RegexPatterns\Build-OrgTimeStampRegex.ps1
-private\RegexPatterns\Build-OrgHeadlineRegex.ps1
-private\RegexPatterns\Build-OrgPlainTextRegex.ps1
-private\Get-OrgModeRegexPattern.ps1
+private\Parser\RegexPatterns\Build-OrgTimeStampRegex.ps1
+private\Parser\RegexPatterns\Build-OrgHeadlineRegex.ps1
+private\Parser\RegexPatterns\Build-OrgPlainTextRegex.ps1
+private\Parser\Get-OrgModeRegexPattern.ps1
 
-private\ConvertFrom-OrgHeadline.ps1
-private\ConvertFrom-OrgTimeStamp.ps1
+private\Parser\ConvertFrom-OrgHeadline.ps1
+private\Parser\ConvertFrom-OrgTimeStamp.ps1
 
 # visible functions
 public\Property\Add-OrgProperty.ps1
@@ -34,4 +36,4 @@ public\Property\Test-OrgProperty.ps1
 
 public\Headline\Get-OrgHeadline.ps1
 
-public\ConvertFrom-OrgMode.ps1
+public\Parser\ConvertFrom-OrgMode.ps1
