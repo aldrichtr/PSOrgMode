@@ -18,13 +18,13 @@ private\New-OrgElement.ps1
 private\Add-OrgElement.ps1
 private\Get-OrgElement.ps1
 
-private\RegexPatterns\Build-OrgTimeStampRegex.ps1
-private\RegexPatterns\Build-OrgHeadlineRegex.ps1
-private\RegexPatterns\Build-OrgPlainTextRegex.ps1
-private\Get-OrgModeRegexPattern.ps1
+private\Parser\RegexPatterns\Build-OrgTimeStampRegex.ps1
+private\Parser\RegexPatterns\Build-OrgHeadlineRegex.ps1
+private\Parser\RegexPatterns\Build-OrgPlainTextRegex.ps1
+private\Parser\Get-OrgModeRegexPattern.ps1
 
-private\ConvertFrom-OrgHeadline.ps1
-private\ConvertFrom-OrgTimeStamp.ps1
+private\Parser\ConvertFrom-OrgHeadline.ps1
+private\Parser\ConvertFrom-OrgTimeStamp.ps1
 
 # visible functions
 public\Property\Add-OrgProperty.ps1
@@ -34,4 +34,4 @@ public\Property\Test-OrgProperty.ps1
 
 public\Headline\Get-OrgHeadline.ps1
 
-public\ConvertFrom-OrgMode.ps1
+public\Parser\ConvertFrom-OrgMode.ps1
