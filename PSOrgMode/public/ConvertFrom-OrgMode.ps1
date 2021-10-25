@@ -58,22 +58,17 @@ Function ConvertFrom-OrgMode {
         $Granularity = 'all'
     )
     begin {
-        # patterns for identifying lines in the input that are either org-mode
-        # elements or are important to the context
         # most dont need capture groups because another function handles the
         # parsing.
-        $empty_line = '^\s*$'
 
-        # one or more '*' followed by at least one space, then anything else
-        $headline = '^\*+\s+.*$'
+        $regex = Get-OrgModeRegexPattern
+        $empty_line = $regex.withAnchors($regex.plaintext.blank_line)
 
         $property_single = '^\s*\#\+(\w+):\s+(.*)$'
         $property_drawer_start = '^\s*:PROPERTIES:.*$'
         $property_drawer_property = '^\s*:(?<prop_name>.*):\s+(?<prop_value>.*)?$'
         $property_drawer_end = '^\s*:END:.*$'
 
-        # start with a '<' or '[' and end with a '>' or ']'
-        $timestamp = '^\s*[<\[].*[>\]]\s*$'
         $planning = ('^\s*(?<type>SCHEDULED|DEADLINE|CLOSED):',
         '\s+(?<stamp>[<\[].*[>\]])\s*$') -join ''
 
@@ -100,7 +95,7 @@ Function ConvertFrom-OrgMode {
 
         Write-Verbose "${line_number}: '$InputObject'"
         switch -Regex -CaseSensitive ($InputObject) {
-            $headline {
+            $regex.withAnchors($regex.headline.line) {
                 Write-Verbose "$logging_indent| matches org headline"
                 $h = $InputObject | ConvertFrom-OrgHeadline
                 if ($h.Level -eq 1) {
@@ -155,7 +150,8 @@ Function ConvertFrom-OrgMode {
                 }
                 continue
             }
-            $timestamp {
+            {($_ -cmatch $regex.withAnchors($regex.timestamp.timestamp.pattern)) -or
+             ($_ -cmatch $regex.withAnchors($regex.timestamp.timespan.pattern))}    {
                 Write-Verbose "$logging_indent| matched Timestamp information"
                 $current_headline.Timestamp = $InputObject | ConvertFrom-OrgTimeStamp
                 continue

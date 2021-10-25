@@ -52,74 +52,10 @@ Function ConvertFrom-OrgTimeStamp {
         $TimeStamp
     )
     begin {
-        # Build up sophisticated patterns by creating basic building blocks
-        # ---
-        $start  = '[<|\[]'  # an opening tag of a timestamp
-        $end    = '[>|\]]'    # a closing tag of a timestamp
-        $year   = '\d{4}'
-        $month  = '\d{2}'
-        $day    = '\d{2}'
-        $wday   = '\w{3}'
-        $time   = '\d{1,2}:\d{2}'
-        $repeat = '[.+]{1,2}\d+[ymwdh]'
-        $warn   = '[-]{1,2}\d+[ymwdh]'
-
-        # Join blocks together to create components
-        $date = ($year, '-', $month, '-', $day, '\s+', $wday) -join ''
-        $time_span = ('(', $time, ')?(-', $time, ')?') -join ''
-        $time_stamp = (
-            $date,
-            '\s*',$time_span,
-            '\s*(', $repeat, ')?',
-            '\s*(', $warn, ')?'
-        ) -join ''
-
-        # Join components together to create the patterns for
-        # orgmode timestamps
-        $any_time_stamp = ($start, $time_stamp, $end) -join ''
-        $any_time_span = ($any_time_stamp, '--', $any_time_stamp) -join ''
-
-        # Utilities for Breaking matches down into it's components
-        # get the date, time and repeat from a timestamp
-        $timestamp_components = (
-            '(?<start>', $start, ')',
-            '\s*(?<date>', $date, ')',
-            '\s*(?<Stime>', $time, ')?',
-            '\s*-?(?<Etime>', $time, ')?',
-            '\s*(?<repeat>', $repeat, ')?',
-            '\s*(?<warn>', $warn, ')?',
-            '\s*(?<end>', $end, ')'
-        ) -join ''
-
-        # get the two stamps out of a span
-        $time_span_components = (
-            '(?<span_start>', $any_time_stamp, ')',
-            '--',
-            '(?<span_end>', $any_time_stamp, ')'
-        ) -join ''
-
-        # Finally, all the pieces are made, now we can make patterns for finding
-        # things
-
-        $any_time_regex = ('^\s*', $any_time_stamp, '\s*$') -join ''
-        $any_span_regex = ('^\s*', $any_time_span,  '\s*$') -join ''
-
-        Write-Debug "timestamp regex: $any_time_regex"
-        Write-Debug "timespan regex: $any_span_regex"
+        $regex = Get-OrgModeRegexPattern -Type 'timestamp'
         function convertStamp([string]$t) {
-            $null = $t -match $timestamp_components
+            $null = $t -match $regex.timestamp.components
             if ($Matches.Count -gt 0) {
-                Write-Debug ("convertStamp: parsing $t`n `
-                $timestamp_components`n `
-                Found:`n `
-                start: $($Matches.start) `n `
-                end:   $($Matches.end) `n `
-                date:  $($Matches.date) `n `
-                Stime:  $($Matches.Stime) `n `
-                Etime:  $($Matches.Etime) `n `
-                repeat:  $($Matches.repeat) `n `
-                warn:  $($Matches.warn) `n ")
-
                 if (($Matches.start -eq '<') -and
                 ($Matches.end -eq '>')) {
                     $active = $true
@@ -138,7 +74,6 @@ Function ConvertFrom-OrgTimeStamp {
                 $t_end = Get-Date "$t_date $etime"
                 $t_repeat = $Matches.repeat
                 $t_warn = $Matches.warn
-                Write-Debug "convertTimeStamp Start '$t_start' End '$t_end'"
                 # Make an object and return it
                 $ts = [OrgTimeStamp]::new()
                     $ts.Active = $active
@@ -156,7 +91,7 @@ Function ConvertFrom-OrgTimeStamp {
             # them, convert them to an object and then merge the
             # results into a single, new object and return it.
 
-            $null = $t -match $time_span_components
+            $null = $t -match $regex.timespan.components
             if ($Matches.Count -gt 0) {
                 $s = convertStamp($Matches.span_start)
                 $e = convertStamp($Matches.span_end)
@@ -203,12 +138,12 @@ Function ConvertFrom-OrgTimeStamp {
         # defined above.
         Write-Debug "looking for a timestamp in $TimeStamp"
         switch -Regex ($TimeStamp) {
-            $any_time_regex {
+            $regex.withAnchors($regex.timestamp.pattern) {
                 Write-Debug "  matches an org timestamp"
                 $ts = convertStamp($TimeStamp)
                 continue
             }
-            $any_span_regex {
+            $regex.withAnchors($regex.timespan.pattern) {
                 Write-Debug "  matches an org timespan"
                 $ts = convertSpan($TimeStamp)
                 continue

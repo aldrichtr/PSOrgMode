@@ -15,7 +15,12 @@ Function ConvertFrom-OrgHeadline {
     )
     begin {
         Write-Debug "In $($PSCmdlet.MyInvocation.MyCommand.Name)`n$('-' * 78)"
-     }
+        $regex = Get-OrgModeRegexPattern -Type 'headline'
+        Write-Debug "state is $($regex.state)"
+        Write-Debug "priority is $($regex.priority)"
+        Write-Debug "track is $($regex.track)"
+        Write-Debug "tags is $($regex.tags)"
+    }
     process {
         $components = [System.Collections.ArrayList]($InputObject.Split(' '))
         # confirm that the first component is only "stars"
@@ -27,15 +32,15 @@ Function ConvertFrom-OrgHeadline {
         }
         # Todo state is positional, if it matches somewhere else in the
         # headline, its not a Todo state
-        if ($components[0] -cmatch '[A-Z]{4,}') {
+        if ($components[0] -cmatch $regex.state) {
             $state = $components[0]
             $components.Remove($state)
         }
 
         switch -Regex ($components) {
-            '\[\#\w\]' { $priority = $_ }
-            '\[\d+/\d+\]' { $track = $_ }
-            '\:(\w+\:)+' { $tags = $_ }
+            $regex.priority { $priority = $_ }
+            $regex.track { $track = $_ }
+            $regex.tags { $tags = $_ }
         }
         # everything else is part of the title, so remove
         # the parts we already matched
