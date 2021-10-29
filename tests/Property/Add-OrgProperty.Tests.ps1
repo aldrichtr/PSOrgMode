@@ -1,5 +1,10 @@
 
-Describe "Add-OrgProperty function" {
+Describe "Testing public Property function Add-OrgProperty" -Tags @('unit', 'OrgProperty', 'Add' ) {
+    Context "Basic functionality" {
+        It "Should load without error" {
+            {Get-Help Add-OrgElement -ErrorAction Stop} | Should -Not -Throw
+        }
+    }
     Context "When the name <Name> and value <Value> are given" -Foreach @(
         @{
             Name = 'CATEGORY'

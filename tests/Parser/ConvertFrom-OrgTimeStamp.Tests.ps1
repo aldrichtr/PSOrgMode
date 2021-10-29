@@ -1,6 +1,11 @@
 
 InModuleScope -ModuleName PSOrgMode -ScriptBlock {
-    Describe "ConvertFrom-OrgTimeStamp function" -Tags @("unit", "convertfrom", "OrgTimeStamp") {
+    Describe "Testing private Parser function ConvertFrom-OrgTimeStamp" -Tags @('unit', 'OrgTimeStamp', 'ConvertFrom' ) {
+        Context "Basic functionality" {
+            It "Should load without error" {
+                {Get-Help ConvertFrom-OrgTimeStamp -ErrorAction Stop} | Should -Not -Throw
+            }
+        }
         Context "When a single <Type> org timestamp string is given" -Foreach @(
             @{
                 Type    = "Date only - Active"

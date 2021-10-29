@@ -11,7 +11,7 @@ Function Resolve-UnLoaded {
     $custom = Get-Content "$PSScriptRoot\LoadOrder.txt"
 
     Get-ChildItem @import_options -Recurse | ForEach-Object {
-       $rel = $_.FullName.Replace("$PSScriptRoot\",'')
+       $rel = $_.FullName -replace [regex]::Escape("$PSScriptRoot\") , ''
        if ($rel -notin $custom) {
             Write-Warning "$rel is not listed in custom"
        }

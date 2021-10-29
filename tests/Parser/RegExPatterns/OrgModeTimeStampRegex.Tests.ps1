@@ -1,6 +1,6 @@
 
 
-Describe "Build-OrgModeTimeStampRegex function" {
+Describe "Build-OrgModeTimeStampRegex function" -Tags @('unit', 'Build', 'OrgModeTimeStampRegex'){
     Context "When the function is invoked" {
         BeforeAll {
             $t = Build-OrgTimeStampRegex
