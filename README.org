@@ -1,50 +1,60 @@
-#+TITLE: PSOrgMode - A module for reading and writing org-mode format
+#+TITLE: PSOrgMode - A module for implementing Emacs` org-mode in PowerShell
+#+AUTHOR: Timothy Aldrich
+#+EMAIL: timothy.r.aldrich@gmail.com
+#+FILETAGS: org powershell
 
-* ConvertFrom-OrgMode
-This is the main entry into the module functions.  It converts org-mode
-formatted text into PowerShell objects.
-`ConvertFrom-OrgMode` parses text input, identifying elements and building an object
-hierarchy that represents the /document/.  Some "important" elements have their own
-Convert* functions, such as *headline* and *timestamp*.
+| Status: | Pre-release |
+| Location: | [[https://github.com/aldrichtr/PSOrgMode][github]]
+| Version: | 0.0.1 |
 
-* OrgMode components
-As much as possible, `ConvertFrom-OrgMode` follows the org-element.el parser.
-A fundemental concept of the original org-mode parser is that all components
-are grouped into three categories:
-- Elements :: An Element has a Type, Properties, and Content.
-- Greater-Elements :: While still technically the same, these Elements only
-contain other elements, and are treated 'special' by the org-element-parser.
-- Objects :: Components that effect their content, but do not contain other
-components.  For example, marking text as bold.
+* Welcome to the PSOrgMode project
 
-* OrgElement
-ConvertFrom-OrgMode and many other functions use an OrgElement object.  Again,
-trying to follow the concepts in the org-element parser, an OrgElement has:
-- Type : an OrgType enum that identifies the type of Element, such as headline,
-section, src_block, etc.
-- Properties :: A collection of OrgProperty objects.  There are several Cmdlets
-for working with OrgProperty objects.
-- Children :: A collection of OrgElements that are part of this one.  For example,
-a level 1 Headline could have several  level 2 Headlines below it, as well as sections,
-src_blocks, etc.
-- Parent :: A reference to the OrgElement "up" the tree.
-* OrgProperty
-Because the Property system is so powerful, they have their own class.  They
-are an intrinsic part of OrgElement, so every other Element type has them as
-well.
-**  Managing Properties
-- New-OrgProperty
-- Test-OrgProperty
-* OrgHeadline
-Almost anything useful in an orgmode file has to do with headlines.  An OrgHeadline
-inherets from OrgElement, and adds additional fields, such as Level, State,
-Priority, Title, and Tags.
-Because there are so many fields, and so many combinations of optional components
-of a headline, `ConvertFrom-OrgHeadline` is a specialized parser just for them.
-* OrgTimestamp
-So much information goes into a timestamp in orgmode.  Besides a Date, it can
-be Active or Inactive, have time information, it can be a timespan (meaning A
-start date/time and an end date/time), Planning information (Scheduled, Deadline,
-or Closed), and depending on the type, can have either Delay, Warning, or Repeat
-interval information.
-`ConvertFrom-OrgTimeStamp` handles all of these fields and returns an OrgTimeStamp
+PSOrgMode is a PowerShell module for working with [[https://orgmode.org][org-mode]]
+files.
+
+* Installation
+  Currently, this module is in pre-release status, so it is not published to the
+  PSGallery.  If you'd like to install the module before the first release:
+  #+BEGIN_SRC powershell
+  git clone https://github.com/aldrichtr/PSOrgMode.git
+  cd PSOrgMode
+  Import-Module .\PSOrgMode\PSOrgMode.psd1
+  #+END_SRC
+
+* Usage
+  Convert org-mode text to an object, similar to JSON, CSV etc.
+  #+BEGIN_SRC powershell
+  $o = Get-Content .\path\to\file.org | ConvertFrom-OrgMode
+  $o | Get-OrgHeadline | ft
+  #+END_SRC
+
+  #+BEGIN_EXAMPLE
+  Level State Priority Title                                 Tracking Timestamp    Scheduled Deadline Closed Commented
+  ----- ----- -------- -----                                 -------- ---------    --------- -------- ------ ---------
+      1 TODO  [#A]     First level one headline
+  #+END_EXAMPLE
+
+* Why ?
+  I /love/ emacs.  I've used it , and org-mode as my daily work environment for
+  ... I don't know how long, but it's decades.
+
+  New job, new tools, and I found myself without emacs on my workstation.
+
+  I didn't want to like PowerShell, but after using it for a while now, I have to
+  say, I really do.
+
+  So, I have years of notes, old projects, and reference material in a folder of
+  org files, and I want a way to use them, so... PSOrgMode.
+
+* Project Roadmap
+  I'm just getting started on the project, and I will move this part into the
+  issue/project section, but as a high-level outline of what I want to do with
+  this project:
+  - Parse org-mode text into an object hierarchy (Parser)
+  - Write objects to org-mode format (Interpreter)
+  - Work with TODO items, timestamps and planning (Agenda)
+
+  Some other Orgmode functionality that is interesting and I may add in future
+  versions:
+  - Work with source code blocks and babel calls (Tangle)
+  - Convert org-mode text to other formats (Export)
