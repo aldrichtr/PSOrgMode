@@ -29,7 +29,7 @@ if (Test-Path "$PSScriptRoot\LoadOrder.txt") {
                     # blank line, skip
                     continue
                 }
-                '^\s*#$' {
+                '^\s*#.*$' {
                     # Comment line, skip
                     continue
                 }

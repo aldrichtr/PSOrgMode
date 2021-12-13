@@ -1,7 +1,7 @@
 
 
 BeforeDiscovery {
-    $sourceFiles = Get-ChildItem $Source.Path -Filter "*.ps1" -Recurse | Get-SourceComponent
+    $sourceFiles = Get-ChildItem $Source.Path -Filter "*.ps1" -Recurse | Get-SourceItem
     # Gather rules during discovery, so we can use the 'foreach' below
     $analyzerRules = Get-ScriptAnalyzerRule
 }

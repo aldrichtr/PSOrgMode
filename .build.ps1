@@ -13,4 +13,7 @@ param(
     $ModuleName = 'PSOrgMode'
 )
 
+
 . ./build/BuildTool.ps1
+
+task Test analyzer_test_source
