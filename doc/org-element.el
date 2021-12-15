@@ -146,83 +146,83 @@ specially in `org-element--object-lex'.")
 (defun org-element--set-regexps ()
   "Build variable syntax regexps."
   (setq org-element-paragraph-separate
-	(concat "^\\(?:"
-		;; Headlines, inlinetasks.
-		"\\*+ " "\\|"
-		;; Footnote definitions.
-		"\\[fn:[-_[:word:]]+\\]" "\\|"
-		;; Diary sexps.
-		"%%(" "\\|"
-		"[ \t]*\\(?:"
-		;; Empty lines.
-		"$" "\\|"
-		;; Tables (any type).
-		"|" "\\|"
-		"\\+\\(?:-+\\+\\)+[ \t]*$" "\\|"
-		;; Comments, keyword-like or block-like constructs.
-		;; Blocks and keywords with dual values need to be
-		;; double-checked.
-		"#\\(?: \\|$\\|\\+\\(?:"
-		"BEGIN_\\S-+" "\\|"
-		"\\S-+\\(?:\\[.*\\]\\)?:[ \t]*\\)\\)"
-		"\\|"
-		;; Drawers (any type) and fixed-width areas.  Drawers
-		;; need to be double-checked.
-		":\\(?: \\|$\\|[-_[:word:]]+:[ \t]*$\\)" "\\|"
-		;; Horizontal rules.
-		"-\\{5,\\}[ \t]*$" "\\|"
-		;; LaTeX environments.
-		"\\\\begin{\\([A-Za-z0-9*]+\\)}" "\\|"
-		;; Clock lines.
-		"CLOCK:" "\\|"
-		;; Lists.
-		(let ((term (pcase org-plain-list-ordered-item-terminator
-			      (?\) ")") (?. "\\.") (_ "[.)]")))
-		      (alpha (and org-list-allow-alphabetical "\\|[A-Za-z]")))
-		  (concat "\\(?:[-+*]\\|\\(?:[0-9]+" alpha "\\)" term "\\)"
-			  "\\(?:[ \t]\\|$\\)"))
-		"\\)\\)")
-	org-element--object-regexp
-	(mapconcat #'identity
-		   (let ((link-types (regexp-opt (org-link-types))))
-		     (list
-		      ;; Sub/superscript.
-		      "\\(?:[_^][-{(*+.,[:alnum:]]\\)"
-		      ;; Bold, code, italic, strike-through, underline
-		      ;; and verbatim.
-		      (concat "[*~=+_/]"
-			      (format "[^%s]"
-				      (nth 2 org-emphasis-regexp-components)))
-		      ;; Plain links.
-		      (concat "\\<" link-types ":")
-		      ;; Objects starting with "[": citations,
-		      ;; footnote reference, statistics cookie,
-		      ;; timestamp (inactive) and regular link.
-		      (format "\\[\\(?:%s\\)"
-			      (mapconcat
-			       #'identity
-			       (list "cite[:/]"
-				     "fn:"
-				     "\\(?:[0-9]\\|\\(?:%\\|/[0-9]*\\)\\]\\)"
-				     "\\[")
-			       "\\|"))
-		      ;; Objects starting with "@": export snippets.
-		      "@@"
-		      ;; Objects starting with "{": macro.
-		      "{{{"
-		      ;; Objects starting with "<" : timestamp
-		      ;; (active, diary), target, radio target and
-		      ;; angular links.
-		      (concat "<\\(?:%%\\|<\\|[0-9]\\|" link-types "\\)")
-		      ;; Objects starting with "$": latex fragment.
-		      "\\$"
-		      ;; Objects starting with "\": line break,
-		      ;; entity, latex fragment.
-		      "\\\\\\(?:[a-zA-Z[(]\\|\\\\[ \t]*$\\|_ +\\)"
-		      ;; Objects starting with raw text: inline Babel
-		      ;; source block, inline Babel call.
-		      "\\(?:call\\|src\\)_"))
-		   "\\|")))
+    (concat "^\\(?:"
+        ;; Headlines, inlinetasks.
+        "\\*+ " "\\|"
+        ;; Footnote definitions.
+        "\\[fn:[-_[:word:]]+\\]" "\\|"
+        ;; Diary sexps.
+        "%%(" "\\|"
+        "[ \t]*\\(?:"
+        ;; Empty lines.
+        "$" "\\|"
+        ;; Tables (any type).
+        "|" "\\|"
+        "\\+\\(?:-+\\+\\)+[ \t]*$" "\\|"
+        ;; Comments, keyword-like or block-like constructs.
+        ;; Blocks and keywords with dual values need to be
+        ;; double-checked.
+        "#\\(?: \\|$\\|\\+\\(?:"
+        "BEGIN_\\S-+" "\\|"
+        "\\S-+\\(?:\\[.*\\]\\)?:[ \t]*\\)\\)"
+        "\\|"
+        ;; Drawers (any type) and fixed-width areas.  Drawers
+        ;; need to be double-checked.
+        ":\\(?: \\|$\\|[-_[:word:]]+:[ \t]*$\\)" "\\|"
+        ;; Horizontal rules.
+        "-\\{5,\\}[ \t]*$" "\\|"
+        ;; LaTeX environments.
+        "\\\\begin{\\([A-Za-z0-9*]+\\)}" "\\|"
+        ;; Clock lines.
+        "CLOCK:" "\\|"
+        ;; Lists.
+        (let ((term (pcase org-plain-list-ordered-item-terminator
+                  (?\) ")") (?. "\\.") (_ "[.)]")))
+              (alpha (and org-list-allow-alphabetical "\\|[A-Za-z]")))
+          (concat "\\(?:[-+*]\\|\\(?:[0-9]+" alpha "\\)" term "\\)"
+              "\\(?:[ \t]\\|$\\)"))
+        "\\)\\)")
+    org-element--object-regexp
+    (mapconcat #'identity
+           (let ((link-types (regexp-opt (org-link-types))))
+             (list
+              ;; Sub/superscript.
+              "\\(?:[_^][-{(*+.,[:alnum:]]\\)"
+              ;; Bold, code, italic, strike-through, underline
+              ;; and verbatim.
+              (concat "[*~=+_/]"
+                  (format "[^%s]"
+                      (nth 2 org-emphasis-regexp-components)))
+              ;; Plain links.
+              (concat "\\<" link-types ":")
+              ;; Objects starting with "[": citations,
+              ;; footnote reference, statistics cookie,
+              ;; timestamp (inactive) and regular link.
+              (format "\\[\\(?:%s\\)"
+                  (mapconcat
+                   #'identity
+                   (list "cite[:/]"
+                     "fn:"
+                     "\\(?:[0-9]\\|\\(?:%\\|/[0-9]*\\)\\]\\)"
+                     "\\[")
+                   "\\|"))
+              ;; Objects starting with "@": export snippets.
+              "@@"
+              ;; Objects starting with "{": macro.
+              "{{{"
+              ;; Objects starting with "<" : timestamp
+              ;; (active, diary), target, radio target and
+              ;; angular links.
+              (concat "<\\(?:%%\\|<\\|[0-9]\\|" link-types "\\)")
+              ;; Objects starting with "$": latex fragment.
+              "\\$"
+              ;; Objects starting with "\": line break,
+              ;; entity, latex fragment.
+              "\\\\\\(?:[a-zA-Z[(]\\|\\\\[ \t]*$\\|_ +\\)"
+              ;; Objects starting with raw text: inline Babel
+              ;; source block, inline Babel call.
+              "\\(?:call\\|src\\)_"))
+           "\\|")))
 
 (org-element--set-regexps)
 
@@ -235,29 +235,29 @@ specially in `org-element--object-lex'.")
 
 (defconst org-element-all-elements
   '(babel-call center-block clock comment comment-block diary-sexp drawer
-	       dynamic-block example-block export-block fixed-width
-	       footnote-definition headline horizontal-rule inlinetask item
-	       keyword latex-environment node-property paragraph plain-list
-	       planning property-drawer quote-block section
-	       special-block src-block table table-row verse-block)
+           dynamic-block example-block export-block fixed-width
+           footnote-definition headline horizontal-rule inlinetask item
+           keyword latex-environment node-property paragraph plain-list
+           planning property-drawer quote-block section
+           special-block src-block table table-row verse-block)
   "Complete list of element types.")
 
 (defconst org-element-greater-elements
   '(center-block drawer dynamic-block footnote-definition headline inlinetask
-		 item plain-list property-drawer quote-block section
-		 special-block table)
+         item plain-list property-drawer quote-block section
+         special-block table)
   "List of recursive element types aka Greater Elements.")
 
 (defconst org-element-all-objects
   '(bold citation citation-reference code entity export-snippet
-	 footnote-reference inline-babel-call inline-src-block italic line-break
-	 latex-fragment link macro radio-target statistics-cookie strike-through
-	 subscript superscript table-cell target timestamp underline verbatim)
+     footnote-reference inline-babel-call inline-src-block italic line-break
+     latex-fragment link macro radio-target statistics-cookie strike-through
+     subscript superscript table-cell target timestamp underline verbatim)
   "Complete list of object types.")
 
 (defconst org-element-recursive-objects
   '(bold citation footnote-reference italic link subscript radio-target
-	 strike-through superscript table-cell underline)
+     strike-through superscript table-cell underline)
   "List of recursive object types.")
 
 (defconst org-element-object-containers
@@ -302,7 +302,7 @@ This list is checked after translations have been applied.  See
 
 (defconst org-element--parsed-properties-alist
   (mapcar (lambda (k) (cons k (intern (concat ":" (downcase k)))))
-	  org-element-parsed-keywords)
+      org-element-parsed-keywords)
   "Alist of parsed keywords and associated properties.
 This is generated from `org-element-parsed-keywords', which
 see.")
@@ -321,20 +321,20 @@ This list is checked after translations have been applied.  See
 
 (defconst org-element--affiliated-re
   (format "[ \t]*#\\+\\(?:%s\\):[ \t]*"
-	  (concat
-	   ;; Dual affiliated keywords.
-	   (format "\\(?1:%s\\)\\(?:\\[\\(.*\\)\\]\\)?"
-		   (regexp-opt org-element-dual-keywords))
-	   "\\|"
-	   ;; Regular affiliated keywords.
-	   (format "\\(?1:%s\\)"
-		   (regexp-opt
-		    (cl-remove-if
-		     (lambda (k) (member k org-element-dual-keywords))
-		     org-element-affiliated-keywords)))
-	   "\\|"
-	   ;; Export attributes.
-	   "\\(?1:ATTR_[-_A-Za-z0-9]+\\)"))
+      (concat
+       ;; Dual affiliated keywords.
+       (format "\\(?1:%s\\)\\(?:\\[\\(.*\\)\\]\\)?"
+           (regexp-opt org-element-dual-keywords))
+       "\\|"
+       ;; Regular affiliated keywords.
+       (format "\\(?1:%s\\)"
+           (regexp-opt
+            (cl-remove-if
+             (lambda (k) (member k org-element-dual-keywords))
+             org-element-affiliated-keywords)))
+       "\\|"
+       ;; Export attributes.
+       "\\(?1:ATTR_[-_A-Za-z0-9]+\\)"))
   "Regexp matching any affiliated keyword.
 
 Keyword name is put in match group 1.  Moreover, if keyword
@@ -345,10 +345,10 @@ Don't modify it, set `org-element-affiliated-keywords' instead.")
 
 (defconst org-element-object-restrictions
   (let* ((minimal-set '(bold code entity italic latex-fragment strike-through
-			     subscript superscript underline verbatim))
-	 (standard-set
-	  (remq 'citation-reference (remq 'table-cell org-element-all-objects)))
-	 (standard-set-no-line-break (remq 'line-break standard-set)))
+                 subscript superscript underline verbatim))
+     (standard-set
+      (remq 'citation-reference (remq 'table-cell org-element-all-objects)))
+     (standard-set-no-line-break (remq 'line-break standard-set)))
     `((bold ,@standard-set)
       (citation citation-reference)
       (citation-reference ,@minimal-set)
@@ -361,7 +361,7 @@ Don't modify it, set `org-element-affiliated-keywords' instead.")
       ;; Ignore all links in a link description.  Also ignore
       ;; radio-targets and line breaks.
       (link export-snippet inline-babel-call inline-src-block macro
-	    statistics-cookie ,@minimal-set)
+        statistics-cookie ,@minimal-set)
       (paragraph ,@standard-set)
       ;; Remove any variable object from radio target as it would
       ;; prevent it from being properly recognized.
@@ -429,17 +429,17 @@ contents between brackets, as a string, or nil.  Also move point
 past the brackets."
   (when (eq char (char-after))
     (let ((syntax-table (pcase char
-			  (?\{ org-element--pair-curly-table)
-			  (?\[ org-element--pair-square-table)
-			  (?\( org-element--pair-round-table)
-			  (_ nil)))
-	  (pos (point)))
+              (?\{ org-element--pair-curly-table)
+              (?\[ org-element--pair-square-table)
+              (?\( org-element--pair-round-table)
+              (_ nil)))
+      (pos (point)))
       (when syntax-table
-	(with-syntax-table syntax-table
-	  (let ((end (ignore-errors (scan-lists pos 1 0))))
-	    (when end
-	      (goto-char end)
-	      (buffer-substring-no-properties (1+ pos) (1- end)))))))))
+    (with-syntax-table syntax-table
+      (let ((end (ignore-errors (scan-lists pos 1 0))))
+        (when end
+          (goto-char end)
+          (buffer-substring-no-properties (1+ pos) (1- end)))))))))
 
 
 ;;; Accessors and Setters
@@ -481,15 +481,15 @@ It can also return the following special value:
 (defsubst org-element-contents (element)
   "Extract contents from an ELEMENT."
   (cond ((not (consp element)) nil)
-	((symbolp (car element)) (nthcdr 2 element))
-	(t element)))
+    ((symbolp (car element)) (nthcdr 2 element))
+    (t element)))
 
 (defsubst org-element-restriction (element)
   "Return restriction associated to ELEMENT.
 ELEMENT can be an element, an object or a symbol representing an
 element or object type."
   (cdr (assq (if (symbolp element) element (org-element-type element))
-	     org-element-object-restrictions)))
+         org-element-object-restrictions)))
 
 (defsubst org-element-put-property (element property value)
   "In ELEMENT set PROPERTY to VALUE.
@@ -502,20 +502,20 @@ Return modified element."
   "Set ELEMENT's contents to CONTENTS.
 Return ELEMENT."
   (cond ((null element) contents)
-	((not (symbolp (car element))) contents)
-	((cdr element) (setcdr (cdr element) contents) element)
-	(t (nconc element contents))))
+    ((not (symbolp (car element))) contents)
+    ((cdr element) (setcdr (cdr element) contents) element)
+    (t (nconc element contents))))
 
 (defun org-element-secondary-p (object)
   "Non-nil when OBJECT directly belongs to a secondary string.
 Return value is the property name, as a keyword, or nil."
   (let* ((parent (org-element-property :parent object))
-	 (properties (cdr (assq (org-element-type parent)
-				org-element-secondary-value-alist))))
+     (properties (cdr (assq (org-element-type parent)
+                org-element-secondary-value-alist))))
     (catch 'exit
       (dolist (p properties)
-	(and (memq object (org-element-property p parent))
-	     (throw 'exit p))))))
+    (and (memq object (org-element-property p parent))
+         (throw 'exit p))))))
 
 (defsubst org-element-class (datum &optional parent)
   "Return class for ELEMENT, as a symbol.
@@ -523,7 +523,7 @@ Class is either `element' or `object'.  Optional argument PARENT
 is the element or object containing DATUM.  It defaults to the
 value of DATUM `:parent' property."
   (let ((type (org-element-type datum))
-	(parent (or parent (org-element-property :parent datum))))
+    (parent (or parent (org-element-property :parent datum))))
     (cond
      ;; Trivial cases.
      ((memq type org-element-all-objects) 'object)
@@ -538,10 +538,10 @@ value of DATUM `:parent' property."
      ((not parent) 'element)
      (t
       (let ((parent-type (org-element-type parent)))
-	(cond ((not parent-type) 'object)
-	      ((memq parent-type org-element-object-containers) 'object)
-	      ((org-element-secondary-p datum) 'object)
-	      (t 'element)))))))
+    (cond ((not parent-type) 'object)
+          ((memq parent-type org-element-object-containers) 'object)
+          ((org-element-secondary-p datum) 'object)
+          (t 'element)))))))
 
 (defsubst org-element-adopt-elements (parent &rest children)
   "Append elements to the contents of another element.
@@ -560,8 +560,8 @@ Return parent element."
     ;; Add CHILDREN at the end of PARENT contents.
     (when parent
       (apply #'org-element-set-contents
-	     parent
-	     (nconc (org-element-contents parent) children)))
+         parent
+         (nconc (org-element-contents parent) children)))
     ;; Return modified PARENT element.
     (or parent children)))
 
@@ -570,14 +570,14 @@ Return parent element."
 Remove element from the parse tree by side-effect, and return it
 with its `:parent' property stripped out."
   (let ((parent (org-element-property :parent element))
-	(secondary (org-element-secondary-p element)))
+    (secondary (org-element-secondary-p element)))
     (if secondary
         (org-element-put-property
-	 parent secondary
-	 (delq element (org-element-property secondary parent)))
+     parent secondary
+     (delq element (org-element-property secondary parent)))
       (apply #'org-element-set-contents
-	     parent
-	     (delq element (org-element-contents parent))))
+         parent
+         (delq element (org-element-contents parent))))
     ;; Return ELEMENT with its :parent removed.
     (org-element-put-property element :parent nil)))
 
@@ -586,24 +586,24 @@ with its `:parent' property stripped out."
 LOCATION is an element, object or string within the parse tree.
 Parse tree is modified by side effect."
   (let* ((parent (org-element-property :parent location))
-	 (property (org-element-secondary-p location))
-	 (siblings (if property (org-element-property property parent)
-		     (org-element-contents parent)))
-	 ;; Special case: LOCATION is the first element of an
-	 ;; independent secondary string (e.g. :title property).  Add
-	 ;; ELEMENT in-place.
-	 (specialp (and (not property)
-			(eq siblings parent)
-			(eq (car parent) location))))
+     (property (org-element-secondary-p location))
+     (siblings (if property (org-element-property property parent)
+             (org-element-contents parent)))
+     ;; Special case: LOCATION is the first element of an
+     ;; independent secondary string (e.g. :title property).  Add
+     ;; ELEMENT in-place.
+     (specialp (and (not property)
+            (eq siblings parent)
+            (eq (car parent) location))))
     ;; Install ELEMENT at the appropriate LOCATION within SIBLINGS.
     (cond (specialp)
-	  ((or (null siblings) (eq (car siblings) location))
-	   (push element siblings))
-	  ((null location) (nconc siblings (list element)))
-	  (t
-	   (let ((index (cl-position location siblings)))
-	     (unless index (error "No location found to insert element"))
-	     (push element (cdr (nthcdr (1- index) siblings))))))
+      ((or (null siblings) (eq (car siblings) location))
+       (push element siblings))
+      ((null location) (nconc siblings (list element)))
+      (t
+       (let ((index (cl-position location siblings)))
+         (unless index (error "No location found to insert element"))
+         (push element (cdr (nthcdr (1- index) siblings))))))
     ;; Store SIBLINGS at appropriate place in parse tree.
     (cond
      (specialp (setcdr parent (copy-sequence parent)) (setcar parent element))
@@ -618,11 +618,11 @@ The function takes care of setting `:parent' property for NEW."
   ;; Ensure OLD and NEW have the same parent.
   (org-element-put-property new :parent (org-element-property :parent old))
   (if (or (memq (org-element-type old) '(plain-text nil))
-	  (memq (org-element-type new) '(plain-text nil)))
+      (memq (org-element-type new) '(plain-text nil)))
       ;; We cannot replace OLD with NEW since one of them is not an
       ;; object or element.  We take the long path.
       (progn (org-element-insert-before new old)
-	     (org-element-extract-element old))
+         (org-element-extract-element old))
     ;; Since OLD is going to be changed into NEW by side-effect, first
     ;; make sure that every element or object within NEW has OLD as
     ;; parent.
@@ -649,11 +649,11 @@ is cleared and contents are removed in the process."
   (when datum
     (let ((type (org-element-type datum)))
       (pcase type
-	(`org-data (list 'org-data nil))
-	(`plain-text (substring-no-properties datum))
-	(`nil (copy-sequence datum))
-	(_
-	 (list type (plist-put (copy-sequence (nth 1 datum)) :parent nil)))))))
+    (`org-data (list 'org-data nil))
+    (`plain-text (substring-no-properties datum))
+    (`nil (copy-sequence datum))
+    (_
+     (list type (plist-put (copy-sequence (nth 1 datum)) :parent nil)))))))
 
 
 
@@ -708,32 +708,32 @@ containing `:begin', `:end', `:contents-begin', `:contents-end',
 Assume point is at the beginning of the block."
   (let ((case-fold-search t))
     (if (not (save-excursion
-	       (re-search-forward "^[ \t]*#\\+END_CENTER[ \t]*$" limit t)))
-	;; Incomplete block: parse it as a paragraph.
-	(org-element-paragraph-parser limit affiliated)
+           (re-search-forward "^[ \t]*#\\+END_CENTER[ \t]*$" limit t)))
+    ;; Incomplete block: parse it as a paragraph.
+    (org-element-paragraph-parser limit affiliated)
       (let ((block-end-line (match-beginning 0)))
-	(let* ((begin (car affiliated))
-	       (post-affiliated (point))
-	       ;; Empty blocks have no contents.
-	       (contents-begin (progn (forward-line)
-				      (and (< (point) block-end-line)
-					   (point))))
-	       (contents-end (and contents-begin block-end-line))
-	       (pos-before-blank (progn (goto-char block-end-line)
-					(forward-line)
-					(point)))
-	       (end (save-excursion
-		      (skip-chars-forward " \r\t\n" limit)
-		      (if (eobp) (point) (line-beginning-position)))))
-	  (list 'center-block
-		(nconc
-		 (list :begin begin
-		       :end end
-		       :contents-begin contents-begin
-		       :contents-end contents-end
-		       :post-blank (count-lines pos-before-blank end)
-		       :post-affiliated post-affiliated)
-		 (cdr affiliated))))))))
+    (let* ((begin (car affiliated))
+           (post-affiliated (point))
+           ;; Empty blocks have no contents.
+           (contents-begin (progn (forward-line)
+                      (and (< (point) block-end-line)
+                       (point))))
+           (contents-end (and contents-begin block-end-line))
+           (pos-before-blank (progn (goto-char block-end-line)
+                    (forward-line)
+                    (point)))
+           (end (save-excursion
+              (skip-chars-forward " \r\t\n" limit)
+              (if (eobp) (point) (line-beginning-position)))))
+      (list 'center-block
+        (nconc
+         (list :begin begin
+               :end end
+               :contents-begin contents-begin
+               :contents-end contents-end
+               :post-blank (count-lines pos-before-blank end)
+               :post-affiliated post-affiliated)
+         (cdr affiliated))))))))
 
 (defun org-element-center-block-interpreter (_ contents)
   "Interpret a center-block element as Org syntax.
@@ -760,41 +760,41 @@ Assume point is at beginning of drawer."
     (if (not (save-excursion
                (goto-char (min limit (line-end-position)))
                (re-search-forward "^[ \t]*:END:[ \t]*$" limit t)))
-	;; Incomplete drawer: parse it as a paragraph.
-	(org-element-paragraph-parser limit affiliated)
+    ;; Incomplete drawer: parse it as a paragraph.
+    (org-element-paragraph-parser limit affiliated)
       (save-excursion
-	(let* ((drawer-end-line (match-beginning 0))
-	       (name (progn (looking-at org-drawer-regexp)
-			    (match-string-no-properties 1)))
-	       (begin (car affiliated))
-	       (post-affiliated (point))
-	       ;; Empty drawers have no contents.
-	       (contents-begin (progn (forward-line)
-				      (and (< (point) drawer-end-line)
-					   (point))))
-	       (contents-end (and contents-begin drawer-end-line))
-	       (pos-before-blank (progn (goto-char drawer-end-line)
-					(forward-line)
-					(point)))
-	       (end (progn (skip-chars-forward " \r\t\n" limit)
-			   (if (eobp) (point) (line-beginning-position)))))
-	  (list 'drawer
-		(nconc
-		 (list :begin begin
-		       :end end
-		       :drawer-name name
-		       :contents-begin contents-begin
-		       :contents-end contents-end
-		       :post-blank (count-lines pos-before-blank end)
-		       :post-affiliated post-affiliated)
-		 (cdr affiliated))))))))
+    (let* ((drawer-end-line (match-beginning 0))
+           (name (progn (looking-at org-drawer-regexp)
+                (match-string-no-properties 1)))
+           (begin (car affiliated))
+           (post-affiliated (point))
+           ;; Empty drawers have no contents.
+           (contents-begin (progn (forward-line)
+                      (and (< (point) drawer-end-line)
+                       (point))))
+           (contents-end (and contents-begin drawer-end-line))
+           (pos-before-blank (progn (goto-char drawer-end-line)
+                    (forward-line)
+                    (point)))
+           (end (progn (skip-chars-forward " \r\t\n" limit)
+               (if (eobp) (point) (line-beginning-position)))))
+      (list 'drawer
+        (nconc
+         (list :begin begin
+               :end end
+               :drawer-name name
+               :contents-begin contents-begin
+               :contents-end contents-end
+               :post-blank (count-lines pos-before-blank end)
+               :post-affiliated post-affiliated)
+         (cdr affiliated))))))))
 
 (defun org-element-drawer-interpreter (drawer contents)
   "Interpret DRAWER element as Org syntax.
 CONTENTS is the contents of the element."
   (format ":%s:\n%s:END:"
-	  (org-element-property :drawer-name drawer)
-	  contents))
+      (org-element-property :drawer-name drawer)
+      contents))
 
 
 ;;;; Dynamic Block
@@ -815,54 +815,54 @@ containing `:block-name', `:begin', `:end', `:contents-begin',
 Assume point is at beginning of dynamic block."
   (let ((case-fold-search t))
     (if (not (save-excursion
-	       (re-search-forward "^[ \t]*#\\+END:?[ \t]*$" limit t)))
-	;; Incomplete block: parse it as a paragraph.
-	(org-element-paragraph-parser limit affiliated)
+           (re-search-forward "^[ \t]*#\\+END:?[ \t]*$" limit t)))
+    ;; Incomplete block: parse it as a paragraph.
+    (org-element-paragraph-parser limit affiliated)
       (let ((block-end-line (match-beginning 0)))
-	(save-excursion
-	  (let* ((name (progn (looking-at org-dblock-start-re)
-			      (match-string-no-properties 1)))
-		 (arguments (match-string-no-properties 3))
-		 (begin (car affiliated))
-		 (post-affiliated (point))
-		 ;; Empty blocks have no contents.
-		 (contents-begin (progn (forward-line)
-					(and (< (point) block-end-line)
-					     (point))))
-		 (contents-end (and contents-begin block-end-line))
-		 (pos-before-blank (progn (goto-char block-end-line)
-					  (forward-line)
-					  (point)))
-		 (end (progn (skip-chars-forward " \r\t\n" limit)
-			     (if (eobp) (point) (line-beginning-position)))))
-	    (list 'dynamic-block
-		  (nconc
-		   (list :begin begin
-			 :end end
-			 :block-name name
-			 :arguments arguments
-			 :contents-begin contents-begin
-			 :contents-end contents-end
-			 :post-blank (count-lines pos-before-blank end)
-			 :post-affiliated post-affiliated)
-		   (cdr affiliated)))))))))
+    (save-excursion
+      (let* ((name (progn (looking-at org-dblock-start-re)
+                  (match-string-no-properties 1)))
+         (arguments (match-string-no-properties 3))
+         (begin (car affiliated))
+         (post-affiliated (point))
+         ;; Empty blocks have no contents.
+         (contents-begin (progn (forward-line)
+                    (and (< (point) block-end-line)
+                         (point))))
+         (contents-end (and contents-begin block-end-line))
+         (pos-before-blank (progn (goto-char block-end-line)
+                      (forward-line)
+                      (point)))
+         (end (progn (skip-chars-forward " \r\t\n" limit)
+                 (if (eobp) (point) (line-beginning-position)))))
+        (list 'dynamic-block
+          (nconc
+           (list :begin begin
+             :end end
+             :block-name name
+             :arguments arguments
+             :contents-begin contents-begin
+             :contents-end contents-end
+             :post-blank (count-lines pos-before-blank end)
+             :post-affiliated post-affiliated)
+           (cdr affiliated)))))))))
 
 (defun org-element-dynamic-block-interpreter (dynamic-block contents)
   "Interpret DYNAMIC-BLOCK element as Org syntax.
 CONTENTS is the contents of the element."
   (format "#+begin: %s%s\n%s#+end:"
-	  (org-element-property :block-name dynamic-block)
-	  (let ((args (org-element-property :arguments dynamic-block)))
-	    (if args (concat " " args) ""))
-	  contents))
+      (org-element-property :block-name dynamic-block)
+      (let ((args (org-element-property :arguments dynamic-block)))
+        (if args (concat " " args) ""))
+      contents))
 
 
 ;;;; Footnote Definition
 
 (defconst org-element--footnote-separator
   (concat org-outline-regexp-bol "\\|"
-	  org-footnote-definition-re "\\|"
-	  "^\\([ \t]*\n\\)\\{2,\\}")
+      org-footnote-definition-re "\\|"
+      "^\\([ \t]*\n\\)\\{2,\\}")
   "Regexp used as a footnote definition separator.")
 
 (defun org-element-footnote-definition-parser (limit affiliated)
@@ -881,68 +881,68 @@ a plist containing `:label', `:begin' `:end', `:contents-begin',
 Assume point is at the beginning of the footnote definition."
   (save-excursion
     (let* ((label (progn (looking-at org-footnote-definition-re)
-			 (match-string-no-properties 1)))
-	   (begin (car affiliated))
-	   (post-affiliated (point))
-	   (end
-	    (save-excursion
-	      (end-of-line)
-	      (cond
-	       ((not
-		 (re-search-forward org-element--footnote-separator limit t))
-		limit)
-	       ((eq ?\[ (char-after (match-beginning 0)))
-		;; At a new footnote definition, make sure we end
-		;; before any affiliated keyword above.
-		(forward-line -1)
-		(while (and (> (point) post-affiliated)
-			    (looking-at-p org-element--affiliated-re))
-		  (forward-line -1))
-		(line-beginning-position 2))
-	       ((eq ?* (char-after (match-beginning 0))) (match-beginning 0))
-	       (t (skip-chars-forward " \r\t\n" limit)
-		  (if (= limit (point)) limit (line-beginning-position))))))
-	   (pre-blank 0)
-	   (contents-begin
-	    (progn (search-forward "]")
-		   (skip-chars-forward " \r\t\n" end)
-		   (cond ((= (point) end) nil)
-			 ((= (line-beginning-position) post-affiliated) (point))
-			 (t
-			  (setq pre-blank
-				(count-lines (line-beginning-position) begin))
-			  (line-beginning-position)))))
-	   (contents-end
-	    (progn (goto-char end)
-		   (skip-chars-backward " \r\t\n")
-		   (line-beginning-position 2))))
+             (match-string-no-properties 1)))
+       (begin (car affiliated))
+       (post-affiliated (point))
+       (end
+        (save-excursion
+          (end-of-line)
+          (cond
+           ((not
+         (re-search-forward org-element--footnote-separator limit t))
+        limit)
+           ((eq ?\[ (char-after (match-beginning 0)))
+        ;; At a new footnote definition, make sure we end
+        ;; before any affiliated keyword above.
+        (forward-line -1)
+        (while (and (> (point) post-affiliated)
+                (looking-at-p org-element--affiliated-re))
+          (forward-line -1))
+        (line-beginning-position 2))
+           ((eq ?* (char-after (match-beginning 0))) (match-beginning 0))
+           (t (skip-chars-forward " \r\t\n" limit)
+          (if (= limit (point)) limit (line-beginning-position))))))
+       (pre-blank 0)
+       (contents-begin
+        (progn (search-forward "]")
+           (skip-chars-forward " \r\t\n" end)
+           (cond ((= (point) end) nil)
+             ((= (line-beginning-position) post-affiliated) (point))
+             (t
+              (setq pre-blank
+                (count-lines (line-beginning-position) begin))
+              (line-beginning-position)))))
+       (contents-end
+        (progn (goto-char end)
+           (skip-chars-backward " \r\t\n")
+           (line-beginning-position 2))))
       (list 'footnote-definition
-	    (nconc
-	     (list :label label
-		   :begin begin
-		   :end end
-		   :contents-begin contents-begin
-		   :contents-end (and contents-begin contents-end)
-		   :pre-blank pre-blank
-		   :post-blank (count-lines contents-end end)
-		   :post-affiliated post-affiliated)
-	     (cdr affiliated))))))
+        (nconc
+         (list :label label
+           :begin begin
+           :end end
+           :contents-begin contents-begin
+           :contents-end (and contents-begin contents-end)
+           :pre-blank pre-blank
+           :post-blank (count-lines contents-end end)
+           :post-affiliated post-affiliated)
+         (cdr affiliated))))))
 
 (defun org-element-footnote-definition-interpreter (footnote-definition contents)
   "Interpret FOOTNOTE-DEFINITION element as Org syntax.
 CONTENTS is the contents of the footnote-definition."
   (let ((pre-blank
-	 (min (or (org-element-property :pre-blank footnote-definition)
-		  ;; 0 is specific to paragraphs at the beginning of
-		  ;; the footnote definition, so we use 1 as
-		  ;; a fall-back value, which is more universal.
-		  1)
-	      ;; Footnote ends after more than two consecutive empty
-	      ;; lines: limit ourselves to 2 newline characters.
-	      2)))
+     (min (or (org-element-property :pre-blank footnote-definition)
+          ;; 0 is specific to paragraphs at the beginning of
+          ;; the footnote definition, so we use 1 as
+          ;; a fall-back value, which is more universal.
+          1)
+          ;; Footnote ends after more than two consecutive empty
+          ;; lines: limit ourselves to 2 newline characters.
+          2)))
     (concat (format "[fn:%s]" (org-element-property :label footnote-definition))
-	    (if (= pre-blank 0) (concat " " (org-trim contents))
-	      (concat (make-string pre-blank ?\n) contents)))))
+        (if (= pre-blank 0) (concat " " (org-trim contents))
+          (concat (make-string pre-blank ?\n) contents)))))
 
 
 ;;;; Headline
@@ -958,12 +958,12 @@ parser (e.g. `:end' and :END:).  Return value is a plist."
     (when (looking-at org-property-drawer-re)
       (forward-line)
       (let ((end (match-end 0)) properties)
-	(while (< (line-end-position) end)
-	  (looking-at org-property-re)
-	  (push (match-string-no-properties 3) properties)
-	  (push (intern (concat ":" (upcase (match-string 2)))) properties)
-	  (forward-line))
-	properties))))
+    (while (< (line-end-position) end)
+      (looking-at org-property-re)
+      (push (match-string-no-properties 3) properties)
+      (push (intern (concat ":" (upcase (match-string 2)))) properties)
+      (forward-line))
+    properties))))
 
 (defun org-element--get-time-properties ()
   "Return time properties associated to headline at point.
@@ -971,17 +971,17 @@ Return value is a plist."
   (save-excursion
     (when (progn (forward-line) (looking-at org-planning-line-re))
       (let ((end (line-end-position)) plist)
-	(while (re-search-forward org-keyword-time-not-clock-regexp end t)
-	  (goto-char (match-end 1))
-	  (skip-chars-forward " \t")
-	  (let ((keyword (match-string 1))
-		(time (org-element-timestamp-parser)))
-	    (cond ((equal keyword org-scheduled-string)
-		   (setq plist (plist-put plist :scheduled time)))
-		  ((equal keyword org-deadline-string)
-		   (setq plist (plist-put plist :deadline time)))
-		  (t (setq plist (plist-put plist :closed time))))))
-	plist))))
+    (while (re-search-forward org-keyword-time-not-clock-regexp end t)
+      (goto-char (match-end 1))
+      (skip-chars-forward " \t")
+      (let ((keyword (match-string 1))
+        (time (org-element-timestamp-parser)))
+        (cond ((equal keyword org-scheduled-string)
+           (setq plist (plist-put plist :scheduled time)))
+          ((equal keyword org-deadline-string)
+           (setq plist (plist-put plist :deadline time)))
+          (t (setq plist (plist-put plist :closed time))))))
+    plist))))
 
 (defun org-element-headline-parser (limit &optional raw-secondary-p)
   "Parse a headline.
@@ -1006,128 +1006,128 @@ parsed as a secondary string, but as a plain string instead.
 Assume point is at beginning of the headline."
   (save-excursion
     (let* ((begin (point))
-	   (level (prog1 (org-reduced-level (skip-chars-forward "*"))
-		    (skip-chars-forward " \t")))
-	   (todo (and org-todo-regexp
-		      (let (case-fold-search) (looking-at (concat org-todo-regexp " ")))
-		      (progn (goto-char (match-end 0))
-			     (skip-chars-forward " \t")
-			     (match-string 1))))
-	   (todo-type
-	    (and todo (if (member todo org-done-keywords) 'done 'todo)))
-	   (priority (and (looking-at "\\[#.\\][ \t]*")
-			  (progn (goto-char (match-end 0))
-				 (aref (match-string 0) 2))))
-	   (commentedp
-	    (and (let (case-fold-search) (looking-at org-comment-string))
-		 (goto-char (match-end 0))))
-	   (title-start (prog1 (point)
+       (level (prog1 (org-reduced-level (skip-chars-forward "*"))
+            (skip-chars-forward " \t")))
+       (todo (and org-todo-regexp
+              (let (case-fold-search) (looking-at (concat org-todo-regexp " ")))
+              (progn (goto-char (match-end 0))
+                 (skip-chars-forward " \t")
+                 (match-string 1))))
+       (todo-type
+        (and todo (if (member todo org-done-keywords) 'done 'todo)))
+       (priority (and (looking-at "\\[#.\\][ \t]*")
+              (progn (goto-char (match-end 0))
+                 (aref (match-string 0) 2))))
+       (commentedp
+        (and (let (case-fold-search) (looking-at org-comment-string))
+         (goto-char (match-end 0))))
+       (title-start (prog1 (point)
                           (unless (or todo priority commentedp)
                             ;; Headline like "* :tag:"
                             (skip-syntax-backward " \t"))))
-	   (tags (when (re-search-forward
-			"[ \t]+\\(:[[:alnum:]_@#%:]+:\\)[ \t]*$"
-			(line-end-position)
-			'move)
-		   (goto-char (match-beginning 0))
-		   (org-split-string (match-string 1) ":")))
-	   (title-end (point))
-	   (raw-value (org-trim
-		       (buffer-substring-no-properties title-start title-end)))
-	   (archivedp (member org-archive-tag tags))
-	   (footnote-section-p (and org-footnote-section
-				    (string= org-footnote-section raw-value)))
-	   (standard-props (org-element--get-node-properties))
-	   (time-props (org-element--get-time-properties))
-	   (end (min (save-excursion (org-end-of-subtree t t)) limit))
-	   (contents-begin (save-excursion
-			     (forward-line)
-			     (skip-chars-forward " \r\t\n" end)
-			     (and (/= (point) end) (line-beginning-position))))
-	   (contents-end (and contents-begin
-			      (progn (goto-char end)
-				     (skip-chars-backward " \r\t\n")
-				     (line-beginning-position 2)))))
+       (tags (when (re-search-forward
+            "[ \t]+\\(:[[:alnum:]_@#%:]+:\\)[ \t]*$"
+            (line-end-position)
+            'move)
+           (goto-char (match-beginning 0))
+           (org-split-string (match-string 1) ":")))
+       (title-end (point))
+       (raw-value (org-trim
+               (buffer-substring-no-properties title-start title-end)))
+       (archivedp (member org-archive-tag tags))
+       (footnote-section-p (and org-footnote-section
+                    (string= org-footnote-section raw-value)))
+       (standard-props (org-element--get-node-properties))
+       (time-props (org-element--get-time-properties))
+       (end (min (save-excursion (org-end-of-subtree t t)) limit))
+       (contents-begin (save-excursion
+                 (forward-line)
+                 (skip-chars-forward " \r\t\n" end)
+                 (and (/= (point) end) (line-beginning-position))))
+       (contents-end (and contents-begin
+                  (progn (goto-char end)
+                     (skip-chars-backward " \r\t\n")
+                     (line-beginning-position 2)))))
       (let ((headline
-	     (list 'headline
-		   (nconc
-		    (list :raw-value raw-value
-			  :begin begin
-			  :end end
-			  :pre-blank
-			  (if (not contents-begin) 0
-			    (1- (count-lines begin contents-begin)))
-			  :contents-begin contents-begin
-			  :contents-end contents-end
-			  :level level
-			  :priority priority
-			  :tags tags
-			  :todo-keyword todo
-			  :todo-type todo-type
-			  :post-blank
-			  (if contents-end
-			      (count-lines contents-end end)
-			    (1- (count-lines begin end)))
-			  :footnote-section-p footnote-section-p
-			  :archivedp archivedp
-			  :commentedp commentedp
-			  :post-affiliated begin)
-		    time-props
-		    standard-props))))
-	(org-element-put-property
-	 headline :title
-	 (if raw-secondary-p raw-value
-	   (org-element--parse-objects
-	    (progn (goto-char title-start)
-		   (skip-chars-forward " \t")
-		   (point))
-	    (progn (goto-char title-end)
-		   (skip-chars-backward " \t")
-		   (point))
-	    nil
-	    (org-element-restriction 'headline)
-	    headline)))))))
+         (list 'headline
+           (nconc
+            (list :raw-value raw-value
+              :begin begin
+              :end end
+              :pre-blank
+              (if (not contents-begin) 0
+                (1- (count-lines begin contents-begin)))
+              :contents-begin contents-begin
+              :contents-end contents-end
+              :level level
+              :priority priority
+              :tags tags
+              :todo-keyword todo
+              :todo-type todo-type
+              :post-blank
+              (if contents-end
+                  (count-lines contents-end end)
+                (1- (count-lines begin end)))
+              :footnote-section-p footnote-section-p
+              :archivedp archivedp
+              :commentedp commentedp
+              :post-affiliated begin)
+            time-props
+            standard-props))))
+    (org-element-put-property
+     headline :title
+     (if raw-secondary-p raw-value
+       (org-element--parse-objects
+        (progn (goto-char title-start)
+           (skip-chars-forward " \t")
+           (point))
+        (progn (goto-char title-end)
+           (skip-chars-backward " \t")
+           (point))
+        nil
+        (org-element-restriction 'headline)
+        headline)))))))
 
 (defun org-element-headline-interpreter (headline contents)
   "Interpret HEADLINE element as Org syntax.
 CONTENTS is the contents of the element."
   (let* ((level (org-element-property :level headline))
-	 (todo (org-element-property :todo-keyword headline))
-	 (priority (org-element-property :priority headline))
-	 (title (org-element-interpret-data
-		 (org-element-property :title headline)))
-	 (tags (let ((tag-list (org-element-property :tags headline)))
-		 (and tag-list
-		      (format ":%s:" (mapconcat #'identity tag-list ":")))))
-	 (commentedp (org-element-property :commentedp headline))
-	 (pre-blank (or (org-element-property :pre-blank headline) 0))
-	 (heading
-	  (concat (make-string (if org-odd-levels-only (1- (* level 2)) level)
-			       ?*)
-		  (and todo (concat " " todo))
-		  (and commentedp (concat " " org-comment-string))
-		  (and priority (format " [#%c]" priority))
-		  " "
-		  (if (and org-footnote-section
-			   (org-element-property :footnote-section-p headline))
-		      org-footnote-section
-		    title))))
+     (todo (org-element-property :todo-keyword headline))
+     (priority (org-element-property :priority headline))
+     (title (org-element-interpret-data
+         (org-element-property :title headline)))
+     (tags (let ((tag-list (org-element-property :tags headline)))
+         (and tag-list
+              (format ":%s:" (mapconcat #'identity tag-list ":")))))
+     (commentedp (org-element-property :commentedp headline))
+     (pre-blank (or (org-element-property :pre-blank headline) 0))
+     (heading
+      (concat (make-string (if org-odd-levels-only (1- (* level 2)) level)
+                   ?*)
+          (and todo (concat " " todo))
+          (and commentedp (concat " " org-comment-string))
+          (and priority (format " [#%c]" priority))
+          " "
+          (if (and org-footnote-section
+               (org-element-property :footnote-section-p headline))
+              org-footnote-section
+            title))))
     (concat
      heading
      ;; Align tags.
      (when tags
        (cond
-	((zerop org-tags-column) (format " %s" tags))
-	((< org-tags-column 0)
-	 (concat
-	  (make-string
-	   (max (- (+ org-tags-column (length heading) (length tags))) 1)
-	   ?\s)
-	  tags))
-	(t
-	 (concat
-	  (make-string (max (- org-tags-column (length heading)) 1) ?\s)
-	  tags))))
+    ((zerop org-tags-column) (format " %s" tags))
+    ((< org-tags-column 0)
+     (concat
+      (make-string
+       (max (- (+ org-tags-column (length heading) (length tags))) 1)
+       ?\s)
+      tags))
+    (t
+     (concat
+      (make-string (max (- org-tags-column (length heading)) 1) ?\s)
+      tags))))
      (make-string (1+ pre-blank) ?\n)
      contents)))
 
@@ -1155,116 +1155,116 @@ string instead.
 Assume point is at beginning of the inline task."
   (save-excursion
     (let* ((begin (point))
-	   (level (prog1 (org-reduced-level (skip-chars-forward "*"))
-		    (skip-chars-forward " \t")))
-	   (todo (and org-todo-regexp
-		      (let (case-fold-search) (looking-at org-todo-regexp))
-		      (progn (goto-char (match-end 0))
-			     (skip-chars-forward " \t")
-			     (match-string 0))))
-	   (todo-type (and todo
-			   (if (member todo org-done-keywords) 'done 'todo)))
-	   (priority (and (looking-at "\\[#.\\][ \t]*")
-			  (progn (goto-char (match-end 0))
-				 (aref (match-string 0) 2))))
-	   (title-start (point))
-	   (tags (when (re-search-forward
-			"[ \t]+\\(:[[:alnum:]_@#%:]+:\\)[ \t]*$"
-			(line-end-position)
-			'move)
-		   (goto-char (match-beginning 0))
-		   (org-split-string (match-string 1) ":")))
-	   (title-end (point))
-	   (raw-value (org-trim
-		       (buffer-substring-no-properties title-start title-end)))
-	   (task-end (save-excursion
-		       (end-of-line)
-		       (and (re-search-forward org-outline-regexp-bol limit t)
-			    (looking-at-p "[ \t]*END[ \t]*$")
-			    (line-beginning-position))))
-	   (standard-props (and task-end (org-element--get-node-properties)))
-	   (time-props (and task-end (org-element--get-time-properties)))
-	   (contents-begin (and task-end
-				(< (point) task-end)
-				(progn
-				  (forward-line)
-				  (skip-chars-forward " \t\n")
-				  (line-beginning-position))))
-	   (contents-end (and contents-begin task-end))
-	   (end (progn (when task-end (goto-char task-end))
-		       (forward-line)
-		       (skip-chars-forward " \r\t\n" limit)
-		       (if (eobp) (point) (line-beginning-position))))
-	   (inlinetask
-	    (list 'inlinetask
-		  (nconc
-		   (list :raw-value raw-value
-			 :begin begin
-			 :end end
-			 :pre-blank
-			 (if (not contents-begin) 0
-			   (1- (count-lines begin contents-begin)))
-			 :contents-begin contents-begin
-			 :contents-end contents-end
-			 :level level
-			 :priority priority
-			 :tags tags
-			 :todo-keyword todo
-			 :todo-type todo-type
-			 :post-blank (1- (count-lines (or task-end begin) end))
-			 :post-affiliated begin)
-		   time-props
-		   standard-props))))
+       (level (prog1 (org-reduced-level (skip-chars-forward "*"))
+            (skip-chars-forward " \t")))
+       (todo (and org-todo-regexp
+              (let (case-fold-search) (looking-at org-todo-regexp))
+              (progn (goto-char (match-end 0))
+                 (skip-chars-forward " \t")
+                 (match-string 0))))
+       (todo-type (and todo
+               (if (member todo org-done-keywords) 'done 'todo)))
+       (priority (and (looking-at "\\[#.\\][ \t]*")
+              (progn (goto-char (match-end 0))
+                 (aref (match-string 0) 2))))
+       (title-start (point))
+       (tags (when (re-search-forward
+            "[ \t]+\\(:[[:alnum:]_@#%:]+:\\)[ \t]*$"
+            (line-end-position)
+            'move)
+           (goto-char (match-beginning 0))
+           (org-split-string (match-string 1) ":")))
+       (title-end (point))
+       (raw-value (org-trim
+               (buffer-substring-no-properties title-start title-end)))
+       (task-end (save-excursion
+               (end-of-line)
+               (and (re-search-forward org-outline-regexp-bol limit t)
+                (looking-at-p "[ \t]*END[ \t]*$")
+                (line-beginning-position))))
+       (standard-props (and task-end (org-element--get-node-properties)))
+       (time-props (and task-end (org-element--get-time-properties)))
+       (contents-begin (and task-end
+                (< (point) task-end)
+                (progn
+                  (forward-line)
+                  (skip-chars-forward " \t\n")
+                  (line-beginning-position))))
+       (contents-end (and contents-begin task-end))
+       (end (progn (when task-end (goto-char task-end))
+               (forward-line)
+               (skip-chars-forward " \r\t\n" limit)
+               (if (eobp) (point) (line-beginning-position))))
+       (inlinetask
+        (list 'inlinetask
+          (nconc
+           (list :raw-value raw-value
+             :begin begin
+             :end end
+             :pre-blank
+             (if (not contents-begin) 0
+               (1- (count-lines begin contents-begin)))
+             :contents-begin contents-begin
+             :contents-end contents-end
+             :level level
+             :priority priority
+             :tags tags
+             :todo-keyword todo
+             :todo-type todo-type
+             :post-blank (1- (count-lines (or task-end begin) end))
+             :post-affiliated begin)
+           time-props
+           standard-props))))
       (org-element-put-property
        inlinetask :title
        (if raw-secondary-p raw-value
-	 (org-element--parse-objects
-	  (progn (goto-char title-start)
-		 (skip-chars-forward " \t")
-		 (point))
-	  (progn (goto-char title-end)
-		 (skip-chars-backward " \t")
-		 (point))
-	  nil
-	  (org-element-restriction 'inlinetask)
-	  inlinetask))))))
+     (org-element--parse-objects
+      (progn (goto-char title-start)
+         (skip-chars-forward " \t")
+         (point))
+      (progn (goto-char title-end)
+         (skip-chars-backward " \t")
+         (point))
+      nil
+      (org-element-restriction 'inlinetask)
+      inlinetask))))))
 
 (defun org-element-inlinetask-interpreter (inlinetask contents)
   "Interpret INLINETASK element as Org syntax.
 CONTENTS is the contents of inlinetask."
   (let* ((level (org-element-property :level inlinetask))
-	 (todo (org-element-property :todo-keyword inlinetask))
-	 (priority (org-element-property :priority inlinetask))
-	 (title (org-element-interpret-data
-		 (org-element-property :title inlinetask)))
-	 (tags (let ((tag-list (org-element-property :tags inlinetask)))
-		 (and tag-list
-		      (format ":%s:" (mapconcat 'identity tag-list ":")))))
-	 (task (concat (make-string level ?*)
-		       (and todo (concat " " todo))
-		       (and priority (format " [#%c]" priority))
-		       (and title (concat " " title)))))
+     (todo (org-element-property :todo-keyword inlinetask))
+     (priority (org-element-property :priority inlinetask))
+     (title (org-element-interpret-data
+         (org-element-property :title inlinetask)))
+     (tags (let ((tag-list (org-element-property :tags inlinetask)))
+         (and tag-list
+              (format ":%s:" (mapconcat 'identity tag-list ":")))))
+     (task (concat (make-string level ?*)
+               (and todo (concat " " todo))
+               (and priority (format " [#%c]" priority))
+               (and title (concat " " title)))))
     (concat task
-	    ;; Align tags.
-	    (when tags
-	      (cond
-	       ((zerop org-tags-column) (format " %s" tags))
-	       ((< org-tags-column 0)
-		(concat
-		 (make-string
-		  (max (- (+ org-tags-column (length task) (length tags))) 1)
-		  ?\s)
-		 tags))
-	       (t
-		(concat
-		 (make-string (max (- org-tags-column (length task)) 1) ?\s)
-		 tags))))
-	    ;; Prefer degenerate inlinetasks when there are no
-	    ;; contents.
-	    (when contents
-	      (concat "\n"
-		      contents
-		      (make-string level ?*) " end")))))
+        ;; Align tags.
+        (when tags
+          (cond
+           ((zerop org-tags-column) (format " %s" tags))
+           ((< org-tags-column 0)
+        (concat
+         (make-string
+          (max (- (+ org-tags-column (length task) (length tags))) 1)
+          ?\s)
+         tags))
+           (t
+        (concat
+         (make-string (max (- org-tags-column (length task)) 1) ?\s)
+         tags))))
+        ;; Prefer degenerate inlinetasks when there are no
+        ;; contents.
+        (when contents
+          (concat "\n"
+              contents
+              (make-string level ?*) " end")))))
 
 
 ;;;; Item
@@ -1288,81 +1288,81 @@ Assume point is at the beginning of the item."
     (beginning-of-line)
     (looking-at org-list-full-item-re)
     (let* ((begin (point))
-	   (bullet (match-string-no-properties 1))
-	   (checkbox (let ((box (match-string 3)))
-		       (cond ((equal "[ ]" box) 'off)
-			     ((equal "[X]" box) 'on)
-			     ((equal "[-]" box) 'trans))))
-	   (counter (let ((c (match-string 2)))
-		      (save-match-data
-			(cond
-			 ((not c) nil)
-			 ((string-match "[A-Za-z]" c)
-			  (- (string-to-char (upcase (match-string 0 c)))
-			     64))
-			 ((string-match "[0-9]+" c)
-			  (string-to-number (match-string 0 c)))))))
-	   (end (progn (goto-char (nth 6 (assq (point) struct)))
-		       (if (bolp) (point) (line-beginning-position 2))))
-	   (pre-blank 0)
-	   (contents-begin
-	    (progn
-	      (goto-char
-	       ;; Ignore tags in un-ordered lists: they are just
-	       ;; a part of item's body.
-	       (if (and (match-beginning 4)
-			(save-match-data (string-match "[.)]" bullet)))
-		   (match-beginning 4)
-		 (match-end 0)))
-	      (skip-chars-forward " \r\t\n" end)
-	      (cond ((= (point) end) nil)
-		    ;; If first line isn't empty, contents really
-		    ;; start at the text after item's meta-data.
-		    ((= (line-beginning-position) begin) (point))
-		    (t
-		     (setq pre-blank
-			   (count-lines (line-beginning-position) begin))
-		     (line-beginning-position)))))
-	   (contents-end (and contents-begin
-			      (progn (goto-char end)
-				     (skip-chars-backward " \r\t\n")
-				     (line-beginning-position 2))))
-	   (item
-	    (list 'item
-		  (list :bullet bullet
-			:begin begin
-			:end end
-			:contents-begin contents-begin
-			:contents-end contents-end
-			:checkbox checkbox
-			:counter counter
-			:structure struct
-			:pre-blank pre-blank
-			:post-blank (count-lines (or contents-end begin) end)
-			:post-affiliated begin))))
+       (bullet (match-string-no-properties 1))
+       (checkbox (let ((box (match-string 3)))
+               (cond ((equal "[ ]" box) 'off)
+                 ((equal "[X]" box) 'on)
+                 ((equal "[-]" box) 'trans))))
+       (counter (let ((c (match-string 2)))
+              (save-match-data
+            (cond
+             ((not c) nil)
+             ((string-match "[A-Za-z]" c)
+              (- (string-to-char (upcase (match-string 0 c)))
+                 64))
+             ((string-match "[0-9]+" c)
+              (string-to-number (match-string 0 c)))))))
+       (end (progn (goto-char (nth 6 (assq (point) struct)))
+               (if (bolp) (point) (line-beginning-position 2))))
+       (pre-blank 0)
+       (contents-begin
+        (progn
+          (goto-char
+           ;; Ignore tags in un-ordered lists: they are just
+           ;; a part of item's body.
+           (if (and (match-beginning 4)
+            (save-match-data (string-match "[.)]" bullet)))
+           (match-beginning 4)
+         (match-end 0)))
+          (skip-chars-forward " \r\t\n" end)
+          (cond ((= (point) end) nil)
+            ;; If first line isn't empty, contents really
+            ;; start at the text after item's meta-data.
+            ((= (line-beginning-position) begin) (point))
+            (t
+             (setq pre-blank
+               (count-lines (line-beginning-position) begin))
+             (line-beginning-position)))))
+       (contents-end (and contents-begin
+                  (progn (goto-char end)
+                     (skip-chars-backward " \r\t\n")
+                     (line-beginning-position 2))))
+       (item
+        (list 'item
+          (list :bullet bullet
+            :begin begin
+            :end end
+            :contents-begin contents-begin
+            :contents-end contents-end
+            :checkbox checkbox
+            :counter counter
+            :structure struct
+            :pre-blank pre-blank
+            :post-blank (count-lines (or contents-end begin) end)
+            :post-affiliated begin))))
       (org-element-put-property
        item :tag
        (let ((raw (org-list-get-tag begin struct)))
-	 (when raw
-	   (if raw-secondary-p raw
-	     (org-element--parse-objects
-	      (match-beginning 4) (match-end 4) nil
-	      (org-element-restriction 'item)
-	      item))))))))
+     (when raw
+       (if raw-secondary-p raw
+         (org-element--parse-objects
+          (match-beginning 4) (match-end 4) nil
+          (org-element-restriction 'item)
+          item))))))))
 
 (defun org-element-item-interpreter (item contents)
   "Interpret ITEM element as Org syntax.
 CONTENTS is the contents of the element."
   (let ((tag (pcase (org-element-property :tag item)
-	       (`nil nil)
-	       (tag (format "%s :: " (org-element-interpret-data tag)))))
-	(bullet
-	 (org-list-bullet-string
-	  (cond
-	   ((not (string-match-p "[0-9a-zA-Z]"
-				 (org-element-property :bullet item))) "- ")
-	   ((eq org-plain-list-ordered-item-terminator ?\)) "1)")
-	   (t "1.")))))
+           (`nil nil)
+           (tag (format "%s :: " (org-element-interpret-data tag)))))
+    (bullet
+     (org-list-bullet-string
+      (cond
+       ((not (string-match-p "[0-9a-zA-Z]"
+                 (org-element-property :bullet item))) "- ")
+       ((eq org-plain-list-ordered-item-terminator ?\)) "1)")
+       (t "1.")))))
     (concat
      bullet
      (pcase (org-element-property :counter item)
@@ -1376,20 +1376,20 @@ CONTENTS is the contents of the element."
      tag
      (when contents
        (let* ((ind (make-string (if tag 5 (length bullet)) ?\s))
-	      (pre-blank
-	       (min (or (org-element-property :pre-blank item)
-			;; 0 is specific to paragraphs at the
-			;; beginning of the item, so we use 1 as
-			;; a fall-back value, which is more universal.
-			1)
-		    ;; Lists ends after more than two consecutive
-		    ;; empty lines: limit ourselves to 2 newline
-		    ;; characters.
-		    2))
-	      (contents (replace-regexp-in-string
-			 "\\(^\\)[ \t]*\\S-" ind contents nil nil 1)))
-	 (if (= pre-blank 0) (org-trim contents)
-	   (concat (make-string pre-blank ?\n) contents)))))))
+          (pre-blank
+           (min (or (org-element-property :pre-blank item)
+            ;; 0 is specific to paragraphs at the
+            ;; beginning of the item, so we use 1 as
+            ;; a fall-back value, which is more universal.
+            1)
+            ;; Lists ends after more than two consecutive
+            ;; empty lines: limit ourselves to 2 newline
+            ;; characters.
+            2))
+          (contents (replace-regexp-in-string
+             "\\(^\\)[ \t]*\\S-" ind contents nil nil 1)))
+     (if (= pre-blank 0) (org-trim contents)
+       (concat (make-string pre-blank ?\n) contents)))))))
 
 
 ;;;; Plain List
@@ -1398,80 +1398,80 @@ CONTENTS is the contents of the element."
   ;; Return structure of list at point.  Internal function.  See
   ;; `org-list-struct' for details.
   (let ((case-fold-search t)
-	(top-ind limit)
-	(item-re (org-item-re))
-	(inlinetask-re (and (featurep 'org-inlinetask) "^\\*+ "))
-	items struct)
+    (top-ind limit)
+    (item-re (org-item-re))
+    (inlinetask-re (and (featurep 'org-inlinetask) "^\\*+ "))
+    items struct)
     (save-excursion
       (catch :exit
-	(while t
-	  (cond
-	   ;; At limit: end all items.
-	   ((>= (point) limit)
-	    (let ((end (progn (skip-chars-backward " \r\t\n")
-			      (line-beginning-position 2))))
-	      (dolist (item items) (setcar (nthcdr 6 item) end)))
-	    (throw :exit (sort (nconc items struct) #'car-less-than-car)))
-	   ;; At list end: end all items.
-	   ((looking-at org-list-end-re)
-	    (dolist (item items) (setcar (nthcdr 6 item) (point)))
-	    (throw :exit (sort (nconc items struct) #'car-less-than-car)))
-	   ;; At a new item: end previous sibling.
-	   ((looking-at item-re)
-	    (let ((ind (save-excursion (skip-chars-forward " \t")
-				       (current-column))))
-	      (setq top-ind (min top-ind ind))
-	      (while (and items (<= ind (nth 1 (car items))))
-		(let ((item (pop items)))
-		  (setcar (nthcdr 6 item) (point))
-		  (push item struct)))
-	      (push (progn (looking-at org-list-full-item-re)
-			   (let ((bullet (match-string-no-properties 1)))
-			     (list (point)
-				   ind
-				   bullet
-				   (match-string-no-properties 2) ; counter
-				   (match-string-no-properties 3) ; checkbox
-				   ;; Description tag.
-				   (and (save-match-data
-					  (string-match "[-+*]" bullet))
-					(match-string-no-properties 4))
-				   ;; Ending position, unknown so far.
-				   nil)))
-		    items))
-	    (forward-line))
-	   ;; Skip empty lines.
-	   ((looking-at "^[ \t]*$") (forward-line))
-	   ;; Skip inline tasks and blank lines along the way.
-	   ((and inlinetask-re (looking-at inlinetask-re))
-	    (forward-line)
-	    (let ((origin (point)))
-	      (when (re-search-forward inlinetask-re limit t)
-		(if (looking-at-p "END[ \t]*$") (forward-line)
-		  (goto-char origin)))))
-	   ;; At some text line.  Check if it ends any previous item.
-	   (t
-	    (let ((ind (save-excursion
-			 (skip-chars-forward " \t")
-			 (current-column)))
-		  (end (save-excursion
-			 (skip-chars-backward " \r\t\n")
-			 (line-beginning-position 2))))
-	      (while (<= ind (nth 1 (car items)))
-		(let ((item (pop items)))
-		  (setcar (nthcdr 6 item) end)
-		  (push item struct)
-		  (unless items
-		    (throw :exit (sort struct #'car-less-than-car))))))
-	    ;; Skip blocks (any type) and drawers contents.
-	    (cond
-	     ((and (looking-at "[ \t]*#\\+BEGIN\\(:\\|_\\S-+\\)")
-		   (re-search-forward
-		    (format "^[ \t]*#\\+END%s[ \t]*$" (match-string 1))
-		    limit t)))
-	     ((and (looking-at org-drawer-regexp)
-		   (re-search-forward "^[ \t]*:END:[ \t]*$" limit t))))
-	    (forward-line))))))))
+    (while t
+      (cond
+       ;; At limit: end all items.
+       ((>= (point) limit)
+        (let ((end (progn (skip-chars-backward " \r\t\n")
+                  (line-beginning-position 2))))
+          (dolist (item items) (setcar (nthcdr 6 item) end)))
+        (throw :exit (sort (nconc items struct) #'car-less-than-car)))
+       ;; At list end: end all items.
+       ((looking-at org-list-end-re)
+        (dolist (item items) (setcar (nthcdr 6 item) (point)))
+        (throw :exit (sort (nconc items struct) #'car-less-than-car)))
+       ;; At a new item: end previous sibling.
+       ((looking-at item-re)
+        (let ((ind (save-excursion (skip-chars-forward " \t")
+                       (current-column))))
+          (setq top-ind (min top-ind ind))
+          (while (and items (<= ind (nth 1 (car items))))
+        (let ((item (pop items)))
+          (setcar (nthcdr 6 item) (point))
+          (push item struct)))
+          (push (progn (looking-at org-list-full-item-re)
+               (let ((bullet (match-string-no-properties 1)))
+                 (list (point)
+                   ind
+                   bullet
+                   (match-string-no-properties 2) ; counter
+                   (match-string-no-properties 3) ; checkbox
+                   ;; Description tag.
+                   (and (save-match-data
+                      (string-match "[-+*]" bullet))
+                    (match-string-no-properties 4))
+                   ;; Ending position, unknown so far.
+                   nil)))
+            items))
+        (forward-line))
+       ;; Skip empty lines.
+       ((looking-at "^[ \t]*$") (forward-line))
+       ;; Skip inline tasks and blank lines along the way.
+       ((and inlinetask-re (looking-at inlinetask-re))
+        (forward-line)
+        (let ((origin (point)))
+          (when (re-search-forward inlinetask-re limit t)
+        (if (looking-at-p "END[ \t]*$") (forward-line)
+          (goto-char origin)))))
+       ;; At some text line.  Check if it ends any previous item.
+       (t
+        (let ((ind (save-excursion
+             (skip-chars-forward " \t")
+             (current-column)))
+          (end (save-excursion
+             (skip-chars-backward " \r\t\n")
+             (line-beginning-position 2))))
+          (while (<= ind (nth 1 (car items)))
+        (let ((item (pop items)))
+          (setcar (nthcdr 6 item) end)
+          (push item struct)
+          (unless items
+            (throw :exit (sort struct #'car-less-than-car))))))
+        ;; Skip blocks (any type) and drawers contents.
+        (cond
+         ((and (looking-at "[ \t]*#\\+BEGIN\\(:\\|_\\S-+\\)")
+           (re-search-forward
+            (format "^[ \t]*#\\+END%s[ \t]*$" (match-string 1))
+            limit t)))
+         ((and (looking-at org-drawer-regexp)
+           (re-search-forward "^[ \t]*:END:[ \t]*$" limit t))))
+        (forward-line))))))))
 
 (defun org-element-plain-list-parser (limit affiliated structure)
   "Parse a plain list.
@@ -1490,33 +1490,33 @@ containing `:type', `:begin', `:end', `:contents-begin' and
 Assume point is at the beginning of the list."
   (save-excursion
     (let* ((struct (or structure (org-element--list-struct limit)))
-	   (type (cond ((looking-at-p "[ \t]*[A-Za-z0-9]") 'ordered)
-		       ((nth 5 (assq (point) struct)) 'descriptive)
-		       (t 'unordered)))
-	   (contents-begin (point))
-	   (begin (car affiliated))
-	   (contents-end (let* ((item (assq contents-begin struct))
-				(ind (nth 1 item))
-				(pos (nth 6 item)))
-			   (while (and (setq item (assq pos struct))
-				       (= (nth 1 item) ind))
-			     (setq pos (nth 6 item)))
-			   pos))
-	   (end (progn (goto-char contents-end)
-		       (skip-chars-forward " \r\t\n" limit)
-		       (if (= (point) limit) limit (line-beginning-position)))))
+       (type (cond ((looking-at-p "[ \t]*[A-Za-z0-9]") 'ordered)
+               ((nth 5 (assq (point) struct)) 'descriptive)
+               (t 'unordered)))
+       (contents-begin (point))
+       (begin (car affiliated))
+       (contents-end (let* ((item (assq contents-begin struct))
+                (ind (nth 1 item))
+                (pos (nth 6 item)))
+               (while (and (setq item (assq pos struct))
+                       (= (nth 1 item) ind))
+                 (setq pos (nth 6 item)))
+               pos))
+       (end (progn (goto-char contents-end)
+               (skip-chars-forward " \r\t\n" limit)
+               (if (= (point) limit) limit (line-beginning-position)))))
       ;; Return value.
       (list 'plain-list
-	    (nconc
-	     (list :type type
-		   :begin begin
-		   :end end
-		   :contents-begin contents-begin
-		   :contents-end contents-end
-		   :structure struct
-		   :post-blank (count-lines contents-end end)
-		   :post-affiliated contents-begin)
-	     (cdr affiliated))))))
+        (nconc
+         (list :type type
+           :begin begin
+           :end end
+           :contents-begin contents-begin
+           :contents-end contents-end
+           :structure struct
+           :post-blank (count-lines contents-end end)
+           :post-affiliated contents-begin)
+         (cdr affiliated))))))
 
 (defun org-element-plain-list-interpreter (_ contents)
   "Interpret plain-list element as Org syntax.
@@ -1542,21 +1542,21 @@ containing `:begin', `:end', `:contents-begin', `:contents-end',
 Assume point is at the beginning of the property drawer."
   (save-excursion
     (let ((case-fold-search t)
-	  (begin (point))
-	  (contents-begin (line-beginning-position 2)))
+      (begin (point))
+      (contents-begin (line-beginning-position 2)))
       (re-search-forward "^[ \t]*:END:[ \t]*$" limit t)
       (let ((contents-end (and (> (match-beginning 0) contents-begin)
-			       (match-beginning 0)))
-	    (before-blank (progn (forward-line) (point)))
-	    (end (progn (skip-chars-forward " \r\t\n" limit)
-			(if (eobp) (point) (line-beginning-position)))))
-	(list 'property-drawer
-	      (list :begin begin
-		    :end end
-		    :contents-begin (and contents-end contents-begin)
-		    :contents-end contents-end
-		    :post-blank (count-lines before-blank end)
-		    :post-affiliated begin))))))
+                   (match-beginning 0)))
+        (before-blank (progn (forward-line) (point)))
+        (end (progn (skip-chars-forward " \r\t\n" limit)
+            (if (eobp) (point) (line-beginning-position)))))
+    (list 'property-drawer
+          (list :begin begin
+            :end end
+            :contents-begin (and contents-end contents-begin)
+            :contents-end contents-end
+            :post-blank (count-lines before-blank end)
+            :post-affiliated begin))))))
 
 (defun org-element-property-drawer-interpreter (_ contents)
   "Interpret property-drawer element as Org syntax.
@@ -1581,32 +1581,32 @@ containing `:begin', `:end', `:contents-begin', `:contents-end',
 Assume point is at the beginning of the block."
   (let ((case-fold-search t))
     (if (not (save-excursion
-	       (re-search-forward "^[ \t]*#\\+END_QUOTE[ \t]*$" limit t)))
-	;; Incomplete block: parse it as a paragraph.
-	(org-element-paragraph-parser limit affiliated)
+           (re-search-forward "^[ \t]*#\\+END_QUOTE[ \t]*$" limit t)))
+    ;; Incomplete block: parse it as a paragraph.
+    (org-element-paragraph-parser limit affiliated)
       (let ((block-end-line (match-beginning 0)))
-	(save-excursion
-	  (let* ((begin (car affiliated))
-		 (post-affiliated (point))
-		 ;; Empty blocks have no contents.
-		 (contents-begin (progn (forward-line)
-					(and (< (point) block-end-line)
-					     (point))))
-		 (contents-end (and contents-begin block-end-line))
-		 (pos-before-blank (progn (goto-char block-end-line)
-					  (forward-line)
-					  (point)))
-		 (end (progn (skip-chars-forward " \r\t\n" limit)
-			     (if (eobp) (point) (line-beginning-position)))))
-	    (list 'quote-block
-		  (nconc
-		   (list :begin begin
-			 :end end
-			 :contents-begin contents-begin
-			 :contents-end contents-end
-			 :post-blank (count-lines pos-before-blank end)
-			 :post-affiliated post-affiliated)
-		   (cdr affiliated)))))))))
+    (save-excursion
+      (let* ((begin (car affiliated))
+         (post-affiliated (point))
+         ;; Empty blocks have no contents.
+         (contents-begin (progn (forward-line)
+                    (and (< (point) block-end-line)
+                         (point))))
+         (contents-end (and contents-begin block-end-line))
+         (pos-before-blank (progn (goto-char block-end-line)
+                      (forward-line)
+                      (point)))
+         (end (progn (skip-chars-forward " \r\t\n" limit)
+                 (if (eobp) (point) (line-beginning-position)))))
+        (list 'quote-block
+          (nconc
+           (list :begin begin
+             :end end
+             :contents-begin contents-begin
+             :contents-end contents-end
+             :post-blank (count-lines pos-before-blank end)
+             :post-affiliated post-affiliated)
+           (cdr affiliated)))))))))
 
 (defun org-element-quote-block-interpreter (_ contents)
   "Interpret quote-block element as Org syntax.
@@ -1619,24 +1619,24 @@ CONTENTS is the contents of the element."
 (defun org-element-section-parser (_)
   "Parse a section.
 
-Return a list whose CAR is `section' and CDR is a plist
-containing `:begin', `:end', `:contents-begin', `contents-end',
-`:post-blank' and `:post-affiliated' keywords."
+  Return a list whose CAR is `section' and CDR is a plist
+  containing `:begin', `:end', `:contents-begin', `contents-end',
+  `:post-blank' and `:post-affiliated' keywords."
   (save-excursion
     ;; Beginning of section is the beginning of the first non-blank
     ;; line after previous headline.
     (let ((begin (point))
-	  (end (progn (org-with-limited-levels (outline-next-heading))
-		      (point)))
-	  (pos-before-blank (progn (skip-chars-backward " \r\t\n")
-				   (line-beginning-position 2))))
+      (end (progn (org-with-limited-levels (outline-next-heading))
+              (point)))
+      (pos-before-blank (progn (skip-chars-backward " \r\t\n")
+                   (line-beginning-position 2))))
       (list 'section
-	    (list :begin begin
-		  :end end
-		  :contents-begin begin
-		  :contents-end pos-before-blank
-		  :post-blank (count-lines pos-before-blank end)
-		  :post-affiliated begin)))))
+        (list :begin begin
+          :end end
+          :contents-begin begin
+          :contents-end pos-before-blank
+          :post-blank (count-lines pos-before-blank end)
+          :post-affiliated begin)))))
 
 (defun org-element-section-interpreter (_ contents)
   "Interpret section element as Org syntax.
@@ -1660,38 +1660,38 @@ containing `:type', `:begin', `:end', `:contents-begin',
 
 Assume point is at the beginning of the block."
   (let* ((case-fold-search t)
-	 (type (progn (looking-at "[ \t]*#\\+BEGIN_\\(\\S-+\\)")
-		      (match-string-no-properties 1))))
+     (type (progn (looking-at "[ \t]*#\\+BEGIN_\\(\\S-+\\)")
+              (match-string-no-properties 1))))
     (if (not (save-excursion
-	       (re-search-forward
-		(format "^[ \t]*#\\+END_%s[ \t]*$" (regexp-quote type))
-		limit t)))
-	;; Incomplete block: parse it as a paragraph.
-	(org-element-paragraph-parser limit affiliated)
+           (re-search-forward
+        (format "^[ \t]*#\\+END_%s[ \t]*$" (regexp-quote type))
+        limit t)))
+    ;; Incomplete block: parse it as a paragraph.
+    (org-element-paragraph-parser limit affiliated)
       (let ((block-end-line (match-beginning 0)))
-	(save-excursion
-	  (let* ((begin (car affiliated))
-		 (post-affiliated (point))
-		 ;; Empty blocks have no contents.
-		 (contents-begin (progn (forward-line)
-					(and (< (point) block-end-line)
-					     (point))))
-		 (contents-end (and contents-begin block-end-line))
-		 (pos-before-blank (progn (goto-char block-end-line)
-					  (forward-line)
-					  (point)))
-		 (end (progn (skip-chars-forward " \r\t\n" limit)
-			     (if (eobp) (point) (line-beginning-position)))))
-	    (list 'special-block
-		  (nconc
-		   (list :type type
-			 :begin begin
-			 :end end
-			 :contents-begin contents-begin
-			 :contents-end contents-end
-			 :post-blank (count-lines pos-before-blank end)
-			 :post-affiliated post-affiliated)
-		   (cdr affiliated)))))))))
+    (save-excursion
+      (let* ((begin (car affiliated))
+         (post-affiliated (point))
+         ;; Empty blocks have no contents.
+         (contents-begin (progn (forward-line)
+                    (and (< (point) block-end-line)
+                         (point))))
+         (contents-end (and contents-begin block-end-line))
+         (pos-before-blank (progn (goto-char block-end-line)
+                      (forward-line)
+                      (point)))
+         (end (progn (skip-chars-forward " \r\t\n" limit)
+                 (if (eobp) (point) (line-beginning-position)))))
+        (list 'special-block
+          (nconc
+           (list :type type
+             :begin begin
+             :end end
+             :contents-begin contents-begin
+             :contents-end contents-end
+             :post-blank (count-lines pos-before-blank end)
+             :post-affiliated post-affiliated)
+           (cdr affiliated)))))))))
 
 (defun org-element-special-block-interpreter (special-block contents)
   "Interpret SPECIAL-BLOCK element as Org syntax.
@@ -1728,50 +1728,50 @@ containing `:call', `:inside-header', `:arguments',
 `:post-affiliated' as keywords."
   (save-excursion
     (let* ((begin (car affiliated))
-	   (post-affiliated (point))
-	   (before-blank (line-beginning-position 2))
-	   (value (progn (search-forward ":" before-blank t)
-			 (skip-chars-forward " \t")
-			 (org-trim
-			  (buffer-substring-no-properties
-			   (point) (line-end-position)))))
-	   (call
-	    (or (org-string-nw-p
-		 (buffer-substring-no-properties
-		  (point) (progn (skip-chars-forward "^[]()" before-blank)
-				 (point))))))
-	   (inside-header (org-element--parse-paired-brackets ?\[))
-	   (arguments (org-string-nw-p
-		       (org-element--parse-paired-brackets ?\()))
-	   (end-header
-	    (org-string-nw-p
-	     (org-trim
-	      (buffer-substring-no-properties (point) (line-end-position)))))
-	   (end (progn (forward-line)
-		       (skip-chars-forward " \r\t\n" limit)
-		       (if (eobp) (point) (line-beginning-position)))))
+       (post-affiliated (point))
+       (before-blank (line-beginning-position 2))
+       (value (progn (search-forward ":" before-blank t)
+             (skip-chars-forward " \t")
+             (org-trim
+              (buffer-substring-no-properties
+               (point) (line-end-position)))))
+       (call
+        (or (org-string-nw-p
+         (buffer-substring-no-properties
+          (point) (progn (skip-chars-forward "^[]()" before-blank)
+                 (point))))))
+       (inside-header (org-element--parse-paired-brackets ?\[))
+       (arguments (org-string-nw-p
+               (org-element--parse-paired-brackets ?\()))
+       (end-header
+        (org-string-nw-p
+         (org-trim
+          (buffer-substring-no-properties (point) (line-end-position)))))
+       (end (progn (forward-line)
+               (skip-chars-forward " \r\t\n" limit)
+               (if (eobp) (point) (line-beginning-position)))))
       (list 'babel-call
-	    (nconc
-	     (list :call call
-		   :inside-header inside-header
-		   :arguments arguments
-		   :end-header end-header
-		   :begin begin
-		   :end end
-		   :value value
-		   :post-blank (count-lines before-blank end)
-		   :post-affiliated post-affiliated)
-	     (cdr affiliated))))))
+        (nconc
+         (list :call call
+           :inside-header inside-header
+           :arguments arguments
+           :end-header end-header
+           :begin begin
+           :end end
+           :value value
+           :post-blank (count-lines before-blank end)
+           :post-affiliated post-affiliated)
+         (cdr affiliated))))))
 
 (defun org-element-babel-call-interpreter (babel-call _)
   "Interpret BABEL-CALL element as Org syntax."
   (concat "#+call: "
-	  (org-element-property :call babel-call)
-	  (let ((h (org-element-property :inside-header babel-call)))
-	    (and h (format "[%s]" h)))
-	  (concat "(" (org-element-property :arguments babel-call) ")")
-	  (let ((h (org-element-property :end-header babel-call)))
-	    (and h (concat " " h)))))
+      (org-element-property :call babel-call)
+      (let ((h (org-element-property :inside-header babel-call)))
+        (and h (format "[%s]" h)))
+      (concat "(" (org-element-property :arguments babel-call) ")")
+      (let ((h (org-element-property :end-header babel-call)))
+        (and h (concat " " h)))))
 
 
 ;;;; Clock
@@ -1786,41 +1786,41 @@ Return a list whose CAR is `clock' and CDR is a plist containing
 `:post-affiliated' as keywords."
   (save-excursion
     (let* ((case-fold-search nil)
-	   (begin (point))
-	   (value (progn (search-forward "CLOCK:" (line-end-position) t)
-			 (skip-chars-forward " \t")
-			 (org-element-timestamp-parser)))
-	   (duration (and (search-forward " => " (line-end-position) t)
-			  (progn (skip-chars-forward " \t")
-				 (looking-at "\\(\\S-+\\)[ \t]*$"))
-			  (match-string-no-properties 1)))
-	   (status (if duration 'closed 'running))
-	   (post-blank (let ((before-blank (progn (forward-line) (point))))
-			 (skip-chars-forward " \r\t\n" limit)
-			 (skip-chars-backward " \t")
-			 (unless (bolp) (end-of-line))
-			 (count-lines before-blank (point))))
-	   (end (point)))
+       (begin (point))
+       (value (progn (search-forward "CLOCK:" (line-end-position) t)
+             (skip-chars-forward " \t")
+             (org-element-timestamp-parser)))
+       (duration (and (search-forward " => " (line-end-position) t)
+              (progn (skip-chars-forward " \t")
+                 (looking-at "\\(\\S-+\\)[ \t]*$"))
+              (match-string-no-properties 1)))
+       (status (if duration 'closed 'running))
+       (post-blank (let ((before-blank (progn (forward-line) (point))))
+             (skip-chars-forward " \r\t\n" limit)
+             (skip-chars-backward " \t")
+             (unless (bolp) (end-of-line))
+             (count-lines before-blank (point))))
+       (end (point)))
       (list 'clock
-	    (list :status status
-		  :value value
-		  :duration duration
-		  :begin begin
-		  :end end
-		  :post-blank post-blank
-		  :post-affiliated begin)))))
+        (list :status status
+          :value value
+          :duration duration
+          :begin begin
+          :end end
+          :post-blank post-blank
+          :post-affiliated begin)))))
 
 (defun org-element-clock-interpreter (clock _)
   "Interpret CLOCK element as Org syntax."
   (concat "CLOCK: "
-	  (org-element-timestamp-interpreter
-	   (org-element-property :value clock) nil)
-	  (let ((duration (org-element-property :duration clock)))
-	    (and duration
-		 (concat " => "
-			 (apply 'format
-				"%2s:%02s"
-				(org-split-string duration ":")))))))
+      (org-element-timestamp-interpreter
+       (org-element-property :value clock) nil)
+      (let ((duration (org-element-property :duration clock)))
+        (and duration
+         (concat " => "
+             (apply 'format
+                "%2s:%02s"
+                (org-split-string duration ":")))))))
 
 
 ;;;; Comment
@@ -1837,32 +1837,32 @@ containing `:begin', `:end', `:value', `:post-blank',
 Assume point is at comment beginning."
   (save-excursion
     (let* ((begin (point))
-	   (value (prog2 (looking-at "[ \t]*# ?")
-		      (buffer-substring-no-properties
-		       (match-end 0) (line-end-position))
-		    (forward-line)))
-	   (com-end
-	    ;; Get comments ending.
-	    (progn
-	      (while (and (< (point) limit) (looking-at "[ \t]*#\\( \\|$\\)"))
-		;; Accumulate lines without leading hash and first
-		;; whitespace.
-		(setq value
-		      (concat value
-			      "\n"
-			      (buffer-substring-no-properties
-			       (match-end 0) (line-end-position))))
-		(forward-line))
-	      (point)))
-	   (end (progn (goto-char com-end)
-		       (skip-chars-forward " \r\t\n" limit)
-		       (if (eobp) (point) (line-beginning-position)))))
+       (value (prog2 (looking-at "[ \t]*# ?")
+              (buffer-substring-no-properties
+               (match-end 0) (line-end-position))
+            (forward-line)))
+       (com-end
+        ;; Get comments ending.
+        (progn
+          (while (and (< (point) limit) (looking-at "[ \t]*#\\( \\|$\\)"))
+        ;; Accumulate lines without leading hash and first
+        ;; whitespace.
+        (setq value
+              (concat value
+                  "\n"
+                  (buffer-substring-no-properties
+                   (match-end 0) (line-end-position))))
+        (forward-line))
+          (point)))
+       (end (progn (goto-char com-end)
+               (skip-chars-forward " \r\t\n" limit)
+               (if (eobp) (point) (line-beginning-position)))))
       (list 'comment
-	    (list :begin begin
-		  :end end
-		  :value value
-		  :post-blank (count-lines com-end end)
-		  :post-affiliated begin)))))
+        (list :begin begin
+          :end end
+          :value value
+          :post-blank (count-lines com-end end)
+          :post-affiliated begin)))))
 
 (defun org-element-comment-interpreter (comment _)
   "Interpret COMMENT element as Org syntax.
@@ -1887,36 +1887,36 @@ containing `:begin', `:end', `:value', `:post-blank' and
 Assume point is at comment block beginning."
   (let ((case-fold-search t))
     (if (not (save-excursion
-	       (re-search-forward "^[ \t]*#\\+END_COMMENT[ \t]*$" limit t)))
-	;; Incomplete block: parse it as a paragraph.
-	(org-element-paragraph-parser limit affiliated)
+           (re-search-forward "^[ \t]*#\\+END_COMMENT[ \t]*$" limit t)))
+    ;; Incomplete block: parse it as a paragraph.
+    (org-element-paragraph-parser limit affiliated)
       (let ((contents-end (match-beginning 0)))
-	(save-excursion
-	  (let* ((begin (car affiliated))
-		 (post-affiliated (point))
-		 (contents-begin (progn (forward-line) (point)))
-		 (pos-before-blank (progn (goto-char contents-end)
-					  (forward-line)
-					  (point)))
-		 (end (progn (skip-chars-forward " \r\t\n" limit)
-			     (if (eobp) (point) (line-beginning-position))))
-		 (value (buffer-substring-no-properties
-			 contents-begin contents-end)))
-	    (list 'comment-block
-		  (nconc
-		   (list :begin begin
-			 :end end
-			 :value value
-			 :post-blank (count-lines pos-before-blank end)
-			 :post-affiliated post-affiliated)
-		   (cdr affiliated)))))))))
+    (save-excursion
+      (let* ((begin (car affiliated))
+         (post-affiliated (point))
+         (contents-begin (progn (forward-line) (point)))
+         (pos-before-blank (progn (goto-char contents-end)
+                      (forward-line)
+                      (point)))
+         (end (progn (skip-chars-forward " \r\t\n" limit)
+                 (if (eobp) (point) (line-beginning-position))))
+         (value (buffer-substring-no-properties
+             contents-begin contents-end)))
+        (list 'comment-block
+          (nconc
+           (list :begin begin
+             :end end
+             :value value
+             :post-blank (count-lines pos-before-blank end)
+             :post-affiliated post-affiliated)
+           (cdr affiliated)))))))))
 
 (defun org-element-comment-block-interpreter (comment-block _)
   "Interpret COMMENT-BLOCK element as Org syntax."
   (format "#+begin_comment\n%s#+end_comment"
-	  (org-element-normalize-string
-	   (org-remove-indentation
-	    (org-element-property :value comment-block)))))
+      (org-element-normalize-string
+       (org-remove-indentation
+        (org-element-property :value comment-block)))))
 
 
 ;;;; Diary Sexp
@@ -1934,20 +1934,20 @@ containing `:begin', `:end', `:value', `:post-blank' and
 `:post-affiliated' keywords."
   (save-excursion
     (let ((begin (car affiliated))
-	  (post-affiliated (point))
-	  (value (progn (looking-at "\\(%%(.*\\)[ \t]*$")
-			(match-string-no-properties 1)))
-	  (pos-before-blank (progn (forward-line) (point)))
-	  (end (progn (skip-chars-forward " \r\t\n" limit)
-		      (if (eobp) (point) (line-beginning-position)))))
+      (post-affiliated (point))
+      (value (progn (looking-at "\\(%%(.*\\)[ \t]*$")
+            (match-string-no-properties 1)))
+      (pos-before-blank (progn (forward-line) (point)))
+      (end (progn (skip-chars-forward " \r\t\n" limit)
+              (if (eobp) (point) (line-beginning-position)))))
       (list 'diary-sexp
-	    (nconc
-	     (list :value value
-		   :begin begin
-		   :end end
-		   :post-blank (count-lines pos-before-blank end)
-		   :post-affiliated post-affiliated)
-	     (cdr affiliated))))))
+        (nconc
+         (list :value value
+           :begin begin
+           :end end
+           :post-blank (count-lines pos-before-blank end)
+           :post-affiliated post-affiliated)
+         (cdr affiliated))))))
 
 (defun org-element-diary-sexp-interpreter (diary-sexp _)
   "Interpret DIARY-SEXP as Org syntax."
@@ -1970,92 +1970,92 @@ containing `:begin', `:end', `:number-lines', `:preserve-indent',
 `:value', `:post-blank' and `:post-affiliated' keywords."
   (let ((case-fold-search t))
     (if (not (save-excursion
-	       (re-search-forward "^[ \t]*#\\+END_EXAMPLE[ \t]*$" limit t)))
-	;; Incomplete block: parse it as a paragraph.
-	(org-element-paragraph-parser limit affiliated)
+           (re-search-forward "^[ \t]*#\\+END_EXAMPLE[ \t]*$" limit t)))
+    ;; Incomplete block: parse it as a paragraph.
+    (org-element-paragraph-parser limit affiliated)
       (let ((contents-end (match-beginning 0)))
-	(save-excursion
-	  (let* ((switches
-		  (progn
-		    (looking-at "^[ \t]*#\\+BEGIN_EXAMPLE\\(?: +\\(.*\\)\\)?")
-		    (match-string-no-properties 1)))
-		 ;; Switches analysis.
-		 (number-lines
-		  (and switches
-		       (string-match "\\([-+]\\)n\\(?: *\\([0-9]+\\)\\)?\\>"
-				     switches)
-		       (cons
-			(if (equal (match-string 1 switches) "-")
-			    'new
-			  'continued)
-			(if (not (match-end 2)) 0
-			  ;; Subtract 1 to give number of lines before
-			  ;; first line.
-			  (1- (string-to-number (match-string 2 switches)))))))
-		 (preserve-indent
-		  (and switches (string-match "-i\\>" switches)))
-		 ;; Should labels be retained in (or stripped from) example
-		 ;; blocks?
-		 (retain-labels
-		  (or (not switches)
-		      (not (string-match "-r\\>" switches))
-		      (and number-lines (string-match "-k\\>" switches))))
-		 ;; What should code-references use - labels or
-		 ;; line-numbers?
-		 (use-labels
-		  (or (not switches)
-		      (and retain-labels
-			   (not (string-match "-k\\>" switches)))))
-		 (label-fmt
-		  (and switches
-		       (string-match "-l +\"\\([^\"\n]+\\)\"" switches)
-		       (match-string 1 switches)))
-		 ;; Standard block parsing.
-		 (begin (car affiliated))
-		 (post-affiliated (point))
-		 (contents-begin (line-beginning-position 2))
-		 (value (org-unescape-code-in-string
-			 (buffer-substring-no-properties
-			  contents-begin contents-end)))
-		 (pos-before-blank (progn (goto-char contents-end)
-					  (forward-line)
-					  (point)))
-		 (end (progn (skip-chars-forward " \r\t\n" limit)
-			     (if (eobp) (point) (line-beginning-position)))))
-	    (list 'example-block
-		  (nconc
-		   (list :begin begin
-			 :end end
-			 :value value
-			 :switches switches
-			 :number-lines number-lines
-			 :preserve-indent preserve-indent
-			 :retain-labels retain-labels
-			 :use-labels use-labels
-			 :label-fmt label-fmt
-			 :post-blank (count-lines pos-before-blank end)
-			 :post-affiliated post-affiliated)
-		   (cdr affiliated)))))))))
+    (save-excursion
+      (let* ((switches
+          (progn
+            (looking-at "^[ \t]*#\\+BEGIN_EXAMPLE\\(?: +\\(.*\\)\\)?")
+            (match-string-no-properties 1)))
+         ;; Switches analysis.
+         (number-lines
+          (and switches
+               (string-match "\\([-+]\\)n\\(?: *\\([0-9]+\\)\\)?\\>"
+                     switches)
+               (cons
+            (if (equal (match-string 1 switches) "-")
+                'new
+              'continued)
+            (if (not (match-end 2)) 0
+              ;; Subtract 1 to give number of lines before
+              ;; first line.
+              (1- (string-to-number (match-string 2 switches)))))))
+         (preserve-indent
+          (and switches (string-match "-i\\>" switches)))
+         ;; Should labels be retained in (or stripped from) example
+         ;; blocks?
+         (retain-labels
+          (or (not switches)
+              (not (string-match "-r\\>" switches))
+              (and number-lines (string-match "-k\\>" switches))))
+         ;; What should code-references use - labels or
+         ;; line-numbers?
+         (use-labels
+          (or (not switches)
+              (and retain-labels
+               (not (string-match "-k\\>" switches)))))
+         (label-fmt
+          (and switches
+               (string-match "-l +\"\\([^\"\n]+\\)\"" switches)
+               (match-string 1 switches)))
+         ;; Standard block parsing.
+         (begin (car affiliated))
+         (post-affiliated (point))
+         (contents-begin (line-beginning-position 2))
+         (value (org-unescape-code-in-string
+             (buffer-substring-no-properties
+              contents-begin contents-end)))
+         (pos-before-blank (progn (goto-char contents-end)
+                      (forward-line)
+                      (point)))
+         (end (progn (skip-chars-forward " \r\t\n" limit)
+                 (if (eobp) (point) (line-beginning-position)))))
+        (list 'example-block
+          (nconc
+           (list :begin begin
+             :end end
+             :value value
+             :switches switches
+             :number-lines number-lines
+             :preserve-indent preserve-indent
+             :retain-labels retain-labels
+             :use-labels use-labels
+             :label-fmt label-fmt
+             :post-blank (count-lines pos-before-blank end)
+             :post-affiliated post-affiliated)
+           (cdr affiliated)))))))))
 
 (defun org-element-example-block-interpreter (example-block _)
   "Interpret EXAMPLE-BLOCK element as Org syntax."
   (let ((switches (org-element-property :switches example-block))
-	(value
-	 (let ((val (org-element-property :value example-block)))
-	   (cond
-	    ((or org-src-preserve-indentation
-		 (org-element-property :preserve-indent example-block))
-	     val)
-	    ((= 0 org-edit-src-content-indentation)
-	     (org-remove-indentation val))
-	    (t
-	     (let ((ind (make-string org-edit-src-content-indentation ?\s)))
-	       (replace-regexp-in-string "^[ \t]*\\S-"
-					 (concat ind "\\&")
-					 (org-remove-indentation val))))))))
+    (value
+     (let ((val (org-element-property :value example-block)))
+       (cond
+        ((or org-src-preserve-indentation
+         (org-element-property :preserve-indent example-block))
+         val)
+        ((= 0 org-edit-src-content-indentation)
+         (org-remove-indentation val))
+        (t
+         (let ((ind (make-string org-edit-src-content-indentation ?\s)))
+           (replace-regexp-in-string "^[ \t]*\\S-"
+                     (concat ind "\\&")
+                     (org-remove-indentation val))))))))
     (concat "#+begin_example" (and switches (concat " " switches)) "\n"
-	    (org-element-normalize-string (org-escape-code-in-string value))
-	    "#+end_example")))
+        (org-element-normalize-string (org-escape-code-in-string value))
+        "#+end_example")))
 
 
 ;;;; Export Block
@@ -2075,42 +2075,42 @@ containing `:begin', `:end', `:type', `:value', `:post-blank' and
 Assume point is at export-block beginning."
   (let* ((case-fold-search t))
     (if (not (save-excursion
-	       (re-search-forward "^[ \t]*#\\+END_EXPORT[ \t]*$" limit t)))
-	;; Incomplete block: parse it as a paragraph.
-	(org-element-paragraph-parser limit affiliated)
+           (re-search-forward "^[ \t]*#\\+END_EXPORT[ \t]*$" limit t)))
+    ;; Incomplete block: parse it as a paragraph.
+    (org-element-paragraph-parser limit affiliated)
       (save-excursion
-	(let* ((contents-end (match-beginning 0))
-	       (backend
-		(progn
-		  (looking-at
-		   "[ \t]*#\\+BEGIN_EXPORT\\(?:[ \t]+\\(\\S-+\\)\\)?[ \t]*$")
-		  (match-string-no-properties 1)))
-	       (begin (car affiliated))
-	       (post-affiliated (point))
-	       (contents-begin (progn (forward-line) (point)))
-	       (pos-before-blank (progn (goto-char contents-end)
-					(forward-line)
-					(point)))
-	       (end (progn (skip-chars-forward " \r\t\n" limit)
-			   (if (eobp) (point) (line-beginning-position))))
-	       (value (org-unescape-code-in-string
-		       (buffer-substring-no-properties contents-begin
-						       contents-end))))
-	  (list 'export-block
-		(nconc
-		 (list :type (and backend (upcase backend))
-		       :begin begin
-		       :end end
-		       :value value
-		       :post-blank (count-lines pos-before-blank end)
-		       :post-affiliated post-affiliated)
-		 (cdr affiliated))))))))
+    (let* ((contents-end (match-beginning 0))
+           (backend
+        (progn
+          (looking-at
+           "[ \t]*#\\+BEGIN_EXPORT\\(?:[ \t]+\\(\\S-+\\)\\)?[ \t]*$")
+          (match-string-no-properties 1)))
+           (begin (car affiliated))
+           (post-affiliated (point))
+           (contents-begin (progn (forward-line) (point)))
+           (pos-before-blank (progn (goto-char contents-end)
+                    (forward-line)
+                    (point)))
+           (end (progn (skip-chars-forward " \r\t\n" limit)
+               (if (eobp) (point) (line-beginning-position))))
+           (value (org-unescape-code-in-string
+               (buffer-substring-no-properties contents-begin
+                               contents-end))))
+      (list 'export-block
+        (nconc
+         (list :type (and backend (upcase backend))
+               :begin begin
+               :end end
+               :value value
+               :post-blank (count-lines pos-before-blank end)
+               :post-affiliated post-affiliated)
+         (cdr affiliated))))))))
 
 (defun org-element-export-block-interpreter (export-block _)
   "Interpret EXPORT-BLOCK element as Org syntax."
   (format "#+begin_export %s\n%s#+end_export"
-	  (org-element-property :type export-block)
-	  (org-element-property :value export-block)))
+      (org-element-property :type export-block)
+      (org-element-property :value export-block)))
 
 
 ;;;; Fixed-width
@@ -2130,26 +2130,26 @@ containing `:begin', `:end', `:value', `:post-blank' and
 Assume point is at the beginning of the fixed-width area."
   (save-excursion
     (let* ((begin (car affiliated))
-	   (post-affiliated (point))
-	   (end-area
-	    (progn
-	      (while (and (< (point) limit)
-			  (looking-at "[ \t]*:\\( \\|$\\)"))
-		(forward-line))
-	      (if (bolp) (line-end-position 0) (point))))
-	   (end (progn (skip-chars-forward " \r\t\n" limit)
-		       (if (eobp) (point) (line-beginning-position)))))
+       (post-affiliated (point))
+       (end-area
+        (progn
+          (while (and (< (point) limit)
+              (looking-at "[ \t]*:\\( \\|$\\)"))
+        (forward-line))
+          (if (bolp) (line-end-position 0) (point))))
+       (end (progn (skip-chars-forward " \r\t\n" limit)
+               (if (eobp) (point) (line-beginning-position)))))
       (list 'fixed-width
-	    (nconc
-	     (list :begin begin
-		   :end end
-		   :value (replace-regexp-in-string
-			   "^[ \t]*: ?" ""
-			   (buffer-substring-no-properties post-affiliated
-							   end-area))
-		   :post-blank (count-lines end-area end)
-		   :post-affiliated post-affiliated)
-	     (cdr affiliated))))))
+        (nconc
+         (list :begin begin
+           :end end
+           :value (replace-regexp-in-string
+               "^[ \t]*: ?" ""
+               (buffer-substring-no-properties post-affiliated
+                               end-area))
+           :post-blank (count-lines end-area end)
+           :post-affiliated post-affiliated)
+         (cdr affiliated))))))
 
 (defun org-element-fixed-width-interpreter (fixed-width _)
   "Interpret FIXED-WIDTH element as Org syntax."
@@ -2172,17 +2172,17 @@ containing `:begin', `:end', `:post-blank' and `:post-affiliated'
 keywords."
   (save-excursion
     (let ((begin (car affiliated))
-	  (post-affiliated (point))
-	  (post-hr (progn (forward-line) (point)))
-	  (end (progn (skip-chars-forward " \r\t\n" limit)
-		      (if (eobp) (point) (line-beginning-position)))))
+      (post-affiliated (point))
+      (post-hr (progn (forward-line) (point)))
+      (end (progn (skip-chars-forward " \r\t\n" limit)
+              (if (eobp) (point) (line-beginning-position)))))
       (list 'horizontal-rule
-	    (nconc
-	     (list :begin begin
-		   :end end
-		   :post-blank (count-lines post-hr end)
-		   :post-affiliated post-affiliated)
-	     (cdr affiliated))))))
+        (nconc
+         (list :begin begin
+           :end end
+           :post-blank (count-lines post-hr end)
+           :post-affiliated post-affiliated)
+         (cdr affiliated))))))
 
 (defun org-element-horizontal-rule-interpreter (&rest _)
   "Interpret HORIZONTAL-RULE element as Org syntax."
@@ -2207,29 +2207,29 @@ CDR is a plist containing `:key', `:value', `:begin', `:end',
     ;; keyword.  In this case AFFILIATED is nil, so we take care of
     ;; this corner case.
     (let ((begin (or (car affiliated) (point)))
-	  (post-affiliated (point))
-	  (key (progn (looking-at "[ \t]*#\\+\\(\\S-*\\):")
-		      (upcase (match-string-no-properties 1))))
-	  (value (org-trim (buffer-substring-no-properties
-			    (match-end 0) (point-at-eol))))
-	  (pos-before-blank (progn (forward-line) (point)))
-	  (end (progn (skip-chars-forward " \r\t\n" limit)
-		      (if (eobp) (point) (line-beginning-position)))))
+      (post-affiliated (point))
+      (key (progn (looking-at "[ \t]*#\\+\\(\\S-*\\):")
+              (upcase (match-string-no-properties 1))))
+      (value (org-trim (buffer-substring-no-properties
+                (match-end 0) (point-at-eol))))
+      (pos-before-blank (progn (forward-line) (point)))
+      (end (progn (skip-chars-forward " \r\t\n" limit)
+              (if (eobp) (point) (line-beginning-position)))))
       (list 'keyword
-	    (nconc
-	     (list :key key
-		   :value value
-		   :begin begin
-		   :end end
-		   :post-blank (count-lines pos-before-blank end)
-		   :post-affiliated post-affiliated)
-	     (cdr affiliated))))))
+        (nconc
+         (list :key key
+           :value value
+           :begin begin
+           :end end
+           :post-blank (count-lines pos-before-blank end)
+           :post-affiliated post-affiliated)
+         (cdr affiliated))))))
 
 (defun org-element-keyword-interpreter (keyword _)
   "Interpret KEYWORD element as Org syntax."
   (format "#+%s: %s"
-	  (downcase (org-element-property :key keyword))
-	  (org-element-property :value keyword)))
+      (downcase (org-element-property :key keyword))
+      (org-element-property :value keyword)))
 
 
 ;;;; Latex Environment
@@ -2261,26 +2261,26 @@ containing `:begin', `:end', `:value', `:post-blank' and
 Assume point is at the beginning of the latex environment."
   (save-excursion
     (let ((case-fold-search t)
-	  (code-begin (point)))
+      (code-begin (point)))
       (looking-at org-element--latex-begin-environment)
       (if (not (re-search-forward (format org-element--latex-end-environment
-					  (regexp-quote (match-string 1)))
-				  limit t))
-	  ;; Incomplete latex environment: parse it as a paragraph.
-	  (org-element-paragraph-parser limit affiliated)
-	(let* ((code-end (progn (forward-line) (point)))
-	       (begin (car affiliated))
-	       (value (buffer-substring-no-properties code-begin code-end))
-	       (end (progn (skip-chars-forward " \r\t\n" limit)
-			   (if (eobp) (point) (line-beginning-position)))))
-	  (list 'latex-environment
-		(nconc
-		 (list :begin begin
-		       :end end
-		       :value value
-		       :post-blank (count-lines code-end end)
-		       :post-affiliated code-begin)
-		 (cdr affiliated))))))))
+                      (regexp-quote (match-string 1)))
+                  limit t))
+      ;; Incomplete latex environment: parse it as a paragraph.
+      (org-element-paragraph-parser limit affiliated)
+    (let* ((code-end (progn (forward-line) (point)))
+           (begin (car affiliated))
+           (value (buffer-substring-no-properties code-begin code-end))
+           (end (progn (skip-chars-forward " \r\t\n" limit)
+               (if (eobp) (point) (line-beginning-position)))))
+      (list 'latex-environment
+        (nconc
+         (list :begin begin
+               :end end
+               :value value
+               :post-blank (count-lines code-end end)
+               :post-affiliated code-begin)
+         (cdr affiliated))))))))
 
 (defun org-element-latex-environment-interpreter (latex-environment _)
   "Interpret LATEX-ENVIRONMENT element as Org syntax."
@@ -2299,27 +2299,27 @@ containing `:key', `:value', `:begin', `:end', `:post-blank' and
 `:post-affiliated' keywords."
   (looking-at org-property-re)
   (let ((case-fold-search t)
-	(begin (point))
-	(key   (match-string-no-properties 2))
-	(value (match-string-no-properties 3))
-	(end (save-excursion
-	       (end-of-line)
-	       (if (re-search-forward org-property-re limit t)
-		   (line-beginning-position)
-		 limit))))
+    (begin (point))
+    (key   (match-string-no-properties 2))
+    (value (match-string-no-properties 3))
+    (end (save-excursion
+           (end-of-line)
+           (if (re-search-forward org-property-re limit t)
+           (line-beginning-position)
+         limit))))
     (list 'node-property
-	  (list :key key
-		:value value
-		:begin begin
-		:end end
-		:post-blank 0
-		:post-affiliated begin))))
+      (list :key key
+        :value value
+        :begin begin
+        :end end
+        :post-blank 0
+        :post-affiliated begin))))
 
 (defun org-element-node-property-interpreter (node-property _)
   "Interpret NODE-PROPERTY element as Org syntax."
   (format org-property-format
-	  (format ":%s:" (org-element-property :key node-property))
-	  (or (org-element-property :value node-property) "")))
+      (format ":%s:" (org-element-property :key node-property))
+      (or (org-element-property :value node-property) "")))
 
 
 ;;;; Paragraph
@@ -2339,57 +2339,57 @@ containing `:begin', `:end', `:contents-begin' and
 Assume point is at the beginning of the paragraph."
   (save-excursion
     (let* ((begin (car affiliated))
-	   (contents-begin (point))
-	   (before-blank
-	    (let ((case-fold-search t))
-	      (end-of-line)
-	      ;; A matching `org-element-paragraph-separate' is not
-	      ;; necessarily the end of the paragraph.  In particular,
-	      ;; drawers, blocks or LaTeX environments opening lines
-	      ;; must be closed.  Moreover keywords with a secondary
-	      ;; value must belong to "dual keywords".
-	      (while (not
-		      (cond
-		       ((not (and (re-search-forward
-				   org-element-paragraph-separate limit 'move)
-				  (progn (beginning-of-line) t))))
-		       ((looking-at org-drawer-regexp)
-			(save-excursion
-			  (re-search-forward "^[ \t]*:END:[ \t]*$" limit t)))
-		       ((looking-at "[ \t]*#\\+BEGIN_\\(\\S-+\\)")
-			(save-excursion
-			  (re-search-forward
-			   (format "^[ \t]*#\\+END_%s[ \t]*$"
-				   (regexp-quote (match-string 1)))
-			   limit t)))
-		       ((looking-at org-element--latex-begin-environment)
-			(save-excursion
-			  (re-search-forward
-			   (format org-element--latex-end-environment
-				   (regexp-quote (match-string 1)))
-			   limit t)))
-		       ((looking-at "[ \t]*#\\+\\(\\S-+\\)\\[.*\\]:")
-			(member-ignore-case (match-string 1)
-					    org-element-dual-keywords))
-		       ;; Everything else is unambiguous.
-		       (t)))
-		(end-of-line))
-	      (if (= (point) limit) limit
-		(goto-char (line-beginning-position)))))
-	   (contents-end (save-excursion
-			   (skip-chars-backward " \r\t\n" contents-begin)
-			   (line-beginning-position 2)))
-	   (end (progn (skip-chars-forward " \r\t\n" limit)
-		       (if (eobp) (point) (line-beginning-position)))))
+       (contents-begin (point))
+       (before-blank
+        (let ((case-fold-search t))
+          (end-of-line)
+          ;; A matching `org-element-paragraph-separate' is not
+          ;; necessarily the end of the paragraph.  In particular,
+          ;; drawers, blocks or LaTeX environments opening lines
+          ;; must be closed.  Moreover keywords with a secondary
+          ;; value must belong to "dual keywords".
+          (while (not
+              (cond
+               ((not (and (re-search-forward
+                   org-element-paragraph-separate limit 'move)
+                  (progn (beginning-of-line) t))))
+               ((looking-at org-drawer-regexp)
+            (save-excursion
+              (re-search-forward "^[ \t]*:END:[ \t]*$" limit t)))
+               ((looking-at "[ \t]*#\\+BEGIN_\\(\\S-+\\)")
+            (save-excursion
+              (re-search-forward
+               (format "^[ \t]*#\\+END_%s[ \t]*$"
+                   (regexp-quote (match-string 1)))
+               limit t)))
+               ((looking-at org-element--latex-begin-environment)
+            (save-excursion
+              (re-search-forward
+               (format org-element--latex-end-environment
+                   (regexp-quote (match-string 1)))
+               limit t)))
+               ((looking-at "[ \t]*#\\+\\(\\S-+\\)\\[.*\\]:")
+            (member-ignore-case (match-string 1)
+                        org-element-dual-keywords))
+               ;; Everything else is unambiguous.
+               (t)))
+        (end-of-line))
+          (if (= (point) limit) limit
+        (goto-char (line-beginning-position)))))
+       (contents-end (save-excursion
+               (skip-chars-backward " \r\t\n" contents-begin)
+               (line-beginning-position 2)))
+       (end (progn (skip-chars-forward " \r\t\n" limit)
+               (if (eobp) (point) (line-beginning-position)))))
       (list 'paragraph
-	    (nconc
-	     (list :begin begin
-		   :end end
-		   :contents-begin contents-begin
-		   :contents-end contents-end
-		   :post-blank (count-lines before-blank end)
-		   :post-affiliated contents-begin)
-	     (cdr affiliated))))))
+        (nconc
+         (list :begin begin
+           :end end
+           :contents-begin contents-begin
+           :contents-end contents-end
+           :post-blank (count-lines before-blank end)
+           :post-affiliated contents-begin)
+         (cdr affiliated))))))
 
 (defun org-element-paragraph-interpreter (_ contents)
   "Interpret paragraph element as Org syntax.
@@ -2409,49 +2409,49 @@ containing `:closed', `:deadline', `:scheduled', `:begin',
 `:end', `:post-blank' and `:post-affiliated' keywords."
   (save-excursion
     (let* ((case-fold-search nil)
-	   (begin (point))
-	   (post-blank (let ((before-blank (progn (forward-line) (point))))
-			 (skip-chars-forward " \r\t\n" limit)
-			 (skip-chars-backward " \t")
-			 (unless (bolp) (end-of-line))
-			 (count-lines before-blank (point))))
-	   (end (point))
-	   closed deadline scheduled)
+       (begin (point))
+       (post-blank (let ((before-blank (progn (forward-line) (point))))
+             (skip-chars-forward " \r\t\n" limit)
+             (skip-chars-backward " \t")
+             (unless (bolp) (end-of-line))
+             (count-lines before-blank (point))))
+       (end (point))
+       closed deadline scheduled)
       (goto-char begin)
       (while (re-search-forward org-keyword-time-not-clock-regexp end t)
-	(goto-char (match-end 1))
-	(skip-chars-forward " \t" end)
-	(let ((keyword (match-string 1))
-	      (time (org-element-timestamp-parser)))
-	  (cond ((equal keyword org-closed-string) (setq closed time))
-		((equal keyword org-deadline-string) (setq deadline time))
-		(t (setq scheduled time)))))
+    (goto-char (match-end 1))
+    (skip-chars-forward " \t" end)
+    (let ((keyword (match-string 1))
+          (time (org-element-timestamp-parser)))
+      (cond ((equal keyword org-closed-string) (setq closed time))
+        ((equal keyword org-deadline-string) (setq deadline time))
+        (t (setq scheduled time)))))
       (list 'planning
-	    (list :closed closed
-		  :deadline deadline
-		  :scheduled scheduled
-		  :begin begin
-		  :end end
-		  :post-blank post-blank
-		  :post-affiliated begin)))))
+        (list :closed closed
+          :deadline deadline
+          :scheduled scheduled
+          :begin begin
+          :end end
+          :post-blank post-blank
+          :post-affiliated begin)))))
 
 (defun org-element-planning-interpreter (planning _)
   "Interpret PLANNING element as Org syntax."
   (mapconcat
    #'identity
    (delq nil
-	 (list (let ((deadline (org-element-property :deadline planning)))
-		 (when deadline
-		   (concat org-deadline-string " "
-			   (org-element-timestamp-interpreter deadline nil))))
-	       (let ((scheduled (org-element-property :scheduled planning)))
-		 (when scheduled
-		   (concat org-scheduled-string " "
-			   (org-element-timestamp-interpreter scheduled nil))))
-	       (let ((closed (org-element-property :closed planning)))
-		 (when closed
-		   (concat org-closed-string " "
-			   (org-element-timestamp-interpreter closed nil))))))
+     (list (let ((deadline (org-element-property :deadline planning)))
+         (when deadline
+           (concat org-deadline-string " "
+               (org-element-timestamp-interpreter deadline nil))))
+           (let ((scheduled (org-element-property :scheduled planning)))
+         (when scheduled
+           (concat org-scheduled-string " "
+               (org-element-timestamp-interpreter scheduled nil))))
+           (let ((closed (org-element-property :closed planning)))
+         (when closed
+           (concat org-closed-string " "
+               (org-element-timestamp-interpreter closed nil))))))
    " "))
 
 
@@ -2474,109 +2474,109 @@ containing `:language', `:switches', `:parameters', `:begin',
 Assume point is at the beginning of the block."
   (let ((case-fold-search t))
     (if (not (save-excursion (re-search-forward "^[ \t]*#\\+END_SRC[ \t]*$"
-						limit t)))
-	;; Incomplete block: parse it as a paragraph.
-	(org-element-paragraph-parser limit affiliated)
+                        limit t)))
+    ;; Incomplete block: parse it as a paragraph.
+    (org-element-paragraph-parser limit affiliated)
       (let ((contents-end (match-beginning 0)))
-	(save-excursion
-	  (let* ((begin (car affiliated))
-		 (post-affiliated (point))
-		 ;; Get language as a string.
-		 (language
-		  (progn
-		    (looking-at
-		     "^[ \t]*#\\+BEGIN_SRC\
+    (save-excursion
+      (let* ((begin (car affiliated))
+         (post-affiliated (point))
+         ;; Get language as a string.
+         (language
+          (progn
+            (looking-at
+             "^[ \t]*#\\+BEGIN_SRC\
 \\(?: +\\(\\S-+\\)\\)?\
 \\(\\(?: +\\(?:-\\(?:l \".+\"\\|[ikr]\\)\\|[-+]n\\(?: *[0-9]+\\)?\\)\\)+\\)?\
 \\(.*\\)[ \t]*$")
-		    (match-string-no-properties 1)))
-		 ;; Get switches.
-		 (switches (match-string-no-properties 2))
-		 ;; Get parameters.
-		 (parameters (match-string-no-properties 3))
-		 ;; Switches analysis.
-		 (number-lines
-		  (and switches
-		       (string-match "\\([-+]\\)n\\(?: *\\([0-9]+\\)\\)?\\>"
-				     switches)
-		       (cons
-			(if (equal (match-string 1 switches) "-")
-			    'new
-			  'continued)
-			(if (not (match-end 2)) 0
-			  ;; Subtract 1 to give number of lines before
-			  ;; first line.
-			  (1- (string-to-number (match-string 2 switches)))))))
-		 (preserve-indent (and switches
-				       (string-match "-i\\>" switches)))
-		 (label-fmt
-		  (and switches
-		       (string-match "-l +\"\\([^\"\n]+\\)\"" switches)
-		       (match-string 1 switches)))
-		 ;; Should labels be retained in (or stripped from)
-		 ;; source blocks?
-		 (retain-labels
-		  (or (not switches)
-		      (not (string-match "-r\\>" switches))
-		      (and number-lines (string-match "-k\\>" switches))))
-		 ;; What should code-references use - labels or
-		 ;; line-numbers?
-		 (use-labels
-		  (or (not switches)
-		      (and retain-labels
-			   (not (string-match "-k\\>" switches)))))
-		 ;; Retrieve code.
-		 (value (org-unescape-code-in-string
-			 (buffer-substring-no-properties
-			  (line-beginning-position 2) contents-end)))
-		 (pos-before-blank (progn (goto-char contents-end)
-					  (forward-line)
-					  (point)))
-		 ;; Get position after ending blank lines.
-		 (end (progn (skip-chars-forward " \r\t\n" limit)
-			     (if (eobp) (point) (line-beginning-position)))))
-	    (list 'src-block
-		  (nconc
-		   (list :language language
-			 :switches (and (org-string-nw-p switches)
-					(org-trim switches))
-			 :parameters (and (org-string-nw-p parameters)
-					  (org-trim parameters))
-			 :begin begin
-			 :end end
-			 :number-lines number-lines
-			 :preserve-indent preserve-indent
-			 :retain-labels retain-labels
-			 :use-labels use-labels
-			 :label-fmt label-fmt
-			 :value value
-			 :post-blank (count-lines pos-before-blank end)
-			 :post-affiliated post-affiliated)
-		   (cdr affiliated)))))))))
+            (match-string-no-properties 1)))
+         ;; Get switches.
+         (switches (match-string-no-properties 2))
+         ;; Get parameters.
+         (parameters (match-string-no-properties 3))
+         ;; Switches analysis.
+         (number-lines
+          (and switches
+               (string-match "\\([-+]\\)n\\(?: *\\([0-9]+\\)\\)?\\>"
+                     switches)
+               (cons
+            (if (equal (match-string 1 switches) "-")
+                'new
+              'continued)
+            (if (not (match-end 2)) 0
+              ;; Subtract 1 to give number of lines before
+              ;; first line.
+              (1- (string-to-number (match-string 2 switches)))))))
+         (preserve-indent (and switches
+                       (string-match "-i\\>" switches)))
+         (label-fmt
+          (and switches
+               (string-match "-l +\"\\([^\"\n]+\\)\"" switches)
+               (match-string 1 switches)))
+         ;; Should labels be retained in (or stripped from)
+         ;; source blocks?
+         (retain-labels
+          (or (not switches)
+              (not (string-match "-r\\>" switches))
+              (and number-lines (string-match "-k\\>" switches))))
+         ;; What should code-references use - labels or
+         ;; line-numbers?
+         (use-labels
+          (or (not switches)
+              (and retain-labels
+               (not (string-match "-k\\>" switches)))))
+         ;; Retrieve code.
+         (value (org-unescape-code-in-string
+             (buffer-substring-no-properties
+              (line-beginning-position 2) contents-end)))
+         (pos-before-blank (progn (goto-char contents-end)
+                      (forward-line)
+                      (point)))
+         ;; Get position after ending blank lines.
+         (end (progn (skip-chars-forward " \r\t\n" limit)
+                 (if (eobp) (point) (line-beginning-position)))))
+        (list 'src-block
+          (nconc
+           (list :language language
+             :switches (and (org-string-nw-p switches)
+                    (org-trim switches))
+             :parameters (and (org-string-nw-p parameters)
+                      (org-trim parameters))
+             :begin begin
+             :end end
+             :number-lines number-lines
+             :preserve-indent preserve-indent
+             :retain-labels retain-labels
+             :use-labels use-labels
+             :label-fmt label-fmt
+             :value value
+             :post-blank (count-lines pos-before-blank end)
+             :post-affiliated post-affiliated)
+           (cdr affiliated)))))))))
 
 (defun org-element-src-block-interpreter (src-block _)
   "Interpret SRC-BLOCK element as Org syntax."
   (let ((lang (org-element-property :language src-block))
-	(switches (org-element-property :switches src-block))
-	(params (org-element-property :parameters src-block))
-	(value
-	 (let ((val (org-element-property :value src-block)))
-	   (cond
-	    ((or org-src-preserve-indentation
-		 (org-element-property :preserve-indent src-block))
-	     val)
-	    ((zerop org-edit-src-content-indentation)
-	     (org-remove-indentation val))
-	    (t
-	     (let ((ind (make-string org-edit-src-content-indentation ?\s)))
-	       (replace-regexp-in-string "^[ \t]*\\S-"
-					 (concat ind "\\&")
-					 (org-remove-indentation val))))))))
+    (switches (org-element-property :switches src-block))
+    (params (org-element-property :parameters src-block))
+    (value
+     (let ((val (org-element-property :value src-block)))
+       (cond
+        ((or org-src-preserve-indentation
+         (org-element-property :preserve-indent src-block))
+         val)
+        ((zerop org-edit-src-content-indentation)
+         (org-remove-indentation val))
+        (t
+         (let ((ind (make-string org-edit-src-content-indentation ?\s)))
+           (replace-regexp-in-string "^[ \t]*\\S-"
+                     (concat ind "\\&")
+                     (org-remove-indentation val))))))))
     (format "#+begin_src%s\n%s#+end_src"
-	    (concat (and lang (concat " " lang))
-		    (and switches (concat " " switches))
-		    (and params (concat " " params)))
-	    (org-element-normalize-string (org-escape-code-in-string value)))))
+        (concat (and lang (concat " " lang))
+            (and switches (concat " " switches))
+            (and params (concat " " params)))
+        (org-element-normalize-string (org-escape-code-in-string value)))))
 
 
 ;;;; Table
@@ -2597,40 +2597,40 @@ keywords.
 Assume point is at the beginning of the table."
   (save-excursion
     (let* ((case-fold-search t)
-	   (table-begin (point))
-	   (type (if (looking-at "[ \t]*|") 'org 'table.el))
+       (table-begin (point))
+       (type (if (looking-at "[ \t]*|") 'org 'table.el))
            (end-re (format "^[ \t]*\\($\\|[^| \t%s]\\)"
-			   (if (eq type 'org) "" "+")))
-	   (begin (car affiliated))
-	   (table-end
-	    (if (re-search-forward end-re limit 'move)
-		(goto-char (match-beginning 0))
-	      (point)))
-	   (tblfm (let (acc)
-		    (while (looking-at "[ \t]*#\\+TBLFM: +\\(.*\\)[ \t]*$")
-		      (push (match-string-no-properties 1) acc)
-		      (forward-line))
-		    acc))
-	   (pos-before-blank (point))
-	   (end (progn (skip-chars-forward " \r\t\n" limit)
-		       (if (eobp) (point) (line-beginning-position)))))
+               (if (eq type 'org) "" "+")))
+       (begin (car affiliated))
+       (table-end
+        (if (re-search-forward end-re limit 'move)
+        (goto-char (match-beginning 0))
+          (point)))
+       (tblfm (let (acc)
+            (while (looking-at "[ \t]*#\\+TBLFM: +\\(.*\\)[ \t]*$")
+              (push (match-string-no-properties 1) acc)
+              (forward-line))
+            acc))
+       (pos-before-blank (point))
+       (end (progn (skip-chars-forward " \r\t\n" limit)
+               (if (eobp) (point) (line-beginning-position)))))
       (list 'table
-	    (nconc
-	     (list :begin begin
-		   :end end
-		   :type type
-		   :tblfm tblfm
-		   ;; Only `org' tables have contents.  `table.el' tables
-		   ;; use a `:value' property to store raw table as
-		   ;; a string.
-		   :contents-begin (and (eq type 'org) table-begin)
-		   :contents-end (and (eq type 'org) table-end)
-		   :value (and (eq type 'table.el)
-			       (buffer-substring-no-properties
-				table-begin table-end))
-		   :post-blank (count-lines pos-before-blank end)
-		   :post-affiliated table-begin)
-	     (cdr affiliated))))))
+        (nconc
+         (list :begin begin
+           :end end
+           :type type
+           :tblfm tblfm
+           ;; Only `org' tables have contents.  `table.el' tables
+           ;; use a `:value' property to store raw table as
+           ;; a string.
+           :contents-begin (and (eq type 'org) table-begin)
+           :contents-end (and (eq type 'org) table-end)
+           :value (and (eq type 'table.el)
+                   (buffer-substring-no-properties
+                table-begin table-end))
+           :post-blank (count-lines pos-before-blank end)
+           :post-affiliated table-begin)
+         (cdr affiliated))))))
 
 (defun org-element-table-interpreter (table contents)
   "Interpret TABLE element as Org syntax.
@@ -2638,11 +2638,11 @@ CONTENTS is a string, if table's type is `org', or nil."
   (if (eq (org-element-property :type table) 'table.el)
       (org-remove-indentation (org-element-property :value table))
     (concat (with-temp-buffer (insert contents)
-			      (org-table-align)
-			      (buffer-string))
-	    (mapconcat (lambda (fm) (concat "#+TBLFM: " fm))
-		       (reverse (org-element-property :tblfm table))
-		       "\n"))))
+                  (org-table-align)
+                  (buffer-string))
+        (mapconcat (lambda (fm) (concat "#+TBLFM: " fm))
+               (reverse (org-element-property :tblfm table))
+               "\n"))))
 
 
 ;;;; Table Row
@@ -2655,24 +2655,24 @@ containing `:begin', `:end', `:contents-begin', `:contents-end',
 `:type', `:post-blank' and `:post-affiliated' keywords."
   (save-excursion
     (let* ((type (if (looking-at "^[ \t]*|-") 'rule 'standard))
-	   (begin (point))
-	   ;; A table rule has no contents.  In that case, ensure
-	   ;; CONTENTS-BEGIN matches CONTENTS-END.
-	   (contents-begin (and (eq type 'standard) (search-forward "|")))
-	   (contents-end (and (eq type 'standard)
-			      (progn
-				(end-of-line)
-				(skip-chars-backward " \t")
-				(point))))
-	   (end (line-beginning-position 2)))
+       (begin (point))
+       ;; A table rule has no contents.  In that case, ensure
+       ;; CONTENTS-BEGIN matches CONTENTS-END.
+       (contents-begin (and (eq type 'standard) (search-forward "|")))
+       (contents-end (and (eq type 'standard)
+                  (progn
+                (end-of-line)
+                (skip-chars-backward " \t")
+                (point))))
+       (end (line-beginning-position 2)))
       (list 'table-row
-	    (list :type type
-		  :begin begin
-		  :end end
-		  :contents-begin contents-begin
-		  :contents-end contents-end
-		  :post-blank 0
-		  :post-affiliated begin)))))
+        (list :type type
+          :begin begin
+          :end end
+          :contents-begin contents-begin
+          :contents-end contents-end
+          :post-blank 0
+          :post-affiliated begin)))))
 
 (defun org-element-table-row-interpreter (table-row contents)
   "Interpret TABLE-ROW element as Org syntax.
@@ -2698,28 +2698,28 @@ containing `:begin', `:end', `:contents-begin', `:contents-end',
 Assume point is at beginning of the block."
   (let ((case-fold-search t))
     (if (not (save-excursion
-	       (re-search-forward "^[ \t]*#\\+END_VERSE[ \t]*$" limit t)))
-	;; Incomplete block: parse it as a paragraph.
-	(org-element-paragraph-parser limit affiliated)
+           (re-search-forward "^[ \t]*#\\+END_VERSE[ \t]*$" limit t)))
+    ;; Incomplete block: parse it as a paragraph.
+    (org-element-paragraph-parser limit affiliated)
       (let ((contents-end (match-beginning 0)))
-	(save-excursion
-	  (let* ((begin (car affiliated))
-		 (post-affiliated (point))
-		 (contents-begin (progn (forward-line) (point)))
-		 (pos-before-blank (progn (goto-char contents-end)
-					  (forward-line)
-					  (point)))
-		 (end (progn (skip-chars-forward " \r\t\n" limit)
-			     (if (eobp) (point) (line-beginning-position)))))
-	    (list 'verse-block
-		  (nconc
-		   (list :begin begin
-			 :end end
-			 :contents-begin contents-begin
-			 :contents-end contents-end
-			 :post-blank (count-lines pos-before-blank end)
-			 :post-affiliated post-affiliated)
-		   (cdr affiliated)))))))))
+    (save-excursion
+      (let* ((begin (car affiliated))
+         (post-affiliated (point))
+         (contents-begin (progn (forward-line) (point)))
+         (pos-before-blank (progn (goto-char contents-end)
+                      (forward-line)
+                      (point)))
+         (end (progn (skip-chars-forward " \r\t\n" limit)
+                 (if (eobp) (point) (line-beginning-position)))))
+        (list 'verse-block
+          (nconc
+           (list :begin begin
+             :end end
+             :contents-begin contents-begin
+             :contents-end contents-end
+             :post-blank (count-lines pos-before-blank end)
+             :post-affiliated post-affiliated)
+           (cdr affiliated)))))))))
 
 (defun org-element-verse-block-interpreter (_ contents)
   "Interpret verse-block element as Org syntax.
@@ -2758,17 +2758,17 @@ Assume point is at the first star marker."
     (unless (bolp) (backward-char 1))
     (when (looking-at org-emph-re)
       (let ((begin (match-beginning 2))
-	    (contents-begin (match-beginning 4))
-	    (contents-end (match-end 4))
-	    (post-blank (progn (goto-char (match-end 2))
-			       (skip-chars-forward " \t")))
-	    (end (point)))
-	(list 'bold
-	      (list :begin begin
-		    :end end
-		    :contents-begin contents-begin
-		    :contents-end contents-end
-		    :post-blank post-blank))))))
+        (contents-begin (match-beginning 4))
+        (contents-end (match-end 4))
+        (post-blank (progn (goto-char (match-end 2))
+                   (skip-chars-forward " \t")))
+        (end (point)))
+    (list 'bold
+          (list :begin begin
+            :end end
+            :contents-begin contents-begin
+            :contents-end contents-end
+            :post-blank post-blank))))))
 
 (defun org-element-bold-interpreter (_ contents)
   "Interpret bold object as Org syntax.
@@ -2789,52 +2789,52 @@ keywords.  Otherwise, return nil.
 Assume point is at the beginning of the citation."
   (when (looking-at org-element-citation-prefix-re)
     (let* ((begin (point))
-	   (style (and (match-end 1)
-		       (match-string-no-properties 1)))
-	   ;; Ignore blanks between cite type and prefix or key.
-	   (start (match-end 0))
-	   (closing (with-syntax-table org-element--pair-square-table
-		      (ignore-errors (scan-lists begin 1 0)))))
+       (style (and (match-end 1)
+               (match-string-no-properties 1)))
+       ;; Ignore blanks between cite type and prefix or key.
+       (start (match-end 0))
+       (closing (with-syntax-table org-element--pair-square-table
+              (ignore-errors (scan-lists begin 1 0)))))
       (save-excursion
-	(when (and closing
-		   (re-search-forward org-element-citation-key-re closing t))
-	  ;; Find prefix, if any.
-	  (let ((first-key-end (match-end 0))
-		(types (org-element-restriction 'citation-reference))
+    (when (and closing
+           (re-search-forward org-element-citation-key-re closing t))
+      ;; Find prefix, if any.
+      (let ((first-key-end (match-end 0))
+        (types (org-element-restriction 'citation-reference))
                 (cite
-		 (list 'citation
-		       (list :style style
-			     :begin begin
-			     :post-blank (progn
-					   (goto-char closing)
-					   (skip-chars-forward " \t"))
-			     :end (point)))))
-	    ;; `:contents-begin' depends on the presence of
-	    ;; a non-empty common prefix.
-	    (goto-char first-key-end)
-	    (if (not (search-backward ";" start t))
-		(org-element-put-property cite :contents-begin start)
-	      (when (< start (point))
-		(org-element-put-property
+         (list 'citation
+               (list :style style
+                 :begin begin
+                 :post-blank (progn
+                       (goto-char closing)
+                       (skip-chars-forward " \t"))
+                 :end (point)))))
+        ;; `:contents-begin' depends on the presence of
+        ;; a non-empty common prefix.
+        (goto-char first-key-end)
+        (if (not (search-backward ";" start t))
+        (org-element-put-property cite :contents-begin start)
+          (when (< start (point))
+        (org-element-put-property
                  cite :prefix
                  (org-element--parse-objects start (point) nil types cite)))
-	      (forward-char)
-	      (org-element-put-property cite :contents-begin (point)))
-	    ;; `:contents-end' depends on the presence of a non-empty
-	    ;; common suffix.
-	    (goto-char (1- closing))
-	    (skip-chars-backward " \r\t\n")
-	    (let ((end (point)))
-	      (if (or (not (search-backward ";" first-key-end t))
-		      (re-search-forward org-element-citation-key-re end t))
-		  (org-element-put-property cite :contents-end end)
+          (forward-char)
+          (org-element-put-property cite :contents-begin (point)))
+        ;; `:contents-end' depends on the presence of a non-empty
+        ;; common suffix.
+        (goto-char (1- closing))
+        (skip-chars-backward " \r\t\n")
+        (let ((end (point)))
+          (if (or (not (search-backward ";" first-key-end t))
+              (re-search-forward org-element-citation-key-re end t))
+          (org-element-put-property cite :contents-end end)
                 (forward-char)
-		(when (< (point) end)
-		  (org-element-put-property
+        (when (< (point) end)
+          (org-element-put-property
                    cite :suffix
                    (org-element--parse-objects (point) end nil types cite)))
-		(org-element-put-property cite :contents-end (point))))
-	    cite))))))
+        (org-element-put-property cite :contents-end (point))))
+        cite))))))
 
 (defun org-element-citation-interpreter (citation contents)
   "Interpret CITATION object as Org syntax.
@@ -2867,34 +2867,34 @@ Assume point is at the beginning of the reference."
     (let ((begin (point)))
       (when (re-search-forward org-element-citation-key-re nil t)
         (let* ((key (match-string-no-properties 1))
-	       (key-start (match-beginning 0))
-	       (key-end (match-end 0))
-	       (separator (search-forward ";" nil t))
+           (key-start (match-beginning 0))
+           (key-end (match-end 0))
+           (separator (search-forward ";" nil t))
                (end (or separator (point-max)))
                (suffix-end (if separator (1- end) end))
                (types (org-element-restriction 'citation-reference))
-	       (reference
-	        (list 'citation-reference
-		      (list :key key
-			    :begin begin
-			    :end end
-			    :post-blank 0))))
-	  (when (< begin key-start)
-	    (org-element-put-property
-	     reference :prefix
+           (reference
+            (list 'citation-reference
+              (list :key key
+                :begin begin
+                :end end
+                :post-blank 0))))
+      (when (< begin key-start)
+        (org-element-put-property
+         reference :prefix
              (org-element--parse-objects begin key-start nil types reference)))
-	  (when (< key-end suffix-end)
-	    (org-element-put-property
-	     reference :suffix
+      (when (< key-end suffix-end)
+        (org-element-put-property
+         reference :suffix
              (org-element--parse-objects key-end suffix-end nil types reference)))
-	  reference)))))
+      reference)))))
 
 (defun org-element-citation-reference-interpreter (citation-reference _)
   "Interpret CITATION-REFERENCE object as Org syntax."
   (concat (org-element-interpret-data
            (org-element-property :prefix citation-reference))
-	  "@" (org-element-property :key citation-reference)
-	  (org-element-interpret-data
+      "@" (org-element-property :key citation-reference)
+      (org-element-interpret-data
            (org-element-property :suffix citation-reference))
           ";"))
 
@@ -2913,15 +2913,15 @@ Assume point is at the first tilde marker."
     (unless (bolp) (backward-char 1))
     (when (looking-at org-verbatim-re)
       (let ((begin (match-beginning 2))
-	    (value (match-string-no-properties 4))
-	    (post-blank (progn (goto-char (match-end 2))
-			       (skip-chars-forward " \t")))
-	    (end (point)))
-	(list 'code
-	      (list :value value
-		    :begin begin
-		    :end end
-		    :post-blank post-blank))))))
+        (value (match-string-no-properties 4))
+        (post-blank (progn (goto-char (match-end 2))
+                   (skip-chars-forward " \t")))
+        (end (point)))
+    (list 'code
+          (list :value value
+            :begin begin
+            :end end
+            :post-blank post-blank))))))
 
 (defun org-element-code-interpreter (code _)
   "Interpret CODE object as Org syntax."
@@ -2942,32 +2942,32 @@ Assume point is at the beginning of the entity."
   (catch 'no-object
     (when (looking-at "\\\\\\(?:\\(?1:_ +\\)\\|\\(?1:there4\\|sup[123]\\|frac[13][24]\\|[a-zA-Z]+\\)\\(?2:$\\|{}\\|[^[:alpha:]]\\)\\)")
       (save-excursion
-	(let* ((value (or (org-entity-get (match-string 1))
-			  (throw 'no-object nil)))
-	       (begin (match-beginning 0))
-	       (bracketsp (string= (match-string 2) "{}"))
-	       (post-blank (progn (goto-char (match-end 1))
-				  (when bracketsp (forward-char 2))
-				  (skip-chars-forward " \t")))
-	       (end (point)))
-	  (list 'entity
-		(list :name (car value)
-		      :latex (nth 1 value)
-		      :latex-math-p (nth 2 value)
-		      :html (nth 3 value)
-		      :ascii (nth 4 value)
-		      :latin1 (nth 5 value)
-		      :utf-8 (nth 6 value)
-		      :begin begin
-		      :end end
-		      :use-brackets-p bracketsp
-		      :post-blank post-blank)))))))
+    (let* ((value (or (org-entity-get (match-string 1))
+              (throw 'no-object nil)))
+           (begin (match-beginning 0))
+           (bracketsp (string= (match-string 2) "{}"))
+           (post-blank (progn (goto-char (match-end 1))
+                  (when bracketsp (forward-char 2))
+                  (skip-chars-forward " \t")))
+           (end (point)))
+      (list 'entity
+        (list :name (car value)
+              :latex (nth 1 value)
+              :latex-math-p (nth 2 value)
+              :html (nth 3 value)
+              :ascii (nth 4 value)
+              :latin1 (nth 5 value)
+              :utf-8 (nth 6 value)
+              :begin begin
+              :end end
+              :use-brackets-p bracketsp
+              :post-blank post-blank)))))))
 
 (defun org-element-entity-interpreter (entity _)
   "Interpret ENTITY object as Org syntax."
   (concat "\\"
-	  (org-element-property :name entity)
-	  (when (org-element-property :use-brackets-p entity) "{}")))
+      (org-element-property :name entity)
+      (when (org-element-property :use-brackets-p entity) "{}")))
 
 
 ;;;; Export Snippet
@@ -2984,28 +2984,28 @@ Assume point is at the beginning of the snippet."
   (save-excursion
     (let (contents-end)
       (when (and (looking-at "@@\\([-A-Za-z0-9]+\\):")
-		 (setq contents-end
-		       (save-match-data (goto-char (match-end 0))
-					(re-search-forward "@@" nil t)
-					(match-beginning 0))))
-	(let* ((begin (match-beginning 0))
-	       (back-end (match-string-no-properties 1))
-	       (value (buffer-substring-no-properties
-		       (match-end 0) contents-end))
-	       (post-blank (skip-chars-forward " \t"))
-	       (end (point)))
-	  (list 'export-snippet
-		(list :back-end back-end
-		      :value value
-		      :begin begin
-		      :end end
-		      :post-blank post-blank)))))))
+         (setq contents-end
+               (save-match-data (goto-char (match-end 0))
+                    (re-search-forward "@@" nil t)
+                    (match-beginning 0))))
+    (let* ((begin (match-beginning 0))
+           (back-end (match-string-no-properties 1))
+           (value (buffer-substring-no-properties
+               (match-end 0) contents-end))
+           (post-blank (skip-chars-forward " \t"))
+           (end (point)))
+      (list 'export-snippet
+        (list :back-end back-end
+              :value value
+              :begin begin
+              :end end
+              :post-blank post-blank)))))))
 
 (defun org-element-export-snippet-interpreter (export-snippet _)
   "Interpret EXPORT-SNIPPET object as Org syntax."
   (format "@@%s:%s@@"
-	  (org-element-property :back-end export-snippet)
-	  (org-element-property :value export-snippet)))
+      (org-element-property :back-end export-snippet)
+      (org-element-property :value export-snippet)))
 
 
 ;;;; Footnote Reference
@@ -3019,32 +3019,32 @@ When at a footnote reference, return a list whose car is
 `:post-blank' as keywords.  Otherwise, return nil."
   (when (looking-at org-footnote-re)
     (let ((closing (with-syntax-table org-element--pair-square-table
-		     (ignore-errors (scan-lists (point) 1 0)))))
+             (ignore-errors (scan-lists (point) 1 0)))))
       (when closing
-	(save-excursion
-	  (let* ((begin (point))
-		 (label (match-string-no-properties 1))
-		 (inner-begin (match-end 0))
-		 (inner-end (1- closing))
-		 (type (if (match-end 2) 'inline 'standard))
-		 (post-blank (progn (goto-char closing)
-				    (skip-chars-forward " \t")))
-		 (end (point)))
-	    (list 'footnote-reference
-		  (list :label label
-			:type type
-			:begin begin
-			:end end
-			:contents-begin (and (eq type 'inline) inner-begin)
-			:contents-end (and (eq type 'inline) inner-end)
-			:post-blank post-blank))))))))
+    (save-excursion
+      (let* ((begin (point))
+         (label (match-string-no-properties 1))
+         (inner-begin (match-end 0))
+         (inner-end (1- closing))
+         (type (if (match-end 2) 'inline 'standard))
+         (post-blank (progn (goto-char closing)
+                    (skip-chars-forward " \t")))
+         (end (point)))
+        (list 'footnote-reference
+          (list :label label
+            :type type
+            :begin begin
+            :end end
+            :contents-begin (and (eq type 'inline) inner-begin)
+            :contents-end (and (eq type 'inline) inner-end)
+            :post-blank post-blank))))))))
 
 (defun org-element-footnote-reference-interpreter (footnote-reference contents)
   "Interpret FOOTNOTE-REFERENCE object as Org syntax.
 CONTENTS is its definition, when inline, or nil."
   (format "[fn:%s%s]"
-	  (or (org-element-property :label footnote-reference) "")
-	  (if contents (concat ":" contents) "")))
+      (or (org-element-property :label footnote-reference) "")
+      (if contents (concat ":" contents) "")))
 
 
 ;;;; Inline Babel Call
@@ -3061,44 +3061,44 @@ Assume point is at the beginning of the babel call."
   (save-excursion
     (catch :no-object
       (when (let ((case-fold-search nil))
-	      (looking-at "\\<call_\\([^ \t\n[(]+\\)[([]"))
-	(goto-char (match-end 1))
-	(let* ((begin (match-beginning 0))
-	       (call (match-string-no-properties 1))
-	       (inside-header
-		(let ((p (org-element--parse-paired-brackets ?\[)))
-		  (and (org-string-nw-p p)
-		       (replace-regexp-in-string "\n[ \t]*" " " (org-trim p)))))
-	       (arguments (org-string-nw-p
-			   (or (org-element--parse-paired-brackets ?\()
-			       ;; Parenthesis are mandatory.
-			       (throw :no-object nil))))
-	       (end-header
-		(let ((p (org-element--parse-paired-brackets ?\[)))
-		  (and (org-string-nw-p p)
-		       (replace-regexp-in-string "\n[ \t]*" " " (org-trim p)))))
-	       (value (buffer-substring-no-properties begin (point)))
-	       (post-blank (skip-chars-forward " \t"))
-	       (end (point)))
-	  (list 'inline-babel-call
-		(list :call call
-		      :inside-header inside-header
-		      :arguments arguments
-		      :end-header end-header
-		      :begin begin
-		      :end end
-		      :value value
-		      :post-blank post-blank)))))))
+          (looking-at "\\<call_\\([^ \t\n[(]+\\)[([]"))
+    (goto-char (match-end 1))
+    (let* ((begin (match-beginning 0))
+           (call (match-string-no-properties 1))
+           (inside-header
+        (let ((p (org-element--parse-paired-brackets ?\[)))
+          (and (org-string-nw-p p)
+               (replace-regexp-in-string "\n[ \t]*" " " (org-trim p)))))
+           (arguments (org-string-nw-p
+               (or (org-element--parse-paired-brackets ?\()
+                   ;; Parenthesis are mandatory.
+                   (throw :no-object nil))))
+           (end-header
+        (let ((p (org-element--parse-paired-brackets ?\[)))
+          (and (org-string-nw-p p)
+               (replace-regexp-in-string "\n[ \t]*" " " (org-trim p)))))
+           (value (buffer-substring-no-properties begin (point)))
+           (post-blank (skip-chars-forward " \t"))
+           (end (point)))
+      (list 'inline-babel-call
+        (list :call call
+              :inside-header inside-header
+              :arguments arguments
+              :end-header end-header
+              :begin begin
+              :end end
+              :value value
+              :post-blank post-blank)))))))
 
 (defun org-element-inline-babel-call-interpreter (inline-babel-call _)
   "Interpret INLINE-BABEL-CALL object as Org syntax."
   (concat "call_"
-	  (org-element-property :call inline-babel-call)
-	  (let ((h (org-element-property :inside-header inline-babel-call)))
-	    (and h (format "[%s]" h)))
-	  "(" (org-element-property :arguments inline-babel-call) ")"
-	  (let ((h (org-element-property :end-header inline-babel-call)))
-	    (and h (format "[%s]" h)))))
+      (org-element-property :call inline-babel-call)
+      (let ((h (org-element-property :inside-header inline-babel-call)))
+        (and h (format "[%s]" h)))
+      "(" (org-element-property :arguments inline-babel-call) ")"
+      (let ((h (org-element-property :end-header inline-babel-call)))
+        (and h (format "[%s]" h)))))
 
 
 ;;;; Inline Src Block
@@ -3115,34 +3115,34 @@ Assume point is at the beginning of the inline source block."
   (save-excursion
     (catch :no-object
       (when (let ((case-fold-search nil))
-	      (looking-at "\\<src_\\([^ \t\n[{]+\\)[{[]"))
-	(goto-char (match-end 1))
-	(let ((begin (match-beginning 0))
-	      (language (match-string-no-properties 1))
-	      (parameters
-	       (let ((p (org-element--parse-paired-brackets ?\[)))
-		 (and (org-string-nw-p p)
-		      (replace-regexp-in-string "\n[ \t]*" " " (org-trim p)))))
-	      (value (or (org-element--parse-paired-brackets ?\{)
-			 (throw :no-object nil)))
-	      (post-blank (skip-chars-forward " \t")))
-	  (list 'inline-src-block
-		(list :language language
-		      :value value
-		      :parameters parameters
-		      :begin begin
-		      :end (point)
-		      :post-blank post-blank)))))))
+          (looking-at "\\<src_\\([^ \t\n[{]+\\)[{[]"))
+    (goto-char (match-end 1))
+    (let ((begin (match-beginning 0))
+          (language (match-string-no-properties 1))
+          (parameters
+           (let ((p (org-element--parse-paired-brackets ?\[)))
+         (and (org-string-nw-p p)
+              (replace-regexp-in-string "\n[ \t]*" " " (org-trim p)))))
+          (value (or (org-element--parse-paired-brackets ?\{)
+             (throw :no-object nil)))
+          (post-blank (skip-chars-forward " \t")))
+      (list 'inline-src-block
+        (list :language language
+              :value value
+              :parameters parameters
+              :begin begin
+              :end (point)
+              :post-blank post-blank)))))))
 
 (defun org-element-inline-src-block-interpreter (inline-src-block _)
   "Interpret INLINE-SRC-BLOCK object as Org syntax."
   (let ((language (org-element-property :language inline-src-block))
-	(arguments (org-element-property :parameters inline-src-block))
-	(body (org-element-property :value inline-src-block)))
+    (arguments (org-element-property :parameters inline-src-block))
+    (body (org-element-property :value inline-src-block)))
     (format "src_%s%s{%s}"
-	    language
-	    (if arguments (format "[%s]" arguments) "")
-	    body)))
+        language
+        (if arguments (format "[%s]" arguments) "")
+        body)))
 
 ;;;; Italic
 
@@ -3159,17 +3159,17 @@ Assume point is at the first slash marker."
     (unless (bolp) (backward-char 1))
     (when (looking-at org-emph-re)
       (let ((begin (match-beginning 2))
-	    (contents-begin (match-beginning 4))
-	    (contents-end (match-end 4))
-	    (post-blank (progn (goto-char (match-end 2))
-			       (skip-chars-forward " \t")))
-	    (end (point)))
-	(list 'italic
-	      (list :begin begin
-		    :end end
-		    :contents-begin contents-begin
-		    :contents-end contents-end
-		    :post-blank post-blank))))))
+        (contents-begin (match-beginning 4))
+        (contents-end (match-end 4))
+        (post-blank (progn (goto-char (match-end 2))
+                   (skip-chars-forward " \t")))
+        (end (point)))
+    (list 'italic
+          (list :begin begin
+            :end end
+            :contents-begin contents-begin
+            :contents-end contents-end
+            :post-blank post-blank))))))
 
 (defun org-element-italic-interpreter (_ contents)
   "Interpret italic object as Org syntax.
@@ -3190,39 +3190,39 @@ Assume point is at the beginning of the LaTeX fragment."
   (catch 'no-object
     (save-excursion
       (let* ((begin (point))
-	     (after-fragment
-	      (cond
-	       ((not (eq ?$ (char-after)))
-		(pcase (char-after (1+ (point)))
-		  (?\( (search-forward "\\)" nil t))
-		  (?\[ (search-forward "\\]" nil t))
-		  (_
-		   ;; Macro.
-		   (and (looking-at "\\\\[a-zA-Z]+\\*?\\(\\(\\[[^][\n{}]*\\]\\)\
+         (after-fragment
+          (cond
+           ((not (eq ?$ (char-after)))
+        (pcase (char-after (1+ (point)))
+          (?\( (search-forward "\\)" nil t))
+          (?\[ (search-forward "\\]" nil t))
+          (_
+           ;; Macro.
+           (and (looking-at "\\\\[a-zA-Z]+\\*?\\(\\(\\[[^][\n{}]*\\]\\)\
 \\|\\({[^{}\n]*}\\)\\)*")
-			(match-end 0)))))
-	       ((eq ?$ (char-after (1+ (point))))
-		(search-forward "$$" nil t 2))
-	       (t
-		(and (not (eq ?$ (char-before)))
-		     (not (memq (char-after (1+ (point)))
-				'(?\s ?\t ?\n ?, ?. ?\;)))
-		     (search-forward "$" nil t 2)
-		     (not (memq (char-before (match-beginning 0))
-				'(?\s ?\t ?\n ?, ?.)))
-		     (looking-at-p
-		      "\\(\\s.\\|\\s-\\|\\s(\\|\\s)\\|\\s\"\\|'\\|$\\)")
-		     (point)))))
-	     (post-blank
-	      (if (not after-fragment) (throw 'no-object nil)
-		(goto-char after-fragment)
-		(skip-chars-forward " \t")))
-	     (end (point)))
-	(list 'latex-fragment
-	      (list :value (buffer-substring-no-properties begin after-fragment)
-		    :begin begin
-		    :end end
-		    :post-blank post-blank))))))
+            (match-end 0)))))
+           ((eq ?$ (char-after (1+ (point))))
+        (search-forward "$$" nil t 2))
+           (t
+        (and (not (eq ?$ (char-before)))
+             (not (memq (char-after (1+ (point)))
+                '(?\s ?\t ?\n ?, ?. ?\;)))
+             (search-forward "$" nil t 2)
+             (not (memq (char-before (match-beginning 0))
+                '(?\s ?\t ?\n ?, ?.)))
+             (looking-at-p
+              "\\(\\s.\\|\\s-\\|\\s(\\|\\s)\\|\\s\"\\|'\\|$\\)")
+             (point)))))
+         (post-blank
+          (if (not after-fragment) (throw 'no-object nil)
+        (goto-char after-fragment)
+        (skip-chars-forward " \t")))
+         (end (point)))
+    (list 'latex-fragment
+          (list :value (buffer-substring-no-properties begin after-fragment)
+            :begin begin
+            :end end
+            :post-blank post-blank))))))
 
 (defun org-element-latex-fragment-interpreter (latex-fragment _)
   "Interpret LATEX-FRAGMENT object as Org syntax."
@@ -3239,11 +3239,11 @@ Otherwise, return nil.
 
 Assume point is at the beginning of the line break."
   (when (and (looking-at-p "\\\\\\\\[ \t]*$")
-	     (not (eq (char-before) ?\\)))
+         (not (eq (char-before) ?\\)))
     (list 'line-break
-	  (list :begin (point)
-		:end (line-beginning-position 2)
-		:post-blank 0))))
+      (list :begin (point)
+        :end (line-beginning-position 2)
+        :post-blank 0))))
 
 (defun org-element-line-break-interpreter (&rest _)
   "Interpret LINE-BREAK object as Org syntax."
@@ -3264,161 +3264,161 @@ nil.
 Assume point is at the beginning of the link."
   (catch 'no-object
     (let ((begin (point))
-	  end contents-begin contents-end link-end post-blank path type format
-	  raw-link search-option application)
+      end contents-begin contents-end link-end post-blank path type format
+      raw-link search-option application)
       (cond
        ;; Type 1: Text targeted from a radio target.
        ((and org-target-link-regexp
-	     (save-excursion (or (bolp) (backward-char))
-			     (looking-at org-target-link-regexp)))
-	(setq type "radio")
-	(setq format 'plain)
-	(setq link-end (match-end 1))
-	(setq path (match-string-no-properties 1))
-	(setq contents-begin (match-beginning 1))
-	(setq contents-end (match-end 1)))
+         (save-excursion (or (bolp) (backward-char))
+                 (looking-at org-target-link-regexp)))
+    (setq type "radio")
+    (setq format 'plain)
+    (setq link-end (match-end 1))
+    (setq path (match-string-no-properties 1))
+    (setq contents-begin (match-beginning 1))
+    (setq contents-end (match-end 1)))
        ;; Type 2: Standard link, i.e. [[https://orgmode.org][homepage]]
        ((looking-at org-link-bracket-re)
-	(setq format 'bracket)
-	(setq contents-begin (match-beginning 2))
-	(setq contents-end (match-end 2))
-	(setq link-end (match-end 0))
-	;; RAW-LINK is the original link.  Decode any encoding.
-	;; Expand any abbreviation in it.
-	;;
-	;; Also treat any newline character and associated
-	;; indentation as a single space character.  This is not
-	;; compatible with RFC 3986, which requires to ignore
-	;; them altogether.  However, doing so would require
-	;; users to encode spaces on the fly when writing links
-	;; (e.g., insert [[shell:ls%20*.org]] instead of
-	;; [[shell:ls *.org]], which defeats Org's focus on
-	;; simplicity.
-	(setq raw-link (org-link-expand-abbrev
-			(org-link-unescape
-			 (replace-regexp-in-string
-			  "[ \t]*\n[ \t]*" " "
-			  (match-string-no-properties 1)))))
-	;; Determine TYPE of link and set PATH accordingly.  According
-	;; to RFC 3986, remove whitespaces from URI in external links.
-	;; In internal ones, treat indentation as a single space.
-	(cond
-	 ;; File type.
-	 ((or (file-name-absolute-p raw-link)
-	      (string-match "\\`\\.\\.?/" raw-link))
-	  (setq type "file")
-	  (setq path raw-link))
-	 ;; Explicit type (http, irc, bbdb...).
-	 ((string-match org-link-types-re raw-link)
-	  (setq type (match-string 1 raw-link))
-	  (setq path (substring raw-link (match-end 0))))
-	 ;; Code-ref type: PATH is the name of the reference.
-	 ((and (string-match-p "\\`(" raw-link)
-	       (string-match-p ")\\'" raw-link))
-	  (setq type "coderef")
-	  (setq path (substring raw-link 1 -1)))
-	 ;; Custom-id type: PATH is the name of the custom id.
-	 ((= (string-to-char raw-link) ?#)
-	  (setq type "custom-id")
-	  (setq path (substring raw-link 1)))
-	 ;; Fuzzy type: Internal link either matches a target, an
-	 ;; headline name or nothing.  PATH is the target or
-	 ;; headline's name.
-	 (t
-	  (setq type "fuzzy")
-	  (setq path raw-link))))
+    (setq format 'bracket)
+    (setq contents-begin (match-beginning 2))
+    (setq contents-end (match-end 2))
+    (setq link-end (match-end 0))
+    ;; RAW-LINK is the original link.  Decode any encoding.
+    ;; Expand any abbreviation in it.
+    ;;
+    ;; Also treat any newline character and associated
+    ;; indentation as a single space character.  This is not
+    ;; compatible with RFC 3986, which requires to ignore
+    ;; them altogether.  However, doing so would require
+    ;; users to encode spaces on the fly when writing links
+    ;; (e.g., insert [[shell:ls%20*.org]] instead of
+    ;; [[shell:ls *.org]], which defeats Org's focus on
+    ;; simplicity.
+    (setq raw-link (org-link-expand-abbrev
+            (org-link-unescape
+             (replace-regexp-in-string
+              "[ \t]*\n[ \t]*" " "
+              (match-string-no-properties 1)))))
+    ;; Determine TYPE of link and set PATH accordingly.  According
+    ;; to RFC 3986, remove whitespaces from URI in external links.
+    ;; In internal ones, treat indentation as a single space.
+    (cond
+     ;; File type.
+     ((or (file-name-absolute-p raw-link)
+          (string-match "\\`\\.\\.?/" raw-link))
+      (setq type "file")
+      (setq path raw-link))
+     ;; Explicit type (http, irc, bbdb...).
+     ((string-match org-link-types-re raw-link)
+      (setq type (match-string 1 raw-link))
+      (setq path (substring raw-link (match-end 0))))
+     ;; Code-ref type: PATH is the name of the reference.
+     ((and (string-match-p "\\`(" raw-link)
+           (string-match-p ")\\'" raw-link))
+      (setq type "coderef")
+      (setq path (substring raw-link 1 -1)))
+     ;; Custom-id type: PATH is the name of the custom id.
+     ((= (string-to-char raw-link) ?#)
+      (setq type "custom-id")
+      (setq path (substring raw-link 1)))
+     ;; Fuzzy type: Internal link either matches a target, an
+     ;; headline name or nothing.  PATH is the target or
+     ;; headline's name.
+     (t
+      (setq type "fuzzy")
+      (setq path raw-link))))
        ;; Type 3: Plain link, e.g., https://orgmode.org
        ((looking-at org-link-plain-re)
-	(setq format 'plain)
-	(setq raw-link (match-string-no-properties 0))
-	(setq type (match-string-no-properties 1))
-	(setq link-end (match-end 0))
-	(setq path (match-string-no-properties 2)))
+    (setq format 'plain)
+    (setq raw-link (match-string-no-properties 0))
+    (setq type (match-string-no-properties 1))
+    (setq link-end (match-end 0))
+    (setq path (match-string-no-properties 2)))
        ;; Type 4: Angular link, e.g., <https://orgmode.org>.  Unlike to
        ;; bracket links, follow RFC 3986 and remove any extra
        ;; whitespace in URI.
        ((looking-at org-link-angle-re)
-	(setq format 'angle)
-	(setq type (match-string-no-properties 1))
-	(setq link-end (match-end 0))
-	(setq raw-link
-	      (buffer-substring-no-properties
-	       (match-beginning 1) (match-end 2)))
-	(setq path (replace-regexp-in-string
-		    "[ \t]*\n[ \t]*" "" (match-string-no-properties 2))))
+    (setq format 'angle)
+    (setq type (match-string-no-properties 1))
+    (setq link-end (match-end 0))
+    (setq raw-link
+          (buffer-substring-no-properties
+           (match-beginning 1) (match-end 2)))
+    (setq path (replace-regexp-in-string
+            "[ \t]*\n[ \t]*" "" (match-string-no-properties 2))))
        (t (throw 'no-object nil)))
       ;; In any case, deduce end point after trailing white space from
       ;; LINK-END variable.
       (save-excursion
-	(setq post-blank
-	      (progn (goto-char link-end) (skip-chars-forward " \t")))
-	(setq end (point)))
+    (setq post-blank
+          (progn (goto-char link-end) (skip-chars-forward " \t")))
+    (setq end (point)))
       ;; Special "file"-type link processing.  Extract opening
       ;; application and search option, if any.  Also normalize URI.
       (when (string-match "\\`file\\(?:\\+\\(.+\\)\\)?\\'" type)
-	(setq application (match-string 1 type))
-	(setq type "file")
-	(when (string-match "::\\(.*\\)\\'" path)
-	  (setq search-option (match-string 1 path))
-	  (setq path (replace-match "" nil nil path)))
-	(setq path (replace-regexp-in-string "\\`///*\\(.:\\)?/" "\\1/" path)))
+    (setq application (match-string 1 type))
+    (setq type "file")
+    (when (string-match "::\\(.*\\)\\'" path)
+      (setq search-option (match-string 1 path))
+      (setq path (replace-match "" nil nil path)))
+    (setq path (replace-regexp-in-string "\\`///*\\(.:\\)?/" "\\1/" path)))
       ;; Translate link, if `org-link-translation-function' is set.
       (let ((trans (and (functionp org-link-translation-function)
-			(funcall org-link-translation-function type path))))
-	(when trans
-	  (setq type (car trans))
-	  (setq path (cdr trans))))
+            (funcall org-link-translation-function type path))))
+    (when trans
+      (setq type (car trans))
+      (setq path (cdr trans))))
       (list 'link
-	    (list :type type
-		  :path path
-		  :format format
-		  :raw-link (or raw-link path)
-		  :application application
-		  :search-option search-option
-		  :begin begin
-		  :end end
-		  :contents-begin contents-begin
-		  :contents-end contents-end
-		  :post-blank post-blank)))))
+        (list :type type
+          :path path
+          :format format
+          :raw-link (or raw-link path)
+          :application application
+          :search-option search-option
+          :begin begin
+          :end end
+          :contents-begin contents-begin
+          :contents-end contents-end
+          :post-blank post-blank)))))
 
 (defun org-element-link-interpreter (link contents)
   "Interpret LINK object as Org syntax.
 CONTENTS is the contents of the object, or nil."
   (let ((type (org-element-property :type link))
-	(path (org-element-property :path link)))
+    (path (org-element-property :path link)))
     (if (string= type "radio") path
       (let ((fmt (pcase (org-element-property :format link)
-		   ;; Links with contents and internal links have to
-		   ;; use bracket syntax.  Ignore `:format' in these
-		   ;; cases.  This is also the default syntax when the
-		   ;; property is not defined, e.g., when the object
-		   ;; was crafted by the user.
-		   ((guard contents)
-		    (format "[[%%s][%s]]"
-			    ;; Since this is going to be used as
-			    ;; a format string, escape percent signs
-			    ;; in description.
-			    (replace-regexp-in-string "%" "%%" contents)))
-		   ((or `bracket
-			`nil
-			(guard (member type '("coderef" "custom-id" "fuzzy"))))
-		    "[[%s]]")
-		   ;; Otherwise, just obey to `:format'.
-		   (`angle "<%s>")
-		   (`plain "%s")
-		   (f (error "Wrong `:format' value: %s" f)))))
-	(format fmt
-		(pcase type
-		  ("coderef" (format "(%s)" path))
-		  ("custom-id" (concat "#" path))
-		  ("file"
-		   (let ((app (org-element-property :application link))
-			 (opt (org-element-property :search-option link)))
-		     (concat type (and app (concat "+" app)) ":"
-			     path
-			     (and opt (concat "::" opt)))))
-		  ("fuzzy" path)
-		  (_ (concat type ":" path))))))))
+           ;; Links with contents and internal links have to
+           ;; use bracket syntax.  Ignore `:format' in these
+           ;; cases.  This is also the default syntax when the
+           ;; property is not defined, e.g., when the object
+           ;; was crafted by the user.
+           ((guard contents)
+            (format "[[%%s][%s]]"
+                ;; Since this is going to be used as
+                ;; a format string, escape percent signs
+                ;; in description.
+                (replace-regexp-in-string "%" "%%" contents)))
+           ((or `bracket
+            `nil
+            (guard (member type '("coderef" "custom-id" "fuzzy"))))
+            "[[%s]]")
+           ;; Otherwise, just obey to `:format'.
+           (`angle "<%s>")
+           (`plain "%s")
+           (f (error "Wrong `:format' value: %s" f)))))
+    (format fmt
+        (pcase type
+          ("coderef" (format "(%s)" path))
+          ("custom-id" (concat "#" path))
+          ("file"
+           (let ((app (org-element-property :application link))
+             (opt (org-element-property :search-option link)))
+             (concat type (and app (concat "+" app)) ":"
+                 path
+                 (and opt (concat "::" opt)))))
+          ("fuzzy" path)
+          (_ (concat type ":" path))))))))
 
 
 ;;;; Macro
@@ -3434,31 +3434,31 @@ Assume point is at the macro."
   (save-excursion
     (when (looking-at "{{{\\([a-zA-Z][-a-zA-Z0-9_]*\\)\\((\\([^\000]*?\\))\\)?}}}")
       (let ((begin (point))
-	    (key (downcase (match-string-no-properties 1)))
-	    (value (match-string-no-properties 0))
-	    (post-blank (progn (goto-char (match-end 0))
-			       (skip-chars-forward " \t")))
-	    (end (point))
-	    (args (pcase (match-string-no-properties 3)
-		    (`nil nil)
-		    (a (org-macro-extract-arguments
-			(replace-regexp-in-string
-			 "[ \t\r\n]+" " " (org-trim a)))))))
-	(list 'macro
-	      (list :key key
-		    :value value
-		    :args args
-		    :begin begin
-		    :end end
-		    :post-blank post-blank))))))
+        (key (downcase (match-string-no-properties 1)))
+        (value (match-string-no-properties 0))
+        (post-blank (progn (goto-char (match-end 0))
+                   (skip-chars-forward " \t")))
+        (end (point))
+        (args (pcase (match-string-no-properties 3)
+            (`nil nil)
+            (a (org-macro-extract-arguments
+            (replace-regexp-in-string
+             "[ \t\r\n]+" " " (org-trim a)))))))
+    (list 'macro
+          (list :key key
+            :value value
+            :args args
+            :begin begin
+            :end end
+            :post-blank post-blank))))))
 
 (defun org-element-macro-interpreter (macro _)
   "Interpret MACRO object as Org syntax."
   (format "{{{%s%s}}}"
-	  (org-element-property :key macro)
-	  (pcase (org-element-property :args macro)
-	    (`nil "")
-	    (args (format "(%s)" (apply #'org-macro-escape-arguments args))))))
+      (org-element-property :key macro)
+      (pcase (org-element-property :args macro)
+        (`nil "")
+        (args (format "(%s)" (apply #'org-macro-escape-arguments args))))))
 
 
 ;;;; Radio-target
@@ -3475,19 +3475,19 @@ Assume point is at the radio target."
   (save-excursion
     (when (looking-at org-radio-target-regexp)
       (let ((begin (point))
-	    (contents-begin (match-beginning 1))
-	    (contents-end (match-end 1))
-	    (value (match-string-no-properties 1))
-	    (post-blank (progn (goto-char (match-end 0))
-			       (skip-chars-forward " \t")))
-	    (end (point)))
-	(list 'radio-target
-	      (list :begin begin
-		    :end end
-		    :contents-begin contents-begin
-		    :contents-end contents-end
-		    :post-blank post-blank
-		    :value value))))))
+        (contents-begin (match-beginning 1))
+        (contents-end (match-end 1))
+        (value (match-string-no-properties 1))
+        (post-blank (progn (goto-char (match-end 0))
+                   (skip-chars-forward " \t")))
+        (end (point)))
+    (list 'radio-target
+          (list :begin begin
+            :end end
+            :contents-begin contents-begin
+            :contents-end contents-end
+            :post-blank post-blank
+            :value value))))))
 
 (defun org-element-radio-target-interpreter (_ contents)
   "Interpret target object as Org syntax.
@@ -3508,16 +3508,16 @@ Assume point is at the beginning of the statistics-cookie."
   (save-excursion
     (when (looking-at "\\[[0-9]*\\(%\\|/[0-9]*\\)\\]")
       (let* ((begin (point))
-	     (value (buffer-substring-no-properties
-		     (match-beginning 0) (match-end 0)))
-	     (post-blank (progn (goto-char (match-end 0))
-				(skip-chars-forward " \t")))
-	     (end (point)))
-	(list 'statistics-cookie
-	      (list :begin begin
-		    :end end
-		    :value value
-		    :post-blank post-blank))))))
+         (value (buffer-substring-no-properties
+             (match-beginning 0) (match-end 0)))
+         (post-blank (progn (goto-char (match-end 0))
+                (skip-chars-forward " \t")))
+         (end (point)))
+    (list 'statistics-cookie
+          (list :begin begin
+            :end end
+            :value value
+            :post-blank post-blank))))))
 
 (defun org-element-statistics-cookie-interpreter (statistics-cookie _)
   "Interpret STATISTICS-COOKIE object as Org syntax."
@@ -3539,17 +3539,17 @@ Assume point is at the first plus sign marker."
     (unless (bolp) (backward-char 1))
     (when (looking-at org-emph-re)
       (let ((begin (match-beginning 2))
-	    (contents-begin (match-beginning 4))
-	    (contents-end (match-end 4))
-	    (post-blank (progn (goto-char (match-end 2))
-			       (skip-chars-forward " \t")))
-	    (end (point)))
-	(list 'strike-through
-	      (list :begin begin
-		    :end end
-		    :contents-begin contents-begin
-		    :contents-end contents-end
-		    :post-blank post-blank))))))
+        (contents-begin (match-beginning 4))
+        (contents-end (match-end 4))
+        (post-blank (progn (goto-char (match-end 2))
+                   (skip-chars-forward " \t")))
+        (end (point)))
+    (list 'strike-through
+          (list :begin begin
+            :end end
+            :contents-begin contents-begin
+            :contents-end contents-end
+            :post-blank post-blank))))))
 
 (defun org-element-strike-through-interpreter (_ contents)
   "Interpret strike-through object as Org syntax.
@@ -3572,20 +3572,20 @@ Assume point is at the underscore."
     (unless (bolp) (backward-char))
     (when (looking-at org-match-substring-regexp)
       (let ((bracketsp (match-beginning 4))
-	    (begin (match-beginning 2))
-	    (contents-begin (or (match-beginning 4)
-				(match-beginning 3)))
-	    (contents-end (or (match-end 4) (match-end 3)))
-	    (post-blank (progn (goto-char (match-end 0))
-			       (skip-chars-forward " \t")))
-	    (end (point)))
-	(list 'subscript
-	      (list :begin begin
-		    :end end
-		    :use-brackets-p bracketsp
-		    :contents-begin contents-begin
-		    :contents-end contents-end
-		    :post-blank post-blank))))))
+        (begin (match-beginning 2))
+        (contents-begin (or (match-beginning 4)
+                (match-beginning 3)))
+        (contents-end (or (match-end 4) (match-end 3)))
+        (post-blank (progn (goto-char (match-end 0))
+                   (skip-chars-forward " \t")))
+        (end (point)))
+    (list 'subscript
+          (list :begin begin
+            :end end
+            :use-brackets-p bracketsp
+            :contents-begin contents-begin
+            :contents-end contents-end
+            :post-blank post-blank))))))
 
 (defun org-element-subscript-interpreter (subscript contents)
   "Interpret SUBSCRIPT object as Org syntax.
@@ -3610,20 +3610,20 @@ Assume point is at the caret."
     (unless (bolp) (backward-char))
     (when (looking-at org-match-substring-regexp)
       (let ((bracketsp (match-beginning 4))
-	    (begin (match-beginning 2))
-	    (contents-begin (or (match-beginning 4)
-				(match-beginning 3)))
-	    (contents-end (or (match-end 4) (match-end 3)))
-	    (post-blank (progn (goto-char (match-end 0))
-			       (skip-chars-forward " \t")))
-	    (end (point)))
-	(list 'superscript
-	      (list :begin begin
-		    :end end
-		    :use-brackets-p bracketsp
-		    :contents-begin contents-begin
-		    :contents-end contents-end
-		    :post-blank post-blank))))))
+        (begin (match-beginning 2))
+        (contents-begin (or (match-beginning 4)
+                (match-beginning 3)))
+        (contents-end (or (match-end 4) (match-end 3)))
+        (post-blank (progn (goto-char (match-end 0))
+                   (skip-chars-forward " \t")))
+        (end (point)))
+    (list 'superscript
+          (list :begin begin
+            :end end
+            :use-brackets-p bracketsp
+            :contents-begin contents-begin
+            :contents-end contents-end
+            :post-blank post-blank))))))
 
 (defun org-element-superscript-interpreter (superscript contents)
   "Interpret SUPERSCRIPT object as Org syntax.
@@ -3642,15 +3642,15 @@ containing `:begin', `:end', `:contents-begin', `:contents-end'
 and `:post-blank' keywords."
   (looking-at "[ \t]*\\(.*?\\)[ \t]*\\(?:|\\|$\\)")
   (let* ((begin (match-beginning 0))
-	 (end (match-end 0))
-	 (contents-begin (match-beginning 1))
-	 (contents-end (match-end 1)))
+     (end (match-end 0))
+     (contents-begin (match-beginning 1))
+     (contents-end (match-end 1)))
     (list 'table-cell
-	  (list :begin begin
-		:end end
-		:contents-begin contents-begin
-		:contents-end contents-end
-		:post-blank 0))))
+      (list :begin begin
+        :end end
+        :contents-begin contents-begin
+        :contents-end contents-end
+        :post-blank 0))))
 
 (defun org-element-table-cell-interpreter (_ contents)
   "Interpret table-cell element as Org syntax.
@@ -3671,15 +3671,15 @@ Assume point is at the target."
   (save-excursion
     (when (looking-at org-target-regexp)
       (let ((begin (point))
-	    (value (match-string-no-properties 1))
-	    (post-blank (progn (goto-char (match-end 0))
-			       (skip-chars-forward " \t")))
-	    (end (point)))
-	(list 'target
-	      (list :begin begin
-		    :end end
-		    :value value
-		    :post-blank post-blank))))))
+        (value (match-string-no-properties 1))
+        (post-blank (progn (goto-char (match-end 0))
+                   (skip-chars-forward " \t")))
+        (end (point)))
+    (list 'target
+          (list :begin begin
+            :end end
+            :value value
+            :post-blank post-blank))))))
 
 (defun org-element-target-interpreter (target _)
   "Interpret TARGET object as Org syntax."
@@ -3690,10 +3690,10 @@ Assume point is at the target."
 
 (defconst org-element--timestamp-regexp
   (concat org-ts-regexp-both
-	  "\\|"
-	  "\\(?:<[0-9]+-[0-9]+-[0-9]+[^>\n]+?\\+[0-9]+[dwmy]>\\)"
-	  "\\|"
-	  "\\(?:<%%\\(?:([^>\n]+)\\)>\\)")
+      "\\|"
+      "\\(?:<[0-9]+-[0-9]+-[0-9]+[^>\n]+?\\+[0-9]+[dwmy]>\\)"
+      "\\|"
+      "\\(?:<%%\\(?:([^>\n]+)\\)>\\)")
   "Regexp matching any timestamp type object.")
 
 (defun org-element-timestamp-parser ()
@@ -3712,183 +3712,183 @@ Assume point is at the beginning of the timestamp."
   (when (looking-at-p org-element--timestamp-regexp)
     (save-excursion
       (let* ((begin (point))
-	     (activep (eq (char-after) ?<))
-	     (raw-value
-	      (progn
-		(looking-at "\\([<[]\\(%%\\)?.*?\\)[]>]\\(?:--\\([<[].*?[]>]\\)\\)?")
-		(match-string-no-properties 0)))
-	     (date-start (match-string-no-properties 1))
-	     (date-end (match-string 3))
-	     (diaryp (match-beginning 2))
-	     (post-blank (progn (goto-char (match-end 0))
-				(skip-chars-forward " \t")))
-	     (end (point))
-	     (time-range
-	      (and (not diaryp)
-		   (string-match
-		    "[012]?[0-9]:[0-5][0-9]\\(-\\([012]?[0-9]\\):\\([0-5][0-9]\\)\\)"
-		    date-start)
-		   (cons (string-to-number (match-string 2 date-start))
-			 (string-to-number (match-string 3 date-start)))))
-	     (type (cond (diaryp 'diary)
-			 ((and activep (or date-end time-range)) 'active-range)
-			 (activep 'active)
-			 ((or date-end time-range) 'inactive-range)
-			 (t 'inactive)))
-	     (repeater-props
-	      (and (not diaryp)
-		   (string-match "\\([.+]?\\+\\)\\([0-9]+\\)\\([hdwmy]\\)"
-				 raw-value)
-		   (list
-		    :repeater-type
-		    (let ((type (match-string 1 raw-value)))
-		      (cond ((equal "++" type) 'catch-up)
-			    ((equal ".+" type) 'restart)
-			    (t 'cumulate)))
-		    :repeater-value (string-to-number (match-string 2 raw-value))
-		    :repeater-unit
-		    (pcase (string-to-char (match-string 3 raw-value))
-		      (?h 'hour) (?d 'day) (?w 'week) (?m 'month) (_ 'year)))))
-	     (warning-props
-	      (and (not diaryp)
-		   (string-match "\\(-\\)?-\\([0-9]+\\)\\([hdwmy]\\)" raw-value)
-		   (list
-		    :warning-type (if (match-string 1 raw-value) 'first 'all)
-		    :warning-value (string-to-number (match-string 2 raw-value))
-		    :warning-unit
-		    (pcase (string-to-char (match-string 3 raw-value))
-		      (?h 'hour) (?d 'day) (?w 'week) (?m 'month) (_ 'year)))))
-	     year-start month-start day-start hour-start minute-start year-end
-	     month-end day-end hour-end minute-end)
-	;; Parse date-start.
-	(unless diaryp
-	  (let ((date (org-parse-time-string date-start t)))
-	    (setq year-start (nth 5 date)
-		  month-start (nth 4 date)
-		  day-start (nth 3 date)
-		  hour-start (nth 2 date)
-		  minute-start (nth 1 date))))
-	;; Compute date-end.  It can be provided directly in time-stamp,
-	;; or extracted from time range.  Otherwise, it defaults to the
-	;; same values as date-start.
-	(unless diaryp
-	  (let ((date (and date-end (org-parse-time-string date-end t))))
-	    (setq year-end (or (nth 5 date) year-start)
-		  month-end (or (nth 4 date) month-start)
-		  day-end (or (nth 3 date) day-start)
-		  hour-end (or (nth 2 date) (car time-range) hour-start)
-		  minute-end (or (nth 1 date) (cdr time-range) minute-start))))
-	(list 'timestamp
-	      (nconc (list :type type
-			   :raw-value raw-value
-			   :year-start year-start
-			   :month-start month-start
-			   :day-start day-start
-			   :hour-start hour-start
-			   :minute-start minute-start
-			   :year-end year-end
-			   :month-end month-end
-			   :day-end day-end
-			   :hour-end hour-end
-			   :minute-end minute-end
-			   :begin begin
-			   :end end
-			   :post-blank post-blank)
-		     repeater-props
-		     warning-props))))))
+         (activep (eq (char-after) ?<))
+         (raw-value
+          (progn
+        (looking-at "\\([<[]\\(%%\\)?.*?\\)[]>]\\(?:--\\([<[].*?[]>]\\)\\)?")
+        (match-string-no-properties 0)))
+         (date-start (match-string-no-properties 1))
+         (date-end (match-string 3))
+         (diaryp (match-beginning 2))
+         (post-blank (progn (goto-char (match-end 0))
+                (skip-chars-forward " \t")))
+         (end (point))
+         (time-range
+          (and (not diaryp)
+           (string-match
+            "[012]?[0-9]:[0-5][0-9]\\(-\\([012]?[0-9]\\):\\([0-5][0-9]\\)\\)"
+            date-start)
+           (cons (string-to-number (match-string 2 date-start))
+             (string-to-number (match-string 3 date-start)))))
+         (type (cond (diaryp 'diary)
+             ((and activep (or date-end time-range)) 'active-range)
+             (activep 'active)
+             ((or date-end time-range) 'inactive-range)
+             (t 'inactive)))
+         (repeater-props
+          (and (not diaryp)
+           (string-match "\\([.+]?\\+\\)\\([0-9]+\\)\\([hdwmy]\\)"
+                 raw-value)
+           (list
+            :repeater-type
+            (let ((type (match-string 1 raw-value)))
+              (cond ((equal "++" type) 'catch-up)
+                ((equal ".+" type) 'restart)
+                (t 'cumulate)))
+            :repeater-value (string-to-number (match-string 2 raw-value))
+            :repeater-unit
+            (pcase (string-to-char (match-string 3 raw-value))
+              (?h 'hour) (?d 'day) (?w 'week) (?m 'month) (_ 'year)))))
+         (warning-props
+          (and (not diaryp)
+           (string-match "\\(-\\)?-\\([0-9]+\\)\\([hdwmy]\\)" raw-value)
+           (list
+            :warning-type (if (match-string 1 raw-value) 'first 'all)
+            :warning-value (string-to-number (match-string 2 raw-value))
+            :warning-unit
+            (pcase (string-to-char (match-string 3 raw-value))
+              (?h 'hour) (?d 'day) (?w 'week) (?m 'month) (_ 'year)))))
+         year-start month-start day-start hour-start minute-start year-end
+         month-end day-end hour-end minute-end)
+    ;; Parse date-start.
+    (unless diaryp
+      (let ((date (org-parse-time-string date-start t)))
+        (setq year-start (nth 5 date)
+          month-start (nth 4 date)
+          day-start (nth 3 date)
+          hour-start (nth 2 date)
+          minute-start (nth 1 date))))
+    ;; Compute date-end.  It can be provided directly in time-stamp,
+    ;; or extracted from time range.  Otherwise, it defaults to the
+    ;; same values as date-start.
+    (unless diaryp
+      (let ((date (and date-end (org-parse-time-string date-end t))))
+        (setq year-end (or (nth 5 date) year-start)
+          month-end (or (nth 4 date) month-start)
+          day-end (or (nth 3 date) day-start)
+          hour-end (or (nth 2 date) (car time-range) hour-start)
+          minute-end (or (nth 1 date) (cdr time-range) minute-start))))
+    (list 'timestamp
+          (nconc (list :type type
+               :raw-value raw-value
+               :year-start year-start
+               :month-start month-start
+               :day-start day-start
+               :hour-start hour-start
+               :minute-start minute-start
+               :year-end year-end
+               :month-end month-end
+               :day-end day-end
+               :hour-end hour-end
+               :minute-end minute-end
+               :begin begin
+               :end end
+               :post-blank post-blank)
+             repeater-props
+             warning-props))))))
 
 (defun org-element-timestamp-interpreter (timestamp _)
   "Interpret TIMESTAMP object as Org syntax."
   (let* ((repeat-string
-	  (concat
-	   (pcase (org-element-property :repeater-type timestamp)
-	     (`cumulate "+") (`catch-up "++") (`restart ".+"))
-	   (let ((val (org-element-property :repeater-value timestamp)))
-	     (and val (number-to-string val)))
-	   (pcase (org-element-property :repeater-unit timestamp)
-	     (`hour "h") (`day "d") (`week "w") (`month "m") (`year "y"))))
-	 (warning-string
-	  (concat
-	   (pcase (org-element-property :warning-type timestamp)
-	     (`first "--") (`all "-"))
-	   (let ((val (org-element-property :warning-value timestamp)))
-	     (and val (number-to-string val)))
-	   (pcase (org-element-property :warning-unit timestamp)
-	     (`hour "h") (`day "d") (`week "w") (`month "m") (`year "y"))))
-	 (build-ts-string
-	  ;; Build an Org timestamp string from TIME.  ACTIVEP is
-	  ;; non-nil when time stamp is active.  If WITH-TIME-P is
-	  ;; non-nil, add a time part.  HOUR-END and MINUTE-END
-	  ;; specify a time range in the timestamp.  REPEAT-STRING is
-	  ;; the repeater string, if any.
-	  (lambda (time activep &optional with-time-p hour-end minute-end)
-	    (let ((ts (format-time-string
-		       (funcall (if with-time-p #'cdr #'car)
-				org-time-stamp-formats)
-		       time)))
-	      (when (and hour-end minute-end)
-		(string-match "[012]?[0-9]:[0-5][0-9]" ts)
-		(setq ts
-		      (replace-match
-		       (format "\\&-%02d:%02d" hour-end minute-end)
-		       nil nil ts)))
-	      (unless activep (setq ts (format "[%s]" (substring ts 1 -1))))
-	      (dolist (s (list repeat-string warning-string))
-		(when (org-string-nw-p s)
-		  (setq ts (concat (substring ts 0 -1)
-				   " "
-				   s
-				   (substring ts -1)))))
-	      ;; Return value.
-	      ts)))
-	 (type (org-element-property :type timestamp)))
+      (concat
+       (pcase (org-element-property :repeater-type timestamp)
+         (`cumulate "+") (`catch-up "++") (`restart ".+"))
+       (let ((val (org-element-property :repeater-value timestamp)))
+         (and val (number-to-string val)))
+       (pcase (org-element-property :repeater-unit timestamp)
+         (`hour "h") (`day "d") (`week "w") (`month "m") (`year "y"))))
+     (warning-string
+      (concat
+       (pcase (org-element-property :warning-type timestamp)
+         (`first "--") (`all "-"))
+       (let ((val (org-element-property :warning-value timestamp)))
+         (and val (number-to-string val)))
+       (pcase (org-element-property :warning-unit timestamp)
+         (`hour "h") (`day "d") (`week "w") (`month "m") (`year "y"))))
+     (build-ts-string
+      ;; Build an Org timestamp string from TIME.  ACTIVEP is
+      ;; non-nil when time stamp is active.  If WITH-TIME-P is
+      ;; non-nil, add a time part.  HOUR-END and MINUTE-END
+      ;; specify a time range in the timestamp.  REPEAT-STRING is
+      ;; the repeater string, if any.
+      (lambda (time activep &optional with-time-p hour-end minute-end)
+        (let ((ts (format-time-string
+               (funcall (if with-time-p #'cdr #'car)
+                org-time-stamp-formats)
+               time)))
+          (when (and hour-end minute-end)
+        (string-match "[012]?[0-9]:[0-5][0-9]" ts)
+        (setq ts
+              (replace-match
+               (format "\\&-%02d:%02d" hour-end minute-end)
+               nil nil ts)))
+          (unless activep (setq ts (format "[%s]" (substring ts 1 -1))))
+          (dolist (s (list repeat-string warning-string))
+        (when (org-string-nw-p s)
+          (setq ts (concat (substring ts 0 -1)
+                   " "
+                   s
+                   (substring ts -1)))))
+          ;; Return value.
+          ts)))
+     (type (org-element-property :type timestamp)))
     (pcase type
       ((or `active `inactive)
        (let* ((minute-start (org-element-property :minute-start timestamp))
-	      (minute-end (org-element-property :minute-end timestamp))
-	      (hour-start (org-element-property :hour-start timestamp))
-	      (hour-end (org-element-property :hour-end timestamp))
-	      (time-range-p (and hour-start hour-end minute-start minute-end
-				 (or (/= hour-start hour-end)
-				     (/= minute-start minute-end)))))
-	 (funcall
-	  build-ts-string
-	  (encode-time 0
-		       (or minute-start 0)
-		       (or hour-start 0)
-		       (org-element-property :day-start timestamp)
-		       (org-element-property :month-start timestamp)
-		       (org-element-property :year-start timestamp))
-	  (eq type 'active)
-	  (and hour-start minute-start)
-	  (and time-range-p hour-end)
-	  (and time-range-p minute-end))))
+          (minute-end (org-element-property :minute-end timestamp))
+          (hour-start (org-element-property :hour-start timestamp))
+          (hour-end (org-element-property :hour-end timestamp))
+          (time-range-p (and hour-start hour-end minute-start minute-end
+                 (or (/= hour-start hour-end)
+                     (/= minute-start minute-end)))))
+     (funcall
+      build-ts-string
+      (encode-time 0
+               (or minute-start 0)
+               (or hour-start 0)
+               (org-element-property :day-start timestamp)
+               (org-element-property :month-start timestamp)
+               (org-element-property :year-start timestamp))
+      (eq type 'active)
+      (and hour-start minute-start)
+      (and time-range-p hour-end)
+      (and time-range-p minute-end))))
       ((or `active-range `inactive-range)
        (let ((minute-start (org-element-property :minute-start timestamp))
-	     (minute-end (org-element-property :minute-end timestamp))
-	     (hour-start (org-element-property :hour-start timestamp))
-	     (hour-end (org-element-property :hour-end timestamp)))
-	 (concat
-	  (funcall
-	   build-ts-string (encode-time
-			    0
-			    (or minute-start 0)
-			    (or hour-start 0)
-			    (org-element-property :day-start timestamp)
-			    (org-element-property :month-start timestamp)
-			    (org-element-property :year-start timestamp))
-	   (eq type 'active-range)
-	   (and hour-start minute-start))
-	  "--"
-	  (funcall build-ts-string
-		   (encode-time 0
-				(or minute-end 0)
-				(or hour-end 0)
-				(org-element-property :day-end timestamp)
-				(org-element-property :month-end timestamp)
-				(org-element-property :year-end timestamp))
-		   (eq type 'active-range)
-		   (and hour-end minute-end)))))
+         (minute-end (org-element-property :minute-end timestamp))
+         (hour-start (org-element-property :hour-start timestamp))
+         (hour-end (org-element-property :hour-end timestamp)))
+     (concat
+      (funcall
+       build-ts-string (encode-time
+                0
+                (or minute-start 0)
+                (or hour-start 0)
+                (org-element-property :day-start timestamp)
+                (org-element-property :month-start timestamp)
+                (org-element-property :year-start timestamp))
+       (eq type 'active-range)
+       (and hour-start minute-start))
+      "--"
+      (funcall build-ts-string
+           (encode-time 0
+                (or minute-end 0)
+                (or hour-end 0)
+                (org-element-property :day-end timestamp)
+                (org-element-property :month-end timestamp)
+                (org-element-property :year-end timestamp))
+           (eq type 'active-range)
+           (and hour-end minute-end)))))
       (_ (org-element-property :raw-value timestamp)))))
 
 
@@ -3907,17 +3907,17 @@ Assume point is at the first underscore marker."
     (unless (bolp) (backward-char 1))
     (when (looking-at org-emph-re)
       (let ((begin (match-beginning 2))
-	    (contents-begin (match-beginning 4))
-	    (contents-end (match-end 4))
-	    (post-blank (progn (goto-char (match-end 2))
-			       (skip-chars-forward " \t")))
-	    (end (point)))
-	(list 'underline
-	      (list :begin begin
-		    :end end
-		    :contents-begin contents-begin
-		    :contents-end contents-end
-		    :post-blank post-blank))))))
+        (contents-begin (match-beginning 4))
+        (contents-end (match-end 4))
+        (post-blank (progn (goto-char (match-end 2))
+                   (skip-chars-forward " \t")))
+        (end (point)))
+    (list 'underline
+          (list :begin begin
+            :end end
+            :contents-begin contents-begin
+            :contents-end contents-end
+            :post-blank post-blank))))))
 
 (defun org-element-underline-interpreter (_ contents)
   "Interpret underline object as Org syntax.
@@ -3939,15 +3939,15 @@ Assume point is at the first equal sign marker."
     (unless (bolp) (backward-char 1))
     (when (looking-at org-verbatim-re)
       (let ((begin (match-beginning 2))
-	    (value (match-string-no-properties 4))
-	    (post-blank (progn (goto-char (match-end 2))
-			       (skip-chars-forward " \t")))
-	    (end (point)))
-	(list 'verbatim
-	      (list :value value
-		    :begin begin
-		    :end end
-		    :post-blank post-blank))))))
+        (value (match-string-no-properties 4))
+        (post-blank (progn (goto-char (match-end 2))
+                   (skip-chars-forward " \t")))
+        (end (point)))
+    (list 'verbatim
+          (list :value value
+            :begin begin
+            :end end
+            :post-blank post-blank))))))
 
 (defun org-element-verbatim-interpreter (verbatim _)
   "Interpret VERBATIM object as Org syntax."
@@ -3990,14 +3990,14 @@ This function assumes point is always at the beginning of the
 element it has to parse."
   (save-excursion
     (let ((case-fold-search t)
-	  ;; Determine if parsing depth allows for secondary strings
-	  ;; parsing.  It only applies to elements referenced in
-	  ;; `org-element-secondary-value-alist'.
-	  (raw-secondary-p (and granularity (not (eq granularity 'object)))))
+      ;; Determine if parsing depth allows for secondary strings
+      ;; parsing.  It only applies to elements referenced in
+      ;; `org-element-secondary-value-alist'.
+      (raw-secondary-p (and granularity (not (eq granularity 'object)))))
       (cond
        ;; Item.
        ((eq mode 'item)
-	(org-element-item-parser limit structure raw-secondary-p))
+    (org-element-item-parser limit structure raw-secondary-p))
        ;; Table Row.
        ((eq mode 'table-row) (org-element-table-row-parser limit))
        ;; Node Property.
@@ -4008,135 +4008,142 @@ element it has to parse."
        ;; Sections (must be checked after headline).
        ((eq mode 'section) (org-element-section-parser limit))
        ((eq mode 'first-section)
-	(org-element-section-parser
-	 (or (save-excursion (org-with-limited-levels (outline-next-heading)))
-	     limit)))
+    (org-element-section-parser
+     (or (save-excursion (org-with-limited-levels (outline-next-heading)))
+         limit)))
        ;; Comments.
        ((looking-at "^[ \t]*#\\(?: \\|$\\)")
-	(org-element-comment-parser limit))
+    (org-element-comment-parser limit))
        ;; Planning.
        ((and (eq mode 'planning)
-	     (eq ?* (char-after (line-beginning-position 0)))
-	     (looking-at org-planning-line-re))
-	(org-element-planning-parser limit))
+         (eq ?* (char-after (line-beginning-position 0)))
+         (looking-at org-planning-line-re))
+    (org-element-planning-parser limit))
        ;; Property drawer.
        ((and (pcase mode
-	       (`planning (eq ?* (char-after (line-beginning-position 0))))
-	       ((or `property-drawer `top-comment)
-		(save-excursion
-		  (beginning-of-line 0)
-		  (not (looking-at "[[:blank:]]*$"))))
-	       (_ nil))
-	     (looking-at org-property-drawer-re))
-	(org-element-property-drawer-parser limit))
+               (`planning (eq ?* (char-after (line-beginning-position 0))))
+               ((or `property-drawer `top-comment)
+                (save-excursion
+                  (beginning-of-line 0)
+                  (not (looking-at "[[:blank:]]*$"))
+                )
+               )
+               (_ nil)
+              )
+              (looking-at org-property-drawer-re)
+        )
+        (org-element-property-drawer-parser limit)
+       )
        ;; When not at bol, point is at the beginning of an item or
        ;; a footnote definition: next item is always a paragraph.
-       ((not (bolp)) (org-element-paragraph-parser limit (list (point))))
+       ((not (bolp))
+        (org-element-paragraph-parser limit (list (point)))
+        )
        ;; Clock.
        ((looking-at org-clock-line-re) (org-element-clock-parser limit))
        ;; Inlinetask.
        ((looking-at "^\\*+ ")
-	(org-element-inlinetask-parser limit raw-secondary-p))
+    (org-element-inlinetask-parser limit raw-secondary-p))
        ;; From there, elements can have affiliated keywords.
        (t (let ((affiliated (org-element--collect-affiliated-keywords
-			     limit (memq granularity '(nil object)))))
-	    (cond
-	     ;; Jumping over affiliated keywords put point off-limits.
-	     ;; Parse them as regular keywords.
-	     ((and (cdr affiliated) (>= (point) limit))
-	      (goto-char (car affiliated))
-	      (org-element-keyword-parser limit nil))
-	     ;; LaTeX Environment.
-	     ((looking-at org-element--latex-begin-environment)
-	      (org-element-latex-environment-parser limit affiliated))
-	     ;; Drawer.
-	     ((looking-at org-drawer-regexp)
-	      (org-element-drawer-parser limit affiliated))
-	     ;; Fixed Width
-	     ((looking-at "[ \t]*:\\( \\|$\\)")
-	      (org-element-fixed-width-parser limit affiliated))
-	     ;; Inline Comments, Blocks, Babel Calls, Dynamic Blocks and
-	     ;; Keywords.
-	     ((looking-at "[ \t]*#\\+")
-	      (goto-char (match-end 0))
-	      (cond
-	       ((looking-at "BEGIN_\\(\\S-+\\)")
-		(beginning-of-line)
-		(funcall (pcase (upcase (match-string 1))
-			   ("CENTER"  #'org-element-center-block-parser)
-			   ("COMMENT" #'org-element-comment-block-parser)
-			   ("EXAMPLE" #'org-element-example-block-parser)
-			   ("EXPORT"  #'org-element-export-block-parser)
-			   ("QUOTE"   #'org-element-quote-block-parser)
-			   ("SRC"     #'org-element-src-block-parser)
-			   ("VERSE"   #'org-element-verse-block-parser)
-			   (_         #'org-element-special-block-parser))
-			 limit
-			 affiliated))
-	       ((looking-at "CALL:")
-		(beginning-of-line)
-		(org-element-babel-call-parser limit affiliated))
-	       ((looking-at "BEGIN:? ")
-		(beginning-of-line)
-		(org-element-dynamic-block-parser limit affiliated))
-	       ((looking-at "\\S-+:")
-		(beginning-of-line)
-		(org-element-keyword-parser limit affiliated))
-	       (t
-		(beginning-of-line)
-		(org-element-paragraph-parser limit affiliated))))
-	     ;; Footnote Definition.
-	     ((looking-at org-footnote-definition-re)
-	      (org-element-footnote-definition-parser limit affiliated))
-	     ;; Horizontal Rule.
-	     ((looking-at "[ \t]*-\\{5,\\}[ \t]*$")
-	      (org-element-horizontal-rule-parser limit affiliated))
-	     ;; Diary Sexp.
-	     ((looking-at "%%(")
-	      (org-element-diary-sexp-parser limit affiliated))
-	     ;; Table.
-	     ((or (looking-at "[ \t]*|")
-		  ;; There is no strict definition of a table.el
-		  ;; table.  Try to prevent false positive while being
-		  ;; quick.
-		  (let ((rule-regexp
-			 (rx (zero-or-more (any " \t"))
-			     "+"
-			     (one-or-more (one-or-more "-") "+")
-			     (zero-or-more (any " \t"))
-			     eol))
-			(non-table.el-line
-			 (rx bol
-			     (zero-or-more (any " \t"))
-			     (or eol (not (any "+| \t")))))
-			(next (line-beginning-position 2)))
-		    ;; Start with a full rule.
-		    (and
-		     (looking-at rule-regexp)
-		     (< next limit)	;no room for a table.el table
-		     (save-excursion
-		       (end-of-line)
-		       (cond
-			;; Must end with a full rule.
-			((not (re-search-forward non-table.el-line limit 'move))
-			 (if (bolp) (forward-line -1) (beginning-of-line))
-			 (looking-at rule-regexp))
-			;; Ignore pseudo-tables with a single
-			;; rule.
-			((= next (line-beginning-position))
-			 nil)
-			;; Must end with a full rule.
-			(t
-			 (forward-line -1)
-			 (looking-at rule-regexp)))))))
-	      (org-element-table-parser limit affiliated))
-	     ;; List.
-	     ((looking-at (org-item-re))
-	      (org-element-plain-list-parser
-	       limit affiliated
-	       (or structure (org-element--list-struct limit))))
-	     ;; Default element: Paragraph.
-	     (t (org-element-paragraph-parser limit affiliated)))))))))
+                 limit (memq granularity '(nil object)))))
+        (cond
+         ;; Jumping over affiliated keywords put point off-limits.
+         ;; Parse them as regular keywords.
+         ((and (cdr affiliated) (>= (point) limit))
+          (goto-char (car affiliated))
+          (org-element-keyword-parser limit nil))
+         ;; LaTeX Environment.
+         ((looking-at org-element--latex-begin-environment)
+          (org-element-latex-environment-parser limit affiliated))
+         ;; Drawer.
+         ((looking-at org-drawer-regexp)
+          (org-element-drawer-parser limit affiliated))
+         ;; Fixed Width
+         ((looking-at "[ \t]*:\\( \\|$\\)")
+          (org-element-fixed-width-parser limit affiliated))
+         ;; Inline Comments, Blocks, Babel Calls, Dynamic Blocks and
+         ;; Keywords.
+         ((looking-at "[ \t]*#\\+")
+          (goto-char (match-end 0))
+          (cond
+           ((looking-at "BEGIN_\\(\\S-+\\)")
+        (beginning-of-line)
+        (funcall (pcase (upcase (match-string 1))
+               ("CENTER"  #'org-element-center-block-parser)
+               ("COMMENT" #'org-element-comment-block-parser)
+               ("EXAMPLE" #'org-element-example-block-parser)
+               ("EXPORT"  #'org-element-export-block-parser)
+               ("QUOTE"   #'org-element-quote-block-parser)
+               ("SRC"     #'org-element-src-block-parser)
+               ("VERSE"   #'org-element-verse-block-parser)
+               (_         #'org-element-special-block-parser))
+             limit
+             affiliated))
+           ((looking-at "CALL:")
+        (beginning-of-line)
+        (org-element-babel-call-parser limit affiliated))
+           ((looking-at "BEGIN:? ")
+        (beginning-of-line)
+        (org-element-dynamic-block-parser limit affiliated))
+           ((looking-at "\\S-+:")
+        (beginning-of-line)
+        (org-element-keyword-parser limit affiliated))
+           (t
+        (beginning-of-line)
+        (org-element-paragraph-parser limit affiliated))))
+         ;; Footnote Definition.
+         ((looking-at org-footnote-definition-re)
+          (org-element-footnote-definition-parser limit affiliated))
+         ;; Horizontal Rule.
+         ((looking-at "[ \t]*-\\{5,\\}[ \t]*$")
+          (org-element-horizontal-rule-parser limit affiliated))
+         ;; Diary Sexp.
+         ((looking-at "%%(")
+          (org-element-diary-sexp-parser limit affiliated))
+         ;; Table.
+         ((or (looking-at "[ \t]*|")
+          ;; There is no strict definition of a table.el
+          ;; table.  Try to prevent false positive while being
+          ;; quick.
+          (let ((rule-regexp
+             (rx (zero-or-more (any " \t"))
+                 "+"
+                 (one-or-more (one-or-more "-") "+")
+                 (zero-or-more (any " \t"))
+                 eol))
+            (non-table.el-line
+             (rx bol
+                 (zero-or-more (any " \t"))
+                 (or eol (not (any "+| \t")))))
+            (next (line-beginning-position 2)))
+            ;; Start with a full rule.
+            (and
+             (looking-at rule-regexp)
+             (< next limit)	;no room for a table.el table
+             (save-excursion
+               (end-of-line)
+               (cond
+            ;; Must end with a full rule.
+            ((not (re-search-forward non-table.el-line limit 'move))
+             (if (bolp) (forward-line -1) (beginning-of-line))
+             (looking-at rule-regexp))
+            ;; Ignore pseudo-tables with a single
+            ;; rule.
+            ((= next (line-beginning-position))
+             nil)
+            ;; Must end with a full rule.
+            (t
+             (forward-line -1)
+             (looking-at rule-regexp)))))))
+          (org-element-table-parser limit affiliated))
+         ;; List.
+         ((looking-at (org-item-re))
+          (org-element-plain-list-parser
+           limit affiliated
+           (or structure (org-element--list-struct limit))))
+         ;; Default element: Paragraph.
+         (t (org-element-paragraph-parser limit affiliated)))))))))
 
 
 ;; Most elements can have affiliated keywords.  When looking for an
@@ -4159,57 +4166,57 @@ When PARSE is non-nil, values from keywords belonging to
 `org-element-parsed-keywords' are parsed as secondary strings."
   (if (not (bolp)) (list (point))
     (let ((case-fold-search t)
-	  (origin (point))
-	  ;; RESTRICT is the list of objects allowed in parsed
-	  ;; keywords value.  If PARSE is nil, no object is allowed.
-	  (restrict (and parse (org-element-restriction 'keyword)))
-	  output)
+      (origin (point))
+      ;; RESTRICT is the list of objects allowed in parsed
+      ;; keywords value.  If PARSE is nil, no object is allowed.
+      (restrict (and parse (org-element-restriction 'keyword)))
+      output)
       (while (and (< (point) limit) (looking-at org-element--affiliated-re))
-	(let* ((raw-kwd (upcase (match-string 1)))
-	       ;; Apply translation to RAW-KWD.  From there, KWD is
-	       ;; the official keyword.
-	       (kwd (or (cdr (assoc raw-kwd
-				    org-element-keyword-translation-alist))
-			raw-kwd))
-	       ;; PARSED? is non-nil when keyword should have its
-	       ;; value parsed.
-	       (parsed? (member kwd org-element-parsed-keywords))
-	       ;; Find main value for any keyword.
-	       (value
-		(let ((beg (match-end 0))
-		      (end (save-excursion
-			     (end-of-line)
-			     (skip-chars-backward " \t")
-			     (point))))
-		  (if parsed?
-		      (save-match-data
-			(org-element--parse-objects beg end nil restrict))
-		    (org-trim (buffer-substring-no-properties beg end)))))
-	       ;; If KWD is a dual keyword, find its secondary value.
-	       ;; Maybe parse it.
-	       (dual? (member kwd org-element-dual-keywords))
-	       (dual-value
-		(and dual?
-		     (let ((sec (match-string-no-properties 2)))
-		       (cond
-			((and sec parsed?)
-			 (save-match-data
-			   (org-element--parse-objects
-			    (match-beginning 2) (match-end 2) nil restrict)))
-			(sec sec)))))
-	       ;; Attribute a property name to KWD.
-	       (kwd-sym (and kwd (intern (concat ":" (downcase kwd))))))
-	  ;; Now set final shape for VALUE.
-	  (when dual?
-	    (setq value (and (or value dual-value) (cons value dual-value))))
-	  (when (or (member kwd org-element-multiple-keywords)
-		    ;; Attributes can always appear on multiple lines.
-		    (string-match "^ATTR_" kwd))
-	    (setq value (cons value (plist-get output kwd-sym))))
-	  ;; Eventually store the new value in OUTPUT.
-	  (setq output (plist-put output kwd-sym value))
-	  ;; Move to next keyword.
-	  (forward-line)))
+    (let* ((raw-kwd (upcase (match-string 1)))
+           ;; Apply translation to RAW-KWD.  From there, KWD is
+           ;; the official keyword.
+           (kwd (or (cdr (assoc raw-kwd
+                    org-element-keyword-translation-alist))
+            raw-kwd))
+           ;; PARSED? is non-nil when keyword should have its
+           ;; value parsed.
+           (parsed? (member kwd org-element-parsed-keywords))
+           ;; Find main value for any keyword.
+           (value
+        (let ((beg (match-end 0))
+              (end (save-excursion
+                 (end-of-line)
+                 (skip-chars-backward " \t")
+                 (point))))
+          (if parsed?
+              (save-match-data
+            (org-element--parse-objects beg end nil restrict))
+            (org-trim (buffer-substring-no-properties beg end)))))
+           ;; If KWD is a dual keyword, find its secondary value.
+           ;; Maybe parse it.
+           (dual? (member kwd org-element-dual-keywords))
+           (dual-value
+        (and dual?
+             (let ((sec (match-string-no-properties 2)))
+               (cond
+            ((and sec parsed?)
+             (save-match-data
+               (org-element--parse-objects
+                (match-beginning 2) (match-end 2) nil restrict)))
+            (sec sec)))))
+           ;; Attribute a property name to KWD.
+           (kwd-sym (and kwd (intern (concat ":" (downcase kwd))))))
+      ;; Now set final shape for VALUE.
+      (when dual?
+        (setq value (and (or value dual-value) (cons value dual-value))))
+      (when (or (member kwd org-element-multiple-keywords)
+            ;; Attributes can always appear on multiple lines.
+            (string-match "^ATTR_" kwd))
+        (setq value (cons value (plist-get output kwd-sym))))
+      ;; Eventually store the new value in OUTPUT.
+      (setq output (plist-put output kwd-sym value))
+      ;; Move to next keyword.
+      (forward-line)))
       ;; If affiliated keywords are orphaned: move back to first one.
       ;; They will be parsed as a paragraph.
       (when (looking-at "[ \t]*$") (goto-char origin) (setq output nil))
@@ -4241,8 +4248,8 @@ recursion.  It can be set to the following symbols:
 
 `headline'          Only parse headlines.
 `greater-element'   Don't recurse into greater elements except
-		    headlines and sections.  Thus, elements
-		    parsed are the top-level ones.
+            headlines and sections.  Thus, elements
+            parsed are the top-level ones.
 `element'           Parse everything but objects and plain text.
 `object'            Parse the complete buffer (default).
 
@@ -4299,20 +4306,20 @@ If STRING is the empty string or nil, return nil."
    ((not string) nil)
    ((equal string "") nil)
    (t (let ((local-variables (buffer-local-variables)))
-	(with-temp-buffer
-	  (dolist (v local-variables)
-	    (ignore-errors
-	      (if (symbolp v) (makunbound v)
-		;; Don't set file name to avoid mishandling hooks (bug#44524)
-		(unless (memq (car v) '(buffer-file-name buffer-file-truename))
-		  (set (make-local-variable (car v)) (cdr v))))))
-	  ;; Transferring local variables may put the temporary buffer
-	  ;; into a read-only state.  Make sure we can insert STRING.
-	  (let ((inhibit-read-only t)) (insert string))
-	  ;; Prevent "Buffer *temp* modified; kill anyway?".
-	  (restore-buffer-modified-p nil)
-	  (org-element--parse-objects
-	   (point-min) (point-max) nil restriction parent))))))
+    (with-temp-buffer
+      (dolist (v local-variables)
+        (ignore-errors
+          (if (symbolp v) (makunbound v)
+        ;; Don't set file name to avoid mishandling hooks (bug#44524)
+        (unless (memq (car v) '(buffer-file-name buffer-file-truename))
+          (set (make-local-variable (car v)) (cdr v))))))
+      ;; Transferring local variables may put the temporary buffer
+      ;; into a read-only state.  Make sure we can insert STRING.
+      (let ((inhibit-read-only t)) (insert string))
+      ;; Prevent "Buffer *temp* modified; kill anyway?".
+      (restore-buffer-modified-p nil)
+      (org-element--parse-objects
+       (point-min) (point-max) nil restriction parent))))))
 
 (defun org-element-map
     (data types fun &optional info first-match no-recursion with-affiliated)
@@ -4379,97 +4386,97 @@ looking into captions:
   (declare (indent 2))
   ;; Ensure TYPES and NO-RECURSION are a list, even of one element.
   (let* ((types (if (listp types) types (list types)))
-	 (no-recursion (if (listp no-recursion) no-recursion
-			 (list no-recursion)))
-	 ;; Recursion depth is determined by --CATEGORY.
-	 (--category
-	  (catch :--found
-	    (let ((category 'greater-elements)
-		  (all-objects (cons 'plain-text org-element-all-objects)))
-	      (dolist (type types category)
-		(cond ((memq type all-objects)
-		       ;; If one object is found, the function has
-		       ;; to recurse into every object.
-		       (throw :--found 'objects))
-		      ((not (memq type org-element-greater-elements))
-		       ;; If one regular element is found, the
-		       ;; function has to recurse, at least, into
-		       ;; every element it encounters.
-		       (and (not (eq category 'elements))
-			    (setq category 'elements))))))))
-	 --acc)
+     (no-recursion (if (listp no-recursion) no-recursion
+             (list no-recursion)))
+     ;; Recursion depth is determined by --CATEGORY.
+     (--category
+      (catch :--found
+        (let ((category 'greater-elements)
+          (all-objects (cons 'plain-text org-element-all-objects)))
+          (dolist (type types category)
+        (cond ((memq type all-objects)
+               ;; If one object is found, the function has
+               ;; to recurse into every object.
+               (throw :--found 'objects))
+              ((not (memq type org-element-greater-elements))
+               ;; If one regular element is found, the
+               ;; function has to recurse, at least, into
+               ;; every element it encounters.
+               (and (not (eq category 'elements))
+                (setq category 'elements))))))))
+     --acc)
     (letrec ((--walk-tree
-	      (lambda (--data)
-		;; Recursively walk DATA.  INFO, if non-nil, is a plist
-		;; holding contextual information.
-		(let ((--type (org-element-type --data)))
-		  (cond
-		   ((not --data))
-		   ;; Ignored element in an export context.
-		   ((and info (memq --data (plist-get info :ignore-list))))
-		   ;; List of elements or objects.
-		   ((not --type) (mapc --walk-tree --data))
-		   ;; Unconditionally enter parse trees.
-		   ((eq --type 'org-data)
-		    (mapc --walk-tree (org-element-contents --data)))
-		   (t
-		    ;; Check if TYPE is matching among TYPES.  If so,
-		    ;; apply FUN to --DATA and accumulate return value
-		    ;; into --ACC (or exit if FIRST-MATCH is non-nil).
-		    (when (memq --type types)
-		      (let ((result (funcall fun --data)))
-			(cond ((not result))
-			      (first-match (throw :--map-first-match result))
-			      (t (push result --acc)))))
-		    ;; If --DATA has a secondary string that can contain
-		    ;; objects with their type among TYPES, look inside.
-		    (when (and (eq --category 'objects) (not (stringp --data)))
-		      (dolist (p (cdr (assq --type
-					    org-element-secondary-value-alist)))
-			(funcall --walk-tree (org-element-property p --data))))
-		    ;; If --DATA has any parsed affiliated keywords and
-		    ;; WITH-AFFILIATED is non-nil, look for objects in
-		    ;; them.
-		    (when (and with-affiliated
-			       (eq --category 'objects)
-			       (eq (org-element-class --data) 'element))
-		      (dolist (kwd-pair org-element--parsed-properties-alist)
-			(let ((kwd (car kwd-pair))
-			      (value (org-element-property (cdr kwd-pair) --data)))
-			  ;; Pay attention to the type of parsed
-			  ;; keyword.  In particular, preserve order for
-			  ;; multiple keywords.
-			  (cond
-			   ((not value))
-			   ((member kwd org-element-dual-keywords)
-			    (if (member kwd org-element-multiple-keywords)
-				(dolist (line (reverse value))
-				  (funcall --walk-tree (cdr line))
-				  (funcall --walk-tree (car line)))
-			      (funcall --walk-tree (cdr value))
-			      (funcall --walk-tree (car value))))
-			   ((member kwd org-element-multiple-keywords)
-			    (mapc --walk-tree (reverse value)))
-			   (t (funcall --walk-tree value))))))
-		    ;; Determine if a recursion into --DATA is possible.
-		    (cond
-		     ;; --TYPE is explicitly removed from recursion.
-		     ((memq --type no-recursion))
-		     ;; --DATA has no contents.
-		     ((not (org-element-contents --data)))
-		     ;; Looking for greater elements but --DATA is
-		     ;; simply an element or an object.
-		     ((and (eq --category 'greater-elements)
-			   (not (memq --type org-element-greater-elements))))
-		     ;; Looking for elements but --DATA is an object.
-		     ((and (eq --category 'elements)
-			   (eq (org-element-class --data) 'object)))
-		     ;; In any other case, map contents.
-		     (t (mapc --walk-tree (org-element-contents --data))))))))))
+          (lambda (--data)
+        ;; Recursively walk DATA.  INFO, if non-nil, is a plist
+        ;; holding contextual information.
+        (let ((--type (org-element-type --data)))
+          (cond
+           ((not --data))
+           ;; Ignored element in an export context.
+           ((and info (memq --data (plist-get info :ignore-list))))
+           ;; List of elements or objects.
+           ((not --type) (mapc --walk-tree --data))
+           ;; Unconditionally enter parse trees.
+           ((eq --type 'org-data)
+            (mapc --walk-tree (org-element-contents --data)))
+           (t
+            ;; Check if TYPE is matching among TYPES.  If so,
+            ;; apply FUN to --DATA and accumulate return value
+            ;; into --ACC (or exit if FIRST-MATCH is non-nil).
+            (when (memq --type types)
+              (let ((result (funcall fun --data)))
+            (cond ((not result))
+                  (first-match (throw :--map-first-match result))
+                  (t (push result --acc)))))
+            ;; If --DATA has a secondary string that can contain
+            ;; objects with their type among TYPES, look inside.
+            (when (and (eq --category 'objects) (not (stringp --data)))
+              (dolist (p (cdr (assq --type
+                        org-element-secondary-value-alist)))
+            (funcall --walk-tree (org-element-property p --data))))
+            ;; If --DATA has any parsed affiliated keywords and
+            ;; WITH-AFFILIATED is non-nil, look for objects in
+            ;; them.
+            (when (and with-affiliated
+                   (eq --category 'objects)
+                   (eq (org-element-class --data) 'element))
+              (dolist (kwd-pair org-element--parsed-properties-alist)
+            (let ((kwd (car kwd-pair))
+                  (value (org-element-property (cdr kwd-pair) --data)))
+              ;; Pay attention to the type of parsed
+              ;; keyword.  In particular, preserve order for
+              ;; multiple keywords.
+              (cond
+               ((not value))
+               ((member kwd org-element-dual-keywords)
+                (if (member kwd org-element-multiple-keywords)
+                (dolist (line (reverse value))
+                  (funcall --walk-tree (cdr line))
+                  (funcall --walk-tree (car line)))
+                  (funcall --walk-tree (cdr value))
+                  (funcall --walk-tree (car value))))
+               ((member kwd org-element-multiple-keywords)
+                (mapc --walk-tree (reverse value)))
+               (t (funcall --walk-tree value))))))
+            ;; Determine if a recursion into --DATA is possible.
+            (cond
+             ;; --TYPE is explicitly removed from recursion.
+             ((memq --type no-recursion))
+             ;; --DATA has no contents.
+             ((not (org-element-contents --data)))
+             ;; Looking for greater elements but --DATA is
+             ;; simply an element or an object.
+             ((and (eq --category 'greater-elements)
+               (not (memq --type org-element-greater-elements))))
+             ;; Looking for elements but --DATA is an object.
+             ((and (eq --category 'elements)
+               (eq (org-element-class --data) 'object)))
+             ;; In any other case, map contents.
+             (t (mapc --walk-tree (org-element-contents --data))))))))))
       (catch :--map-first-match
-	(funcall --walk-tree data)
-	;; Return value in a proper order.
-	(nreverse --acc)))))
+    (funcall --walk-tree data)
+    ;; Return value in a proper order.
+    (nreverse --acc)))))
 
 ;; The following functions are internal parts of the parser.
 ;;
@@ -4495,13 +4502,13 @@ If PARENT? is non-nil, assume the next element or object will be
 located inside the current one."
   (if parent?
       (pcase type
-	(`headline 'section)
-	((and (guard (eq mode 'first-section)) `section) 'top-comment)
-	(`inlinetask 'planning)
-	(`plain-list 'item)
-	(`property-drawer 'node-property)
-	(`section 'planning)
-	(`table 'table-row))
+    (`headline 'section)
+    ((and (guard (eq mode 'first-section)) `section) 'top-comment)
+    (`inlinetask 'planning)
+    (`plain-list 'item)
+    (`property-drawer 'node-property)
+    (`section 'planning)
+    (`table 'table-row))
     (pcase mode
       (`item 'item)
       (`node-property 'node-property)
@@ -4534,47 +4541,47 @@ Elements are accumulated into ACC."
       (org-with-limited-levels (outline-next-heading)))
     (let (elements)
       (while (< (point) end)
-	;; Visible only: skip invisible parts due to folding.
-	(if (and visible-only (org-invisible-p nil t))
-	    (progn
-	      (goto-char (org-find-visible))
-	      (when (and (eolp) (not (eobp))) (forward-char)))
-	  ;; Find current element's type and parse it accordingly to
-	  ;; its category.
-	  (let* ((element (org-element--current-element
-			   end granularity mode structure))
-		 (type (org-element-type element))
-		 (cbeg (org-element-property :contents-begin element)))
-	    (goto-char (org-element-property :end element))
-	    ;; Fill ELEMENT contents by side-effect.
-	    (cond
-	     ;; If element has no contents, don't modify it.
-	     ((not cbeg))
-	     ;; Greater element: parse it between `contents-begin' and
-	     ;; `contents-end'.  Ensure GRANULARITY allows recursion,
-	     ;; or ELEMENT is a headline, in which case going inside
-	     ;; is mandatory, in order to get sub-level headings.
-	     ((and (memq type org-element-greater-elements)
-		   (or (memq granularity '(element object nil))
-		       (and (eq granularity 'greater-element)
-			    (eq type 'section))
-		       (eq type 'headline)))
-	      (org-element--parse-elements
-	       cbeg (org-element-property :contents-end element)
-	       ;; Possibly switch to a special mode.
-	       (org-element--next-mode mode type t)
-	       (and (memq type '(item plain-list))
-		    (org-element-property :structure element))
-	       granularity visible-only element))
-	     ;; ELEMENT has contents.  Parse objects inside, if
-	     ;; GRANULARITY allows it.
-	     ((memq granularity '(object nil))
-	      (org-element--parse-objects
-	       cbeg (org-element-property :contents-end element) element
-	       (org-element-restriction type))))
-	    (push (org-element-put-property element :parent acc) elements)
-	    ;; Update mode.
-	    (setq mode (org-element--next-mode mode type nil)))))
+    ;; Visible only: skip invisible parts due to folding.
+    (if (and visible-only (org-invisible-p nil t))
+        (progn
+          (goto-char (org-find-visible))
+          (when (and (eolp) (not (eobp))) (forward-char)))
+      ;; Find current element's type and parse it accordingly to
+      ;; its category.
+      (let* ((element (org-element--current-element
+               end granularity mode structure))
+         (type (org-element-type element))
+         (cbeg (org-element-property :contents-begin element)))
+        (goto-char (org-element-property :end element))
+        ;; Fill ELEMENT contents by side-effect.
+        (cond
+         ;; If element has no contents, don't modify it.
+         ((not cbeg))
+         ;; Greater element: parse it between `contents-begin' and
+         ;; `contents-end'.  Ensure GRANULARITY allows recursion,
+         ;; or ELEMENT is a headline, in which case going inside
+         ;; is mandatory, in order to get sub-level headings.
+         ((and (memq type org-element-greater-elements)
+           (or (memq granularity '(element object nil))
+               (and (eq granularity 'greater-element)
+                (eq type 'section))
+               (eq type 'headline)))
+          (org-element--parse-elements
+           cbeg (org-element-property :contents-end element)
+           ;; Possibly switch to a special mode.
+           (org-element--next-mode mode type t)
+           (and (memq type '(item plain-list))
+            (org-element-property :structure element))
+           granularity visible-only element))
+         ;; ELEMENT has contents.  Parse objects inside, if
+         ;; GRANULARITY allows it.
+         ((memq granularity '(object nil))
+          (org-element--parse-objects
+           cbeg (org-element-property :contents-end element) element
+           (org-element-restriction type))))
+        (push (org-element-put-property element :parent acc) elements)
+        ;; Update mode.
+        (setq mode (org-element--next-mode mode type nil)))))
       ;; Return result.
       (apply #'org-element-set-contents acc (nreverse elements)))))
 
@@ -4589,111 +4596,111 @@ to an appropriate container (e.g., a paragraph)."
     (org-element-citation-reference-parser))
    (t
     (let* ((start (point))
-	   (limit
-	    ;; Object regexp sometimes needs to have a peek at
-	    ;; a character ahead.  Therefore, when there is a hard
-	    ;; limit, make it one more than the true beginning of the
-	    ;; radio target.
-	    (save-excursion
-	      (cond ((not org-target-link-regexp) nil)
-		    ((not (memq 'link restriction)) nil)
-		    ((progn
-		       (unless (bolp) (forward-char -1))
-		       (not (re-search-forward org-target-link-regexp nil t)))
-		     nil)
-		    ;; Since we moved backward, we do not want to
-		    ;; match again an hypothetical 1-character long
-		    ;; radio link before us.  Realizing that this can
-		    ;; only happen if such a radio link starts at
-		    ;; beginning of line, we prevent this here.
-		    ((and (= start (1+ (line-beginning-position)))
-			  (= start (match-end 1)))
-		     (and (re-search-forward org-target-link-regexp nil t)
-			  (1+ (match-beginning 1))))
-		    (t (1+ (match-beginning 1))))))
-	   found)
+       (limit
+        ;; Object regexp sometimes needs to have a peek at
+        ;; a character ahead.  Therefore, when there is a hard
+        ;; limit, make it one more than the true beginning of the
+        ;; radio target.
+        (save-excursion
+          (cond ((not org-target-link-regexp) nil)
+            ((not (memq 'link restriction)) nil)
+            ((progn
+               (unless (bolp) (forward-char -1))
+               (not (re-search-forward org-target-link-regexp nil t)))
+             nil)
+            ;; Since we moved backward, we do not want to
+            ;; match again an hypothetical 1-character long
+            ;; radio link before us.  Realizing that this can
+            ;; only happen if such a radio link starts at
+            ;; beginning of line, we prevent this here.
+            ((and (= start (1+ (line-beginning-position)))
+              (= start (match-end 1)))
+             (and (re-search-forward org-target-link-regexp nil t)
+              (1+ (match-beginning 1))))
+            (t (1+ (match-beginning 1))))))
+       found)
       (save-excursion
-	(while (and (not found)
-		    (re-search-forward org-element--object-regexp limit 'move))
-	  (goto-char (match-beginning 0))
-	  (let ((result (match-string 0)))
-	    (setq found
-		  (cond
-		   ((string-prefix-p "call_" result t)
-		    (and (memq 'inline-babel-call restriction)
-			 (org-element-inline-babel-call-parser)))
-		   ((string-prefix-p "src_" result t)
-		    (and (memq 'inline-src-block restriction)
-			 (org-element-inline-src-block-parser)))
-		   (t
-		    (pcase (char-after)
-		      (?^ (and (memq 'superscript restriction)
-			       (org-element-superscript-parser)))
-		      (?_ (or (and (memq 'subscript restriction)
-				   (org-element-subscript-parser))
-			      (and (memq 'underline restriction)
-				   (org-element-underline-parser))))
-		      (?* (and (memq 'bold restriction)
-			       (org-element-bold-parser)))
-		      (?/ (and (memq 'italic restriction)
-			       (org-element-italic-parser)))
-		      (?~ (and (memq 'code restriction)
-			       (org-element-code-parser)))
-		      (?= (and (memq 'verbatim restriction)
-			       (org-element-verbatim-parser)))
-		      (?+ (and (memq 'strike-through restriction)
-			       (org-element-strike-through-parser)))
-		      (?@ (and (memq 'export-snippet restriction)
-			       (org-element-export-snippet-parser)))
-		      (?{ (and (memq 'macro restriction)
-			       (org-element-macro-parser)))
-		      (?$ (and (memq 'latex-fragment restriction)
-			       (org-element-latex-fragment-parser)))
-		      (?<
-		       (if (eq (aref result 1) ?<)
-			   (or (and (memq 'radio-target restriction)
-				    (org-element-radio-target-parser))
-			       (and (memq 'target restriction)
-				    (org-element-target-parser)))
-			 (or (and (memq 'timestamp restriction)
-				  (org-element-timestamp-parser))
-			     (and (memq 'link restriction)
-				  (org-element-link-parser)))))
-		      (?\\
-		       (if (eq (aref result 1) ?\\)
-			   (and (memq 'line-break restriction)
-				(org-element-line-break-parser))
-			 (or (and (memq 'entity restriction)
-				  (org-element-entity-parser))
-			     (and (memq 'latex-fragment restriction)
-				  (org-element-latex-fragment-parser)))))
-		      (?\[
-		       (pcase (aref result 1)
-			 ((and ?\[
-			       (guard (memq 'link restriction)))
-			  (org-element-link-parser))
-			 ((and ?f
-			       (guard (memq 'footnote-reference restriction)))
-			  (org-element-footnote-reference-parser))
-			 ((and ?c
-			       (guard (memq 'citation restriction)))
-			  (org-element-citation-parser))
-			 ((and (or ?% ?/)
-			       (guard (memq 'statistics-cookie restriction)))
-			  (org-element-statistics-cookie-parser))
-			 (_
-			  (or (and (memq 'timestamp restriction)
-				   (org-element-timestamp-parser))
-			      (and (memq 'statistics-cookie restriction)
-				   (org-element-statistics-cookie-parser))))))
-		      ;; This is probably a plain link.
-		      (_ (and (memq 'link restriction)
-			      (org-element-link-parser)))))))
-	    (or (eobp) (forward-char))))
-	(cond (found)
-	      (limit (forward-char -1)
-		     (org-element-link-parser))	;radio link
-	      (t nil)))))))
+    (while (and (not found)
+            (re-search-forward org-element--object-regexp limit 'move))
+      (goto-char (match-beginning 0))
+      (let ((result (match-string 0)))
+        (setq found
+          (cond
+           ((string-prefix-p "call_" result t)
+            (and (memq 'inline-babel-call restriction)
+             (org-element-inline-babel-call-parser)))
+           ((string-prefix-p "src_" result t)
+            (and (memq 'inline-src-block restriction)
+             (org-element-inline-src-block-parser)))
+           (t
+            (pcase (char-after)
+              (?^ (and (memq 'superscript restriction)
+                   (org-element-superscript-parser)))
+              (?_ (or (and (memq 'subscript restriction)
+                   (org-element-subscript-parser))
+                  (and (memq 'underline restriction)
+                   (org-element-underline-parser))))
+              (?* (and (memq 'bold restriction)
+                   (org-element-bold-parser)))
+              (?/ (and (memq 'italic restriction)
+                   (org-element-italic-parser)))
+              (?~ (and (memq 'code restriction)
+                   (org-element-code-parser)))
+              (?= (and (memq 'verbatim restriction)
+                   (org-element-verbatim-parser)))
+              (?+ (and (memq 'strike-through restriction)
+                   (org-element-strike-through-parser)))
+              (?@ (and (memq 'export-snippet restriction)
+                   (org-element-export-snippet-parser)))
+              (?{ (and (memq 'macro restriction)
+                   (org-element-macro-parser)))
+              (?$ (and (memq 'latex-fragment restriction)
+                   (org-element-latex-fragment-parser)))
+              (?<
+               (if (eq (aref result 1) ?<)
+               (or (and (memq 'radio-target restriction)
+                    (org-element-radio-target-parser))
+                   (and (memq 'target restriction)
+                    (org-element-target-parser)))
+             (or (and (memq 'timestamp restriction)
+                  (org-element-timestamp-parser))
+                 (and (memq 'link restriction)
+                  (org-element-link-parser)))))
+              (?\\
+               (if (eq (aref result 1) ?\\)
+               (and (memq 'line-break restriction)
+                (org-element-line-break-parser))
+             (or (and (memq 'entity restriction)
+                  (org-element-entity-parser))
+                 (and (memq 'latex-fragment restriction)
+                  (org-element-latex-fragment-parser)))))
+              (?\[
+               (pcase (aref result 1)
+             ((and ?\[
+                   (guard (memq 'link restriction)))
+              (org-element-link-parser))
+             ((and ?f
+                   (guard (memq 'footnote-reference restriction)))
+              (org-element-footnote-reference-parser))
+             ((and ?c
+                   (guard (memq 'citation restriction)))
+              (org-element-citation-parser))
+             ((and (or ?% ?/)
+                   (guard (memq 'statistics-cookie restriction)))
+              (org-element-statistics-cookie-parser))
+             (_
+              (or (and (memq 'timestamp restriction)
+                   (org-element-timestamp-parser))
+                  (and (memq 'statistics-cookie restriction)
+                   (org-element-statistics-cookie-parser))))))
+              ;; This is probably a plain link.
+              (_ (and (memq 'link restriction)
+                  (org-element-link-parser)))))))
+        (or (eobp) (forward-char))))
+    (cond (found)
+          (limit (forward-char -1)
+             (org-element-link-parser))	;radio link
+          (t nil)))))))
 
 (defun org-element--parse-objects (beg end acc restriction &optional parent)
   "Parse objects between BEG and END and return recursive structure.
@@ -4711,39 +4718,39 @@ the list of objects itself."
       (narrow-to-region beg end)
       (goto-char (point-min))
       (let (next-object contents)
-	(while (and (not (eobp))
-		    (setq next-object (org-element--object-lex restriction)))
-	  ;; Text before any object.
-	  (let ((obj-beg (org-element-property :begin next-object)))
-	    (unless (= (point) obj-beg)
-	      (let ((text (buffer-substring-no-properties (point) obj-beg)))
-		(push (if acc (org-element-put-property text :parent acc) text)
-		      contents))))
-	  ;; Object...
-	  (let ((obj-end (org-element-property :end next-object))
-		(cont-beg (org-element-property :contents-begin next-object)))
-	    (when acc (org-element-put-property next-object :parent acc))
-	    (push (if cont-beg
-		      ;; Fill contents of NEXT-OBJECT if possible.
-		      (org-element--parse-objects
-		       cont-beg
-		       (org-element-property :contents-end next-object)
-		       next-object
-		       (org-element-restriction next-object))
-		    next-object)
-		  contents)
-	    (goto-char obj-end)))
-	;; Text after last object.
-	(unless (eobp)
-	  (let ((text (buffer-substring-no-properties (point) end)))
-	    (push (if acc (org-element-put-property text :parent acc) text)
-		  contents)))
-	;; Result.  Set appropriate parent.
-	(if acc (apply #'org-element-set-contents acc (nreverse contents))
-	  (let* ((contents (nreverse contents))
-		 (parent (or parent contents)))
-	    (dolist (datum contents contents)
-	      (org-element-put-property datum :parent parent))))))))
+    (while (and (not (eobp))
+            (setq next-object (org-element--object-lex restriction)))
+      ;; Text before any object.
+      (let ((obj-beg (org-element-property :begin next-object)))
+        (unless (= (point) obj-beg)
+          (let ((text (buffer-substring-no-properties (point) obj-beg)))
+        (push (if acc (org-element-put-property text :parent acc) text)
+              contents))))
+      ;; Object...
+      (let ((obj-end (org-element-property :end next-object))
+        (cont-beg (org-element-property :contents-begin next-object)))
+        (when acc (org-element-put-property next-object :parent acc))
+        (push (if cont-beg
+              ;; Fill contents of NEXT-OBJECT if possible.
+              (org-element--parse-objects
+               cont-beg
+               (org-element-property :contents-end next-object)
+               next-object
+               (org-element-restriction next-object))
+            next-object)
+          contents)
+        (goto-char obj-end)))
+    ;; Text after last object.
+    (unless (eobp)
+      (let ((text (buffer-substring-no-properties (point) end)))
+        (push (if acc (org-element-put-property text :parent acc) text)
+          contents)))
+    ;; Result.  Set appropriate parent.
+    (if acc (apply #'org-element-set-contents acc (nreverse contents))
+      (let* ((contents (nreverse contents))
+         (parent (or parent contents)))
+        (dolist (datum contents contents)
+          (org-element-put-property datum :parent parent))))))))
 
 
 
@@ -4763,110 +4770,110 @@ the list of objects itself."
 DATA is a parse tree, an element, an object or a secondary string
 to interpret.  Return Org syntax as a string."
   (letrec ((fun
-	    (lambda (data parent)
-	      (let* ((type (org-element-type data))
-		     ;; Find interpreter for current object or
-		     ;; element.  If it doesn't exist (e.g. this is
-		     ;; a pseudo object or element), return contents,
-		     ;; if any.
-		     (interpret
-		      (let ((fun (intern
-				  (format "org-element-%s-interpreter" type))))
-			(if (fboundp fun) fun (lambda (_ contents) contents))))
-		     (results
-		      (cond
-		       ;; Secondary string.
-		       ((not type)
-			(mapconcat (lambda (obj) (funcall fun obj parent))
-				   data
-				   ""))
-		       ;; Full Org document.
-		       ((eq type 'org-data)
-			(mapconcat (lambda (obj) (funcall fun obj parent))
-				   (org-element-contents data)
-				   ""))
-		       ;; Plain text: return it.
-		       ((stringp data) data)
-		       ;; Element or object without contents.
-		       ((not (org-element-contents data))
-			(funcall interpret data nil))
-		       ;; Element or object with contents.
-		       (t
-			(funcall
-			 interpret
-			 data
-			 ;; Recursively interpret contents.
-			 (mapconcat
-			  (lambda (datum) (funcall fun datum data))
-			  (org-element-contents
-			   (if (not (memq type '(paragraph verse-block)))
-			       data
-			     ;; Fix indentation of elements containing
-			     ;; objects.  We ignore `table-row'
-			     ;; elements as they are one line long
-			     ;; anyway.
-			     (org-element-normalize-contents
-			      data
-			      ;; When normalizing first paragraph of
-			      ;; an item or a footnote-definition,
-			      ;; ignore first line's indentation.
-			      (and (eq type 'paragraph)
-				   (memq (org-element-type parent)
-					 '(footnote-definition item))
-				   (eq data (car (org-element-contents parent)))
-				   (eq (org-element-property :pre-blank parent)
-				       0)))))
-			  ""))))))
-		(if (memq type '(org-data nil)) results
-		  ;; Build white spaces.  If no `:post-blank' property
-		  ;; is specified, assume its value is 0.
-		  (let ((blank (or (org-element-property :post-blank data) 0)))
-		    (if (eq (org-element-class data parent) 'object)
-			(concat results (make-string blank ?\s))
-		      (concat (org-element--interpret-affiliated-keywords data)
-			      (org-element-normalize-string results)
-			      (make-string blank ?\n)))))))))
+        (lambda (data parent)
+          (let* ((type (org-element-type data))
+             ;; Find interpreter for current object or
+             ;; element.  If it doesn't exist (e.g. this is
+             ;; a pseudo object or element), return contents,
+             ;; if any.
+             (interpret
+              (let ((fun (intern
+                  (format "org-element-%s-interpreter" type))))
+            (if (fboundp fun) fun (lambda (_ contents) contents))))
+             (results
+              (cond
+               ;; Secondary string.
+               ((not type)
+            (mapconcat (lambda (obj) (funcall fun obj parent))
+                   data
+                   ""))
+               ;; Full Org document.
+               ((eq type 'org-data)
+            (mapconcat (lambda (obj) (funcall fun obj parent))
+                   (org-element-contents data)
+                   ""))
+               ;; Plain text: return it.
+               ((stringp data) data)
+               ;; Element or object without contents.
+               ((not (org-element-contents data))
+            (funcall interpret data nil))
+               ;; Element or object with contents.
+               (t
+            (funcall
+             interpret
+             data
+             ;; Recursively interpret contents.
+             (mapconcat
+              (lambda (datum) (funcall fun datum data))
+              (org-element-contents
+               (if (not (memq type '(paragraph verse-block)))
+                   data
+                 ;; Fix indentation of elements containing
+                 ;; objects.  We ignore `table-row'
+                 ;; elements as they are one line long
+                 ;; anyway.
+                 (org-element-normalize-contents
+                  data
+                  ;; When normalizing first paragraph of
+                  ;; an item or a footnote-definition,
+                  ;; ignore first line's indentation.
+                  (and (eq type 'paragraph)
+                   (memq (org-element-type parent)
+                     '(footnote-definition item))
+                   (eq data (car (org-element-contents parent)))
+                   (eq (org-element-property :pre-blank parent)
+                       0)))))
+              ""))))))
+        (if (memq type '(org-data nil)) results
+          ;; Build white spaces.  If no `:post-blank' property
+          ;; is specified, assume its value is 0.
+          (let ((blank (or (org-element-property :post-blank data) 0)))
+            (if (eq (org-element-class data parent) 'object)
+            (concat results (make-string blank ?\s))
+              (concat (org-element--interpret-affiliated-keywords data)
+                  (org-element-normalize-string results)
+                  (make-string blank ?\n)))))))))
     (funcall fun data nil)))
 
 (defun org-element--interpret-affiliated-keywords (element)
   "Return ELEMENT's affiliated keywords as Org syntax.
 If there is no affiliated keyword, return the empty string."
   (let ((keyword-to-org
-	 (lambda (key value)
-	   (let (dual)
-	     (when (member key org-element-dual-keywords)
-	       (setq dual (cdr value) value (car value)))
-	     (concat "#+" (downcase key)
-		     (and dual
-			  (format "[%s]" (org-element-interpret-data dual)))
-		     ": "
-		     (if (member key org-element-parsed-keywords)
-			 (org-element-interpret-data value)
-		       value)
-		     "\n")))))
+     (lambda (key value)
+       (let (dual)
+         (when (member key org-element-dual-keywords)
+           (setq dual (cdr value) value (car value)))
+         (concat "#+" (downcase key)
+             (and dual
+              (format "[%s]" (org-element-interpret-data dual)))
+             ": "
+             (if (member key org-element-parsed-keywords)
+             (org-element-interpret-data value)
+               value)
+             "\n")))))
     (mapconcat
      (lambda (prop)
        (let ((value (org-element-property prop element))
-	     (keyword (upcase (substring (symbol-name prop) 1))))
-	 (when value
-	   (if (or (member keyword org-element-multiple-keywords)
-		   ;; All attribute keywords can have multiple lines.
-		   (string-match "^ATTR_" keyword))
-	       (mapconcat (lambda (line) (funcall keyword-to-org keyword line))
-			  (reverse value)
-			  "")
-	     (funcall keyword-to-org keyword value)))))
+         (keyword (upcase (substring (symbol-name prop) 1))))
+     (when value
+       (if (or (member keyword org-element-multiple-keywords)
+           ;; All attribute keywords can have multiple lines.
+           (string-match "^ATTR_" keyword))
+           (mapconcat (lambda (line) (funcall keyword-to-org keyword line))
+              (reverse value)
+              "")
+         (funcall keyword-to-org keyword value)))))
      ;; List all ELEMENT's properties matching an attribute line or an
      ;; affiliated keyword, but ignore translated keywords since they
      ;; cannot belong to the property list.
      (cl-loop for prop in (nth 1 element) by 'cddr
-	      when (let ((keyword (upcase (substring (symbol-name prop) 1))))
-		     (or (string-match "^ATTR_" keyword)
-			 (and
-			  (member keyword org-element-affiliated-keywords)
-			  (not (assoc keyword
-				      org-element-keyword-translation-alist)))))
-	      collect prop)
+          when (let ((keyword (upcase (substring (symbol-name prop) 1))))
+             (or (string-match "^ATTR_" keyword)
+             (and
+              (member keyword org-element-affiliated-keywords)
+              (not (assoc keyword
+                      org-element-keyword-translation-alist)))))
+          collect prop)
      "")))
 
 ;; Because interpretation of the parse tree must return the same
@@ -4891,7 +4898,7 @@ newline character at its end."
    ((not (stringp s)) s)
    ((string= "" s) "")
    (t (and (string-match "\\(\n[ \t]*\\)*\\'" s)
-	   (replace-match "\n" nil nil s)))))
+       (replace-match "\n" nil nil s)))))
 
 (defun org-element-normalize-contents (element &optional ignore-first)
   "Normalize plain text in ELEMENT's contents.
@@ -4904,91 +4911,91 @@ indentation to compute maximal common indentation.
 Return the normalized element that is element with global
 indentation removed from its contents."
   (letrec ((find-min-ind
-	    ;; Return minimal common indentation within BLOB.  This is
-	    ;; done by walking recursively BLOB and updating MIN-IND
-	    ;; along the way.  FIRST-FLAG is non-nil when the next
-	    ;; object is expected to be a string that doesn't start
-	    ;; with a newline character.  It happens for strings at
-	    ;; the beginnings of the contents or right after a line
-	    ;; break.
-	    (lambda (blob first-flag min-ind)
-	      (dolist (datum (org-element-contents blob) min-ind)
-		(when first-flag
-		  (setq first-flag nil)
-		  (cond
-		   ;; Objects cannot start with spaces: in this
-		   ;; case, indentation is 0.
-		   ((not (stringp datum)) (throw :zero 0))
-		   ((not (string-match
-			  "\\`\\([ \t]+\\)\\([^ \t\n]\\|\n\\|\\'\\)" datum))
-		    (throw :zero 0))
-		   ((equal (match-string 2 datum) "\n")
-		    (put-text-property
-		     (match-beginning 1) (match-end 1) 'org-ind 'empty datum))
-		   (t
-		    (let ((i (string-width (match-string 1 datum))))
-		      (put-text-property
-		       (match-beginning 1) (match-end 1) 'org-ind i datum)
-		      (setq min-ind (min i min-ind))))))
-		(cond
-		 ((stringp datum)
-		  (let ((s 0))
-		    (while (string-match
-			    "\n\\([ \t]*\\)\\([^ \t\n]\\|\n\\|\\'\\)" datum s)
-		      (setq s (match-end 1))
-		      (cond
-		       ((equal (match-string 1 datum) "")
-			(unless (member (match-string 2 datum) '("" "\n"))
-			  (throw :zero 0)))
-		       ((equal (match-string 2 datum) "\n")
-			(put-text-property (match-beginning 1) (match-end 1)
-					   'org-ind 'empty datum))
-		       (t
-			(let ((i (string-width (match-string 1 datum))))
-			  (put-text-property (match-beginning 1) (match-end 1)
-					     'org-ind i datum)
-			  (setq min-ind (min i min-ind))))))))
-		 ((eq (org-element-type datum) 'line-break)
-		  (setq first-flag t))
-		 ((memq (org-element-type datum) org-element-recursive-objects)
-		  (setq min-ind
-			(funcall find-min-ind datum first-flag min-ind)))))))
-	   (min-ind
-	    (catch :zero
-	      (funcall find-min-ind
-		       element (not ignore-first) most-positive-fixnum))))
+        ;; Return minimal common indentation within BLOB.  This is
+        ;; done by walking recursively BLOB and updating MIN-IND
+        ;; along the way.  FIRST-FLAG is non-nil when the next
+        ;; object is expected to be a string that doesn't start
+        ;; with a newline character.  It happens for strings at
+        ;; the beginnings of the contents or right after a line
+        ;; break.
+        (lambda (blob first-flag min-ind)
+          (dolist (datum (org-element-contents blob) min-ind)
+        (when first-flag
+          (setq first-flag nil)
+          (cond
+           ;; Objects cannot start with spaces: in this
+           ;; case, indentation is 0.
+           ((not (stringp datum)) (throw :zero 0))
+           ((not (string-match
+              "\\`\\([ \t]+\\)\\([^ \t\n]\\|\n\\|\\'\\)" datum))
+            (throw :zero 0))
+           ((equal (match-string 2 datum) "\n")
+            (put-text-property
+             (match-beginning 1) (match-end 1) 'org-ind 'empty datum))
+           (t
+            (let ((i (string-width (match-string 1 datum))))
+              (put-text-property
+               (match-beginning 1) (match-end 1) 'org-ind i datum)
+              (setq min-ind (min i min-ind))))))
+        (cond
+         ((stringp datum)
+          (let ((s 0))
+            (while (string-match
+                "\n\\([ \t]*\\)\\([^ \t\n]\\|\n\\|\\'\\)" datum s)
+              (setq s (match-end 1))
+              (cond
+               ((equal (match-string 1 datum) "")
+            (unless (member (match-string 2 datum) '("" "\n"))
+              (throw :zero 0)))
+               ((equal (match-string 2 datum) "\n")
+            (put-text-property (match-beginning 1) (match-end 1)
+                       'org-ind 'empty datum))
+               (t
+            (let ((i (string-width (match-string 1 datum))))
+              (put-text-property (match-beginning 1) (match-end 1)
+                         'org-ind i datum)
+              (setq min-ind (min i min-ind))))))))
+         ((eq (org-element-type datum) 'line-break)
+          (setq first-flag t))
+         ((memq (org-element-type datum) org-element-recursive-objects)
+          (setq min-ind
+            (funcall find-min-ind datum first-flag min-ind)))))))
+       (min-ind
+        (catch :zero
+          (funcall find-min-ind
+               element (not ignore-first) most-positive-fixnum))))
     (if (or (zerop min-ind) (= min-ind most-positive-fixnum)) element
       ;; Build ELEMENT back, replacing each string with the same
       ;; string minus common indentation.
       (letrec ((build
-		(lambda (datum)
-		  ;; Return DATUM with all its strings indentation
-		  ;; shortened from MIN-IND white spaces.
-		  (setcdr
-		   (cdr datum)
-		   (mapcar
-		    (lambda (object)
-		      (cond
-		       ((stringp object)
-			(with-temp-buffer
-			  (insert object)
-			  (let ((s (point-min)))
-			    (while (setq s (text-property-not-all
-					    s (point-max) 'org-ind nil))
-			      (goto-char s)
-			      (let ((i (get-text-property s 'org-ind)))
-				(delete-region s (progn
-						   (skip-chars-forward " \t")
-						   (point)))
-				(when (integerp i) (indent-to (- i min-ind))))))
-			  (buffer-string)))
-		       ((memq (org-element-type object)
-			      org-element-recursive-objects)
-			(funcall build object))
-		       (t object)))
-		    (org-element-contents datum)))
-		  datum)))
-	(funcall build element)))))
+        (lambda (datum)
+          ;; Return DATUM with all its strings indentation
+          ;; shortened from MIN-IND white spaces.
+          (setcdr
+           (cdr datum)
+           (mapcar
+            (lambda (object)
+              (cond
+               ((stringp object)
+            (with-temp-buffer
+              (insert object)
+              (let ((s (point-min)))
+                (while (setq s (text-property-not-all
+                        s (point-max) 'org-ind nil))
+                  (goto-char s)
+                  (let ((i (get-text-property s 'org-ind)))
+                (delete-region s (progn
+                           (skip-chars-forward " \t")
+                           (point)))
+                (when (integerp i) (indent-to (- i min-ind))))))
+              (buffer-string)))
+               ((memq (org-element-type object)
+                  org-element-recursive-objects)
+            (funcall build object))
+               (t object)))
+            (org-element-contents datum)))
+          datum)))
+    (funcall build element)))))
 
 
 
@@ -5125,16 +5132,16 @@ Such keys are stored in `org-element--cache-sync-keys'.  The hash
 table is cleared once the synchronization is complete."
   (or (gethash element org-element--cache-sync-keys)
       (let* ((begin (org-element-property :begin element))
-	     ;; Increase beginning position of items (respectively
-	     ;; table rows) by one, so the first item can get
-	     ;; a different key from its parent list (respectively
-	     ;; table).
-	     (key (if (memq (org-element-type element) '(item table-row))
-		      (1+ begin)
-		    begin)))
-	(if org-element--cache-sync-requests
-	    (puthash element key org-element--cache-sync-keys)
-	  key))))
+         ;; Increase beginning position of items (respectively
+         ;; table rows) by one, so the first item can get
+         ;; a different key from its parent list (respectively
+         ;; table).
+         (key (if (memq (org-element-type element) '(item table-row))
+              (1+ begin)
+            begin)))
+    (if org-element--cache-sync-requests
+        (puthash element key org-element--cache-sync-keys)
+      key))))
 
 (defun org-element--cache-generate-key (lower upper)
   "Generate a key between LOWER and UPPER.
@@ -5186,25 +5193,25 @@ When they are not equals, the function assumes that LOWER is
 lesser than UPPER, per `org-element--cache-key-less-p'."
   (if (equal lower upper) lower
     (let ((lower (if (integerp lower) (list lower) lower))
-	  (upper (if (integerp upper) (list upper) upper))
+      (upper (if (integerp upper) (list upper) upper))
           skip-upper key)
       (catch 'exit
-	(while t
-	  (let ((min (or (car lower) most-negative-fixnum))
-		(max (cond (skip-upper most-positive-fixnum)
+    (while t
+      (let ((min (or (car lower) most-negative-fixnum))
+        (max (cond (skip-upper most-positive-fixnum)
                            ((car upper))
                            (t most-positive-fixnum))))
             (if (< (1+ min) max)
-		(let ((mean (+ (ash min -1) (ash max -1) (logand min max 1))))
-		  (throw 'exit (if key (nreverse (cons mean key)) mean)))
-	      (when (and (< min max) (not skip-upper))
-		;; When at a given level, LOWER and UPPER differ from
-		;; 1, ignore UPPER altogether.  Instead create a key
-		;; between LOWER and the greatest key with the same
-		;; prefix as LOWER so far.
-		(setq skip-upper t))
-	      (push min key)
-	      (setq lower (cdr lower) upper (cdr upper)))))))))
+        (let ((mean (+ (ash min -1) (ash max -1) (logand min max 1))))
+          (throw 'exit (if key (nreverse (cons mean key)) mean)))
+          (when (and (< min max) (not skip-upper))
+        ;; When at a given level, LOWER and UPPER differ from
+        ;; 1, ignore UPPER altogether.  Instead create a key
+        ;; between LOWER and the greatest key with the same
+        ;; prefix as LOWER so far.
+        (setq skip-upper t))
+          (push min key)
+          (setq lower (cdr lower) upper (cdr upper)))))))))
 
 (defsubst org-element--cache-key-less-p (a b)
   "Non-nil if key A is less than key B.
@@ -5213,22 +5220,22 @@ A and B are either integers or lists of integers, as returned by
   (if (integerp a) (if (integerp b) (< a b) (<= a (car b)))
     (if (integerp b) (< (car a) b)
       (catch 'exit
-	(while (and a b)
-	  (cond ((car-less-than-car a b) (throw 'exit t))
-		((car-less-than-car b a) (throw 'exit nil))
-		(t (setq a (cdr a) b (cdr b)))))
-	;; If A is empty, either keys are equal (B is also empty) and
-	;; we return nil, or A is lesser than B (B is longer) and we
-	;; return a non-nil value.
-	;;
-	;; If A is not empty, B is necessarily empty and A is greater
-	;; than B (A is longer).  Therefore, return nil.
-	(and (null a) b)))))
+    (while (and a b)
+      (cond ((car-less-than-car a b) (throw 'exit t))
+        ((car-less-than-car b a) (throw 'exit nil))
+        (t (setq a (cdr a) b (cdr b)))))
+    ;; If A is empty, either keys are equal (B is also empty) and
+    ;; we return nil, or A is lesser than B (B is longer) and we
+    ;; return a non-nil value.
+    ;;
+    ;; If A is not empty, B is necessarily empty and A is greater
+    ;; than B (A is longer).  Therefore, return nil.
+    (and (null a) b)))))
 
 (defun org-element--cache-compare (a b)
   "Non-nil when element A is located before element B."
   (org-element--cache-key-less-p (org-element--cache-key a)
-				 (org-element--cache-key b)))
+                 (org-element--cache-key b)))
 
 (defsubst org-element--cache-root ()
   "Return root value in cache.
@@ -5258,46 +5265,46 @@ after POS.
 The function can only find elements in the synchronized part of
 the cache."
   (let ((limit (and org-element--cache-sync-requests
-		    (aref (car org-element--cache-sync-requests) 0)))
-	(node (org-element--cache-root))
-	lower upper)
+            (aref (car org-element--cache-sync-requests) 0)))
+    (node (org-element--cache-root))
+    lower upper)
     (while node
       (let* ((element (avl-tree--node-data node))
-	     (begin (org-element-property :begin element)))
-	(cond
-	 ((and limit
-	       (not (org-element--cache-key-less-p
-		     (org-element--cache-key element) limit)))
-	  (setq node (avl-tree--node-left node)))
-	 ((> begin pos)
-	  (setq upper element
-		node (avl-tree--node-left node)))
-	 ((< begin pos)
-	  (setq lower element
-		node (avl-tree--node-right node)))
-	 ;; We found an element in cache starting at POS.  If `side'
-	 ;; is `both' we also want the next one in order to generate
-	 ;; a key in-between.
-	 ;;
-	 ;; If the element is the first row or item in a table or
-	 ;; a plain list, we always return the table or the plain
-	 ;; list.
-	 ;;
-	 ;; In any other case, we return the element found.
-	 ((eq side 'both)
-	  (setq lower element)
-	  (setq node (avl-tree--node-right node)))
-	 ((and (memq (org-element-type element) '(item table-row))
-	       (let ((parent (org-element-property :parent element)))
-		 (and (= (org-element-property :begin element)
-			 (org-element-property :contents-begin parent))
-		      (setq node nil
-			    lower parent
-			    upper parent)))))
-	 (t
-	  (setq node nil
-		lower element
-		upper element)))))
+         (begin (org-element-property :begin element)))
+    (cond
+     ((and limit
+           (not (org-element--cache-key-less-p
+             (org-element--cache-key element) limit)))
+      (setq node (avl-tree--node-left node)))
+     ((> begin pos)
+      (setq upper element
+        node (avl-tree--node-left node)))
+     ((< begin pos)
+      (setq lower element
+        node (avl-tree--node-right node)))
+     ;; We found an element in cache starting at POS.  If `side'
+     ;; is `both' we also want the next one in order to generate
+     ;; a key in-between.
+     ;;
+     ;; If the element is the first row or item in a table or
+     ;; a plain list, we always return the table or the plain
+     ;; list.
+     ;;
+     ;; In any other case, we return the element found.
+     ((eq side 'both)
+      (setq lower element)
+      (setq node (avl-tree--node-right node)))
+     ((and (memq (org-element-type element) '(item table-row))
+           (let ((parent (org-element-property :parent element)))
+         (and (= (org-element-property :begin element)
+             (org-element-property :contents-begin parent))
+              (setq node nil
+                lower parent
+                upper parent)))))
+     (t
+      (setq node nil
+        lower element
+        upper element)))))
     (pcase side
       (`both (cons lower upper))
       (`nil lower)
@@ -5311,14 +5318,14 @@ the cache."
       ;; the new element so `avl-tree-enter' can insert it at the
       ;; right spot in the cache.
       (let ((keys (org-element--cache-find
-		   (org-element-property :begin element) 'both)))
-	(puthash element
-		 (org-element--cache-generate-key
-		  (and (car keys) (org-element--cache-key (car keys)))
-		  (cond ((cdr keys) (org-element--cache-key (cdr keys)))
-			(org-element--cache-sync-requests
-			 (aref (car org-element--cache-sync-requests) 0))))
-		 org-element--cache-sync-keys)))
+           (org-element-property :begin element) 'both)))
+    (puthash element
+         (org-element--cache-generate-key
+          (and (car keys) (org-element--cache-key (car keys)))
+          (cond ((cdr keys) (org-element--cache-key (cdr keys)))
+            (org-element--cache-sync-requests
+             (aref (car org-element--cache-sync-requests) 0))))
+         org-element--cache-sync-keys)))
     (avl-tree-enter org-element--cache element)))
 
 (defsubst org-element--cache-remove (element)
@@ -5334,20 +5341,20 @@ Assume ELEMENT belongs to cache and that a cache is active."
   (when org-element--cache-sync-timer
     (cancel-timer org-element--cache-sync-timer))
   (setq org-element--cache-sync-timer
-	(run-with-idle-timer
-	 (let ((idle (current-idle-time)))
-	   (if idle (org-time-add idle org-element-cache-sync-break)
-	     org-element-cache-sync-idle-time))
-	 nil
-	 #'org-element--cache-sync
-	 buffer)))
+    (run-with-idle-timer
+     (let ((idle (current-idle-time)))
+       (if idle (org-time-add idle org-element-cache-sync-break)
+         org-element-cache-sync-idle-time))
+     nil
+     #'org-element--cache-sync
+     buffer)))
 
 (defsubst org-element--cache-interrupt-p (time-limit)
   "Non-nil when synchronization process should be interrupted.
 TIME-LIMIT is a time value or nil."
   (and time-limit
        (or (input-pending-p)
-	   (org-time-less-p time-limit nil))))
+       (org-time-less-p time-limit nil))))
 
 (defsubst org-element--cache-shift-positions (element offset &optional props)
   "Shift ELEMENT properties relative to buffer positions by OFFSET.
@@ -5363,16 +5370,16 @@ Properties are modified by side-effect."
     ;; is the only one that really matters and it prevents from
     ;; shifting it more than once.
     (when (and (or (not props) (memq :structure props))
-	       (eq (org-element-type element) 'plain-list)
-	       (not (eq (org-element-type (plist-get properties :parent))
-			'item)))
+           (eq (org-element-type element) 'plain-list)
+           (not (eq (org-element-type (plist-get properties :parent))
+            'item)))
       (dolist (item (plist-get properties :structure))
-	(cl-incf (car item) offset)
-	(cl-incf (nth 6 item) offset)))
+    (cl-incf (car item) offset)
+    (cl-incf (nth 6 item) offset)))
     (dolist (key '(:begin :contents-begin :contents-end :end :post-affiliated))
       (let ((value (and (or (not props) (memq key props))
-			(plist-get properties key))))
-	(and value (plist-put properties key (+ offset value)))))))
+            (plist-get properties key))))
+    (and value (plist-put properties key (+ offset value)))))))
 
 (defun org-element--cache-sync (buffer &optional threshold future-change)
   "Synchronize cache with recent modification in BUFFER.
@@ -5390,32 +5397,32 @@ updated before current modification are actually submitted."
   (when (buffer-live-p buffer)
     (with-current-buffer buffer
       (let ((inhibit-quit t) request next)
-	(when org-element--cache-sync-timer
-	  (cancel-timer org-element--cache-sync-timer))
-	(catch 'interrupt
-	  (while org-element--cache-sync-requests
-	    (setq request (car org-element--cache-sync-requests)
-		  next (nth 1 org-element--cache-sync-requests))
-	    (org-element--cache-process-request
-	     request
-	     (and next (aref next 0))
-	     threshold
-	     (and (not threshold)
-		  (org-time-add nil
-				org-element-cache-sync-duration))
-	     future-change)
-	    ;; Request processed.  Merge current and next offsets and
-	    ;; transfer ending position.
-	    (when next
-	      (cl-incf (aref next 3) (aref request 3))
-	      (aset next 2 (aref request 2)))
-	    (setq org-element--cache-sync-requests
-		  (cdr org-element--cache-sync-requests))))
-	;; If more requests are awaiting, set idle timer accordingly.
-	;; Otherwise, reset keys.
-	(if org-element--cache-sync-requests
-	    (org-element--cache-set-timer buffer)
-	  (clrhash org-element--cache-sync-keys))))))
+    (when org-element--cache-sync-timer
+      (cancel-timer org-element--cache-sync-timer))
+    (catch 'interrupt
+      (while org-element--cache-sync-requests
+        (setq request (car org-element--cache-sync-requests)
+          next (nth 1 org-element--cache-sync-requests))
+        (org-element--cache-process-request
+         request
+         (and next (aref next 0))
+         threshold
+         (and (not threshold)
+          (org-time-add nil
+                org-element-cache-sync-duration))
+         future-change)
+        ;; Request processed.  Merge current and next offsets and
+        ;; transfer ending position.
+        (when next
+          (cl-incf (aref next 3) (aref request 3))
+          (aset next 2 (aref request 2)))
+        (setq org-element--cache-sync-requests
+          (cdr org-element--cache-sync-requests))))
+    ;; If more requests are awaiting, set idle timer accordingly.
+    ;; Otherwise, reset keys.
+    (if org-element--cache-sync-requests
+        (org-element--cache-set-timer buffer)
+      (clrhash org-element--cache-sync-keys))))))
 
 (defun org-element--cache-process-request
     (request next threshold time-limit future-change)
@@ -5450,48 +5457,48 @@ request."
       ;; a deletion modifies structure of the balanced tree.
       (catch 'end-phase
         (while t
-	  (when (org-element--cache-interrupt-p time-limit)
-	    (throw 'interrupt nil))
-	  ;; Find first element in cache with key BEG or after it.
-	  (let ((beg (aref request 0))
-		(end (aref request 2))
-		(node (org-element--cache-root))
-		data data-key last-container)
-	    (while node
-	      (let* ((element (avl-tree--node-data node))
-		     (key (org-element--cache-key element)))
-		(cond
-		 ((org-element--cache-key-less-p key beg)
-		  (setq node (avl-tree--node-right node)))
-		 ((org-element--cache-key-less-p beg key)
-		  (setq data element
-			data-key key
-			node (avl-tree--node-left node)))
-		 (t (setq data element
-			  data-key key
-			  node nil)))))
-	    (if data
-		(let ((pos (org-element-property :begin data)))
-		  (if (if (or (not next)
-			      (org-element--cache-key-less-p data-key next))
-			  (<= pos end)
-			(and last-container
-			     (let ((up data))
-			       (while (and up (not (eq up last-container)))
-				 (setq up (org-element-property :parent up)))
-			       up)))
-		      (progn (when (and (not last-container)
-					(> (org-element-property :end data)
-					   end))
-			       (setq last-container data))
-			     (org-element--cache-remove data))
-		    (aset request 0 data-key)
-		    (aset request 1 pos)
-		    (aset request 5 1)
-		    (throw 'end-phase nil)))
-	      ;; No element starting after modifications left in
-	      ;; cache: further processing is futile.
-	      (throw 'quit t))))))
+      (when (org-element--cache-interrupt-p time-limit)
+        (throw 'interrupt nil))
+      ;; Find first element in cache with key BEG or after it.
+      (let ((beg (aref request 0))
+        (end (aref request 2))
+        (node (org-element--cache-root))
+        data data-key last-container)
+        (while node
+          (let* ((element (avl-tree--node-data node))
+             (key (org-element--cache-key element)))
+        (cond
+         ((org-element--cache-key-less-p key beg)
+          (setq node (avl-tree--node-right node)))
+         ((org-element--cache-key-less-p beg key)
+          (setq data element
+            data-key key
+            node (avl-tree--node-left node)))
+         (t (setq data element
+              data-key key
+              node nil)))))
+        (if data
+        (let ((pos (org-element-property :begin data)))
+          (if (if (or (not next)
+                  (org-element--cache-key-less-p data-key next))
+              (<= pos end)
+            (and last-container
+                 (let ((up data))
+                   (while (and up (not (eq up last-container)))
+                 (setq up (org-element-property :parent up)))
+                   up)))
+              (progn (when (and (not last-container)
+                    (> (org-element-property :end data)
+                       end))
+                   (setq last-container data))
+                 (org-element--cache-remove data))
+            (aset request 0 data-key)
+            (aset request 1 pos)
+            (aset request 5 1)
+            (throw 'end-phase nil)))
+          ;; No element starting after modifications left in
+          ;; cache: further processing is futile.
+          (throw 'quit t))))))
     (when (= (aref request 5) 1)
       ;; Phase 1.
       ;;
@@ -5522,27 +5529,27 @@ request."
       ;; phase 1 processing to next request in order to preserve key
       ;; order among requests.
       (let ((key (aref request 0)))
-	(when (and next (not (org-element--cache-key-less-p key next)))
-	  (let ((next-request (nth 1 org-element--cache-sync-requests)))
-	    (aset next-request 0 key)
-	    (aset next-request 1 (aref request 1))
-	    (aset next-request 5 1))
-	  (throw 'quit t)))
+    (when (and next (not (org-element--cache-key-less-p key next)))
+      (let ((next-request (nth 1 org-element--cache-sync-requests)))
+        (aset next-request 0 key)
+        (aset next-request 1 (aref request 1))
+        (aset next-request 5 1))
+      (throw 'quit t)))
       ;; Next element will start at its beginning position plus
       ;; offset, since it hasn't been shifted yet.  Therefore, LIMIT
       ;; contains the real beginning position of the first element to
       ;; shift and re-parent.
       (let ((limit (+ (aref request 1) (aref request 3))))
-	(cond ((and threshold (> limit threshold)) (throw 'interrupt nil))
-	      ((and future-change (>= limit future-change))
-	       ;; Changes are going to happen around this element and
-	       ;; they will trigger another phase 1 request.  Skip the
-	       ;; current one.
-	       (aset request 5 2))
-	      (t
-	       (let ((parent (org-element--parse-to limit t time-limit)))
-		 (aset request 4 parent)
-		 (aset request 5 2))))))
+    (cond ((and threshold (> limit threshold)) (throw 'interrupt nil))
+          ((and future-change (>= limit future-change))
+           ;; Changes are going to happen around this element and
+           ;; they will trigger another phase 1 request.  Skip the
+           ;; current one.
+           (aset request 5 2))
+          (t
+           (let ((parent (org-element--parse-to limit t time-limit)))
+         (aset request 4 parent)
+         (aset request 5 2))))))
     ;; Phase 2.
     ;;
     ;; Shift all elements starting from key START, but before NEXT, by
@@ -5555,54 +5562,54 @@ request."
     ;; pending, exit.  Before leaving, the current synchronization
     ;; request is updated.
     (let ((start (aref request 0))
-	  (offset (aref request 3))
-	  (parent (aref request 4))
-	  (node (org-element--cache-root))
-	  (stack (list nil))
-	  (leftp t)
-	  exit-flag)
+      (offset (aref request 3))
+      (parent (aref request 4))
+      (node (org-element--cache-root))
+      (stack (list nil))
+      (leftp t)
+      exit-flag)
       ;; No re-parenting nor shifting planned: request is over.
       (when (and (not parent) (zerop offset)) (throw 'quit t))
       (while node
-	(let* ((data (avl-tree--node-data node))
-	       (key (org-element--cache-key data)))
-	  (if (and leftp (avl-tree--node-left node)
-		   (not (org-element--cache-key-less-p key start)))
-	      (progn (push node stack)
-		     (setq node (avl-tree--node-left node)))
-	    (unless (org-element--cache-key-less-p key start)
-	      ;; We reached NEXT.  Request is complete.
-	      (when (equal key next) (throw 'quit t))
-	      ;; Handle interruption request.  Update current request.
-	      (when (or exit-flag (org-element--cache-interrupt-p time-limit))
-		(aset request 0 key)
-		(aset request 4 parent)
-		(throw 'interrupt nil))
-	      ;; Shift element.
-	      (unless (zerop offset)
-		(org-element--cache-shift-positions data offset))
-	      (let ((begin (org-element-property :begin data)))
-		;; Update PARENT and re-parent DATA, only when
-		;; necessary.  Propagate new structures for lists.
-		(while (and parent
-			    (<= (org-element-property :end parent) begin))
-		  (setq parent (org-element-property :parent parent)))
-		(cond ((and (not parent) (zerop offset)) (throw 'quit nil))
-		      ((and parent
-			    (let ((p (org-element-property :parent data)))
-			      (or (not p)
-				  (< (org-element-property :begin p)
-				     (org-element-property :begin parent)))))
-		       (org-element-put-property data :parent parent)
-		       (let ((s (org-element-property :structure parent)))
-			 (when (and s (org-element-property :structure data))
-			   (org-element-put-property data :structure s)))))
-		;; Cache is up-to-date past THRESHOLD.  Request
-		;; interruption.
-		(when (and threshold (> begin threshold)) (setq exit-flag t))))
-	    (setq node (if (setq leftp (avl-tree--node-right node))
-			   (avl-tree--node-right node)
-			 (pop stack))))))
+    (let* ((data (avl-tree--node-data node))
+           (key (org-element--cache-key data)))
+      (if (and leftp (avl-tree--node-left node)
+           (not (org-element--cache-key-less-p key start)))
+          (progn (push node stack)
+             (setq node (avl-tree--node-left node)))
+        (unless (org-element--cache-key-less-p key start)
+          ;; We reached NEXT.  Request is complete.
+          (when (equal key next) (throw 'quit t))
+          ;; Handle interruption request.  Update current request.
+          (when (or exit-flag (org-element--cache-interrupt-p time-limit))
+        (aset request 0 key)
+        (aset request 4 parent)
+        (throw 'interrupt nil))
+          ;; Shift element.
+          (unless (zerop offset)
+        (org-element--cache-shift-positions data offset))
+          (let ((begin (org-element-property :begin data)))
+        ;; Update PARENT and re-parent DATA, only when
+        ;; necessary.  Propagate new structures for lists.
+        (while (and parent
+                (<= (org-element-property :end parent) begin))
+          (setq parent (org-element-property :parent parent)))
+        (cond ((and (not parent) (zerop offset)) (throw 'quit nil))
+              ((and parent
+                (let ((p (org-element-property :parent data)))
+                  (or (not p)
+                  (< (org-element-property :begin p)
+                     (org-element-property :begin parent)))))
+               (org-element-put-property data :parent parent)
+               (let ((s (org-element-property :structure parent)))
+             (when (and s (org-element-property :structure data))
+               (org-element-put-property data :structure s)))))
+        ;; Cache is up-to-date past THRESHOLD.  Request
+        ;; interruption.
+        (when (and threshold (> begin threshold)) (setq exit-flag t))))
+        (setq node (if (setq leftp (avl-tree--node-right node))
+               (avl-tree--node-right node)
+             (pop stack))))))
       ;; We reached end of tree: synchronization complete.
       t)))
 
@@ -5622,7 +5629,7 @@ the process stopped before finding the expected result."
     (org-with-wide-buffer
      (goto-char pos)
      (let* ((cached (and (org-element--cache-active-p)
-			 (org-element--cache-find pos nil)))
+             (org-element--cache-find pos nil)))
             (begin (org-element-property :begin cached))
             element next mode)
        (cond
@@ -5632,14 +5639,14 @@ the process stopped before finding the expected result."
         ((not cached)
          (if (org-with-limited-levels (outline-previous-heading))
              (progn
-	       (setq mode 'planning)
-	       (forward-line))
-	   (setq mode 'top-comment))
+           (setq mode 'planning)
+           (forward-line))
+       (setq mode 'top-comment))
          (skip-chars-forward " \r\t\n")
          (beginning-of-line))
         ;; Cache returned exact match: return it.
         ((= pos begin)
-	 (throw 'exit (if syncp (org-element-property :parent cached) cached)))
+     (throw 'exit (if syncp (org-element-property :parent cached) cached)))
         ;; There's a headline between cached value and POS: cached
         ;; value is invalid.  Start parsing from first element
         ;; following the headline.
@@ -5648,7 +5655,7 @@ the process stopped before finding the expected result."
          (forward-line)
          (skip-chars-forward " \r\t\n")
          (beginning-of-line)
-	 (setq mode 'planning))
+     (setq mode 'planning))
         ;; Check if CACHED or any of its ancestors contain point.
         ;;
         ;; If there is such an element, we inspect it in order to know
@@ -5679,65 +5686,65 @@ the process stopped before finding the expected result."
                  (t (setq element up next (point)))))))
        ;; Parse successively each element until we reach POS.
        (let ((end (or (org-element-property :end element)
-		      (save-excursion
-			(org-with-limited-levels (outline-next-heading))
-			(point))))
-	     (parent element))
-	 (while t
-	   (when syncp
-	     (cond ((= (point) pos) (throw 'exit parent))
-		   ((org-element--cache-interrupt-p time-limit)
-		    (throw 'interrupt nil))))
-	   (unless element
-	     (setq element (org-element--current-element
-			    end 'element mode
-			    (org-element-property :structure parent)))
-	     (org-element-put-property element :parent parent)
-	     (org-element--cache-put element))
-	   (let ((elem-end (org-element-property :end element))
-		 (type (org-element-type element)))
-	     (cond
-	      ;; Skip any element ending before point.  Also skip
-	      ;; element ending at point (unless it is also the end of
-	      ;; buffer) since we're sure that another element begins
-	      ;; after it.
-	      ((and (<= elem-end pos) (/= (point-max) elem-end))
-	       (goto-char elem-end)
-	       (setq mode (org-element--next-mode mode type nil)))
-	      ;; A non-greater element contains point: return it.
-	      ((not (memq type org-element-greater-elements))
-	       (throw 'exit element))
-	      ;; Otherwise, we have to decide if ELEMENT really
-	      ;; contains POS.  In that case we start parsing from
-	      ;; contents' beginning.
-	      ;;
-	      ;; If POS is at contents' beginning but it is also at
-	      ;; the beginning of the first item in a list or a table.
-	      ;; In that case, we need to create an anchor for that
-	      ;; list or table, so return it.
-	      ;;
-	      ;; Also, if POS is at the end of the buffer, no element
-	      ;; can start after it, but more than one may end there.
-	      ;; Arbitrarily, we choose to return the innermost of
-	      ;; such elements.
-	      ((let ((cbeg (org-element-property :contents-begin element))
-		     (cend (org-element-property :contents-end element)))
-		 (when (or syncp
-			   (and cbeg cend
-				(or (< cbeg pos)
-				    (and (= cbeg pos)
-					 (not (memq type '(plain-list table)))))
-				(or (> cend pos)
-				    (and (= cend pos) (= (point-max) pos)))))
-		   (goto-char (or next cbeg))
-		   (setq next nil
-			 mode (org-element--next-mode mode type t)
-			 parent element
-			 end cend))))
-	      ;; Otherwise, return ELEMENT as it is the smallest
-	      ;; element containing POS.
-	      (t (throw 'exit element))))
-	   (setq element nil)))))))
+              (save-excursion
+            (org-with-limited-levels (outline-next-heading))
+            (point))))
+         (parent element))
+     (while t
+       (when syncp
+         (cond ((= (point) pos) (throw 'exit parent))
+           ((org-element--cache-interrupt-p time-limit)
+            (throw 'interrupt nil))))
+       (unless element
+         (setq element (org-element--current-element
+                end 'element mode
+                (org-element-property :structure parent)))
+         (org-element-put-property element :parent parent)
+         (org-element--cache-put element))
+       (let ((elem-end (org-element-property :end element))
+         (type (org-element-type element)))
+         (cond
+          ;; Skip any element ending before point.  Also skip
+          ;; element ending at point (unless it is also the end of
+          ;; buffer) since we're sure that another element begins
+          ;; after it.
+          ((and (<= elem-end pos) (/= (point-max) elem-end))
+           (goto-char elem-end)
+           (setq mode (org-element--next-mode mode type nil)))
+          ;; A non-greater element contains point: return it.
+          ((not (memq type org-element-greater-elements))
+           (throw 'exit element))
+          ;; Otherwise, we have to decide if ELEMENT really
+          ;; contains POS.  In that case we start parsing from
+          ;; contents' beginning.
+          ;;
+          ;; If POS is at contents' beginning but it is also at
+          ;; the beginning of the first item in a list or a table.
+          ;; In that case, we need to create an anchor for that
+          ;; list or table, so return it.
+          ;;
+          ;; Also, if POS is at the end of the buffer, no element
+          ;; can start after it, but more than one may end there.
+          ;; Arbitrarily, we choose to return the innermost of
+          ;; such elements.
+          ((let ((cbeg (org-element-property :contents-begin element))
+             (cend (org-element-property :contents-end element)))
+         (when (or syncp
+               (and cbeg cend
+                (or (< cbeg pos)
+                    (and (= cbeg pos)
+                     (not (memq type '(plain-list table)))))
+                (or (> cend pos)
+                    (and (= cend pos) (= (point-max) pos)))))
+           (goto-char (or next cbeg))
+           (setq next nil
+             mode (org-element--next-mode mode type t)
+             parent element
+             end cend))))
+          ;; Otherwise, return ELEMENT as it is the smallest
+          ;; element containing POS.
+          (t (throw 'exit element))))
+       (setq element nil)))))))
 
 
 ;;;; Staging Buffer Changes
@@ -5771,13 +5778,13 @@ text.  See `before-change-functions' for more information."
      (beginning-of-line)
      (let ((bottom (save-excursion (goto-char end) (line-end-position))))
        (setq org-element--cache-change-warning
-	     (save-match-data
-	       (if (and (org-with-limited-levels (org-at-heading-p))
-			(= (line-end-position) bottom))
-		   'headline
-		 (let ((case-fold-search t))
-		   (re-search-forward
-		    org-element--cache-sensitive-re bottom t)))))))))
+         (save-match-data
+           (if (and (org-with-limited-levels (org-at-heading-p))
+            (= (line-end-position) bottom))
+           'headline
+         (let ((case-fold-search t))
+           (re-search-forward
+            org-element--cache-sensitive-re bottom t)))))))))
 
 (defun org-element--cache-after-change (beg end pre)
   "Update buffer modifications for current buffer.
@@ -5790,31 +5797,31 @@ that range.  See `after-change-functions' for more information."
      (beginning-of-line)
      (save-match-data
        (let ((top (point))
-	     (bottom (save-excursion (goto-char end) (line-end-position))))
-	 ;; Determine if modified area needs to be extended, according
-	 ;; to both previous and current state.  We make a special
-	 ;; case for headline editing: if a headline is modified but
-	 ;; not removed, do not extend.
-	 (when (pcase org-element--cache-change-warning
-		 (`t t)
-		 (`headline
-		  (not (and (org-with-limited-levels (org-at-heading-p))
-			    (= (line-end-position) bottom))))
-		 (_
-		  (let ((case-fold-search t))
-		    (re-search-forward
-		     org-element--cache-sensitive-re bottom t))))
-	   ;; Effectively extend modified area.
-	   (org-with-limited-levels
-	    (setq top (progn (goto-char top)
-			     (when (outline-previous-heading) (forward-line))
-			     (point)))
-	    (setq bottom (progn (goto-char bottom)
-				(if (outline-next-heading) (1- (point))
-				  (point))))))
-	 ;; Store synchronization request.
-	 (let ((offset (- end beg pre)))
-	   (org-element--cache-submit-request top (- bottom offset) offset)))))
+         (bottom (save-excursion (goto-char end) (line-end-position))))
+     ;; Determine if modified area needs to be extended, according
+     ;; to both previous and current state.  We make a special
+     ;; case for headline editing: if a headline is modified but
+     ;; not removed, do not extend.
+     (when (pcase org-element--cache-change-warning
+         (`t t)
+         (`headline
+          (not (and (org-with-limited-levels (org-at-heading-p))
+                (= (line-end-position) bottom))))
+         (_
+          (let ((case-fold-search t))
+            (re-search-forward
+             org-element--cache-sensitive-re bottom t))))
+       ;; Effectively extend modified area.
+       (org-with-limited-levels
+        (setq top (progn (goto-char top)
+                 (when (outline-previous-heading) (forward-line))
+                 (point)))
+        (setq bottom (progn (goto-char bottom)
+                (if (outline-next-heading) (1- (point))
+                  (point))))))
+     ;; Store synchronization request.
+     (let ((offset (- end beg pre)))
+       (org-element--cache-submit-request top (- bottom offset) offset)))))
     ;; Activate a timer to process the request during idle time.
     (org-element--cache-set-timer (current-buffer))))
 
@@ -5830,42 +5837,42 @@ elements around the changes that are robust to contents
 modifications are preserved and updated according to the
 changes."
   (let* ((elements (org-element--cache-find (1- beg) 'both))
-	 (before (car elements))
-	 (after (cdr elements)))
+     (before (car elements))
+     (after (cdr elements)))
     (if (not before) after
       (let ((up before)
-	    (robust-flag t))
-	(while up
-	  (if (let ((type (org-element-type up)))
-		(and (or (memq type '(center-block dynamic-block quote-block
-						   special-block))
-			 ;; Drawers named "PROPERTIES" are probably
-			 ;; a properties drawer being edited.  Force
-			 ;; parsing to check if editing is over.
-			 (and (eq type 'drawer)
-			      (not (string=
-				    (org-element-property :drawer-name up)
-				    "PROPERTIES"))))
-		     (let ((cbeg (org-element-property :contents-begin up)))
-		       (and cbeg
-			    (<= cbeg beg)
-			    (> (org-element-property :contents-end up) end)))))
-	      ;; UP is a robust greater element containing changes.
-	      ;; We only need to extend its ending boundaries.
-	      (org-element--cache-shift-positions
-	       up offset '(:contents-end :end))
-	    (setq before up)
-	    (when robust-flag (setq robust-flag nil)))
-	  (setq up (org-element-property :parent up)))
-	;; We're at top level element containing ELEMENT: if it's
-	;; altered by buffer modifications, it is first element in
-	;; cache to be removed.  Otherwise, that first element is the
-	;; following one.
-	;;
-	;; As a special case, do not remove BEFORE if it is a robust
-	;; container for current changes.
-	(if (or (< (org-element-property :end before) beg) robust-flag) after
-	  before)))))
+        (robust-flag t))
+    (while up
+      (if (let ((type (org-element-type up)))
+        (and (or (memq type '(center-block dynamic-block quote-block
+                           special-block))
+             ;; Drawers named "PROPERTIES" are probably
+             ;; a properties drawer being edited.  Force
+             ;; parsing to check if editing is over.
+             (and (eq type 'drawer)
+                  (not (string=
+                    (org-element-property :drawer-name up)
+                    "PROPERTIES"))))
+             (let ((cbeg (org-element-property :contents-begin up)))
+               (and cbeg
+                (<= cbeg beg)
+                (> (org-element-property :contents-end up) end)))))
+          ;; UP is a robust greater element containing changes.
+          ;; We only need to extend its ending boundaries.
+          (org-element--cache-shift-positions
+           up offset '(:contents-end :end))
+        (setq before up)
+        (when robust-flag (setq robust-flag nil)))
+      (setq up (org-element-property :parent up)))
+    ;; We're at top level element containing ELEMENT: if it's
+    ;; altered by buffer modifications, it is first element in
+    ;; cache to be removed.  Otherwise, that first element is the
+    ;; following one.
+    ;;
+    ;; As a special case, do not remove BEFORE if it is a robust
+    ;; container for current changes.
+    (if (or (< (org-element-property :end before) beg) robust-flag) after
+      before)))))
 
 (defun org-element--cache-submit-request (beg end offset)
   "Submit a new cache synchronization request for current buffer.
@@ -5873,29 +5880,29 @@ BEG and END are buffer positions delimiting the minimal area
 where cache data should be removed.  OFFSET is the size of the
 change, as an integer."
   (let ((next (car org-element--cache-sync-requests))
-	delete-to delete-from)
+    delete-to delete-from)
     (if (and next
-	     (zerop (aref next 5))
-	     (> (setq delete-to (+ (aref next 2) (aref next 3))) end)
-	     (<= (setq delete-from (aref next 1)) end))
-	;; Current changes can be merged with first sync request: we
-	;; can save a partial cache synchronization.
-	(progn
-	  (cl-incf (aref next 3) offset)
-	  ;; If last change happened within area to be removed, extend
-	  ;; boundaries of robust parents, if any.  Otherwise, find
-	  ;; first element to remove and update request accordingly.
-	  (if (> beg delete-from)
-	      (let ((up (aref next 4)))
-		(while up
-		  (org-element--cache-shift-positions
-		   up offset '(:contents-end :end))
-		  (setq up (org-element-property :parent up))))
-	    (let ((first (org-element--cache-for-removal beg delete-to offset)))
-	      (when first
-		(aset next 0 (org-element--cache-key first))
-		(aset next 1 (org-element-property :begin first))
-		(aset next 4 (org-element-property :parent first))))))
+         (zerop (aref next 5))
+         (> (setq delete-to (+ (aref next 2) (aref next 3))) end)
+         (<= (setq delete-from (aref next 1)) end))
+    ;; Current changes can be merged with first sync request: we
+    ;; can save a partial cache synchronization.
+    (progn
+      (cl-incf (aref next 3) offset)
+      ;; If last change happened within area to be removed, extend
+      ;; boundaries of robust parents, if any.  Otherwise, find
+      ;; first element to remove and update request accordingly.
+      (if (> beg delete-from)
+          (let ((up (aref next 4)))
+        (while up
+          (org-element--cache-shift-positions
+           up offset '(:contents-end :end))
+          (setq up (org-element-property :parent up))))
+        (let ((first (org-element--cache-for-removal beg delete-to offset)))
+          (when first
+        (aset next 0 (org-element--cache-key first))
+        (aset next 1 (org-element-property :begin first))
+        (aset next 4 (org-element-property :parent first))))))
       ;; Ensure cache is correct up to END.  Also make sure that NEXT,
       ;; if any, is no longer a 0-phase request, thus ensuring that
       ;; phases are properly ordered.  We need to provide OFFSET as
@@ -5904,35 +5911,35 @@ change, as an integer."
       ;; the first request).
       (when next (org-element--cache-sync (current-buffer) end beg))
       (let ((first (org-element--cache-for-removal beg end offset)))
-	(if first
-	    (push (let ((beg (org-element-property :begin first))
-			(key (org-element--cache-key first)))
-		    (cond
-		     ;; When changes happen before the first known
-		     ;; element, re-parent and shift the rest of the
-		     ;; cache.
-		     ((> beg end) (vector key beg nil offset nil 1))
-		     ;; Otherwise, we find the first non robust
-		     ;; element containing END.  All elements between
-		     ;; FIRST and this one are to be removed.
-		     ((let ((first-end (org-element-property :end first)))
-			(and (> first-end end)
-			     (vector key beg first-end offset first 0))))
-		     (t
-		      (let* ((element (org-element--cache-find end))
-			     (end (org-element-property :end element))
-			     (up element))
-			(while (and (setq up (org-element-property :parent up))
-				    (>= (org-element-property :begin up) beg))
-			  (setq end (org-element-property :end up)
-				element up))
-			(vector key beg end offset element 0)))))
-		  org-element--cache-sync-requests)
-	  ;; No element to remove.  No need to re-parent either.
-	  ;; Simply shift additional elements, if any, by OFFSET.
-	  (when org-element--cache-sync-requests
-	    (cl-incf (aref (car org-element--cache-sync-requests) 3)
-		     offset)))))))
+    (if first
+        (push (let ((beg (org-element-property :begin first))
+            (key (org-element--cache-key first)))
+            (cond
+             ;; When changes happen before the first known
+             ;; element, re-parent and shift the rest of the
+             ;; cache.
+             ((> beg end) (vector key beg nil offset nil 1))
+             ;; Otherwise, we find the first non robust
+             ;; element containing END.  All elements between
+             ;; FIRST and this one are to be removed.
+             ((let ((first-end (org-element-property :end first)))
+            (and (> first-end end)
+                 (vector key beg first-end offset first 0))))
+             (t
+              (let* ((element (org-element--cache-find end))
+                 (end (org-element-property :end element))
+                 (up element))
+            (while (and (setq up (org-element-property :parent up))
+                    (>= (org-element-property :begin up) beg))
+              (setq end (org-element-property :end up)
+                element up))
+            (vector key beg end offset element 0)))))
+          org-element--cache-sync-requests)
+      ;; No element to remove.  No need to re-parent either.
+      ;; Simply shift additional elements, if any, by OFFSET.
+      (when org-element--cache-sync-requests
+        (cl-incf (aref (car org-element--cache-sync-requests) 3)
+             offset)))))))
 
 
 ;;;; Public Functions
@@ -5946,17 +5953,17 @@ buffers."
   (dolist (buffer (if all (buffer-list) (list (current-buffer))))
     (with-current-buffer buffer
       (when (and org-element-use-cache (derived-mode-p 'org-mode))
-	(setq-local org-element--cache
-		    (avl-tree-create #'org-element--cache-compare))
-	(setq-local org-element--cache-sync-keys
-		    (make-hash-table :weakness 'key :test #'eq))
-	(setq-local org-element--cache-change-warning nil)
-	(setq-local org-element--cache-sync-requests nil)
-	(setq-local org-element--cache-sync-timer nil)
-	(add-hook 'before-change-functions
-		  #'org-element--cache-before-change nil t)
-	(add-hook 'after-change-functions
-		  #'org-element--cache-after-change nil t)))))
+    (setq-local org-element--cache
+            (avl-tree-create #'org-element--cache-compare))
+    (setq-local org-element--cache-sync-keys
+            (make-hash-table :weakness 'key :test #'eq))
+    (setq-local org-element--cache-change-warning nil)
+    (setq-local org-element--cache-sync-requests nil)
+    (setq-local org-element--cache-sync-timer nil)
+    (add-hook 'before-change-functions
+          #'org-element--cache-before-change nil t)
+    (add-hook 'after-change-functions
+          #'org-element--cache-after-change nil t)))))
 
 ;;;###autoload
 (defun org-element-cache-refresh (pos)
@@ -6020,8 +6027,8 @@ element ending there."
       ;; Otherwise parse until we find element containing ORIGIN.
       (t
        (when (org-element--cache-active-p)
-	 (if (not org-element--cache) (org-element-cache-reset)
-	   (org-element--cache-sync (current-buffer) origin)))
+     (if (not org-element--cache) (org-element-cache-reset)
+       (org-element--cache-sync (current-buffer) origin)))
        (org-element--parse-to origin))))))
 
 ;;;###autoload
@@ -6046,112 +6053,112 @@ Providing it allows for quicker computation."
   (catch 'objects-forbidden
     (org-with-wide-buffer
      (let* ((pos (point))
-	    (element (or element (org-element-at-point)))
-	    (type (org-element-type element))
-	    (post (org-element-property :post-affiliated element)))
+        (element (or element (org-element-at-point)))
+        (type (org-element-type element))
+        (post (org-element-property :post-affiliated element)))
        ;; If point is inside an element containing objects or
        ;; a secondary string, narrow buffer to the container and
        ;; proceed with parsing.  Otherwise, return ELEMENT.
        (cond
-	;; At a parsed affiliated keyword, check if we're inside main
-	;; or dual value.
-	((and post (< pos post))
-	 (beginning-of-line)
-	 (let ((case-fold-search t)) (looking-at org-element--affiliated-re))
-	 (cond
-	  ((not (member-ignore-case (match-string 1)
-				    org-element-parsed-keywords))
-	   (throw 'objects-forbidden element))
-	  ((< (match-end 0) pos)
-	   (narrow-to-region (match-end 0) (line-end-position)))
-	  ((and (match-beginning 2)
-		(>= pos (match-beginning 2))
-		(< pos (match-end 2)))
-	   (narrow-to-region (match-beginning 2) (match-end 2)))
-	  (t (throw 'objects-forbidden element)))
-	 ;; Also change type to retrieve correct restrictions.
-	 (setq type 'keyword))
-	;; At an item, objects can only be located within tag, if any.
-	((eq type 'item)
-	 (let ((tag (org-element-property :tag element)))
-	   (if (or (not tag) (/= (line-beginning-position) post))
-	       (throw 'objects-forbidden element)
-	     (beginning-of-line)
-	     (search-forward tag (line-end-position))
-	     (goto-char (match-beginning 0))
-	     (if (and (>= pos (point)) (< pos (match-end 0)))
-		 (narrow-to-region (point) (match-end 0))
-	       (throw 'objects-forbidden element)))))
-	;; At an headline or inlinetask, objects are in title.
-	((memq type '(headline inlinetask))
-	 (let ((case-fold-search nil))
-	   (goto-char (org-element-property :begin element))
-	   (looking-at org-complex-heading-regexp)
-	   (let ((end (match-end 4)))
-	     (if (not end) (throw 'objects-forbidden element)
-	       (goto-char (match-beginning 4))
-	       (when (looking-at org-comment-string)
-		 (goto-char (match-end 0)))
-	       (if (>= (point) end) (throw 'objects-forbidden element)
-		 (narrow-to-region (point) end))))))
-	;; At a paragraph, a table-row or a verse block, objects are
-	;; located within their contents.
-	((memq type '(paragraph table-row verse-block))
-	 (let ((cbeg (org-element-property :contents-begin element))
-	       (cend (org-element-property :contents-end element)))
-	   ;; CBEG is nil for table rules.
-	   (if (and cbeg cend (>= pos cbeg)
-		    (or (< pos cend) (and (= pos cend) (eobp))))
-	       (narrow-to-region cbeg cend)
-	     (throw 'objects-forbidden element))))
-	(t (throw 'objects-forbidden element)))
+    ;; At a parsed affiliated keyword, check if we're inside main
+    ;; or dual value.
+    ((and post (< pos post))
+     (beginning-of-line)
+     (let ((case-fold-search t)) (looking-at org-element--affiliated-re))
+     (cond
+      ((not (member-ignore-case (match-string 1)
+                    org-element-parsed-keywords))
+       (throw 'objects-forbidden element))
+      ((< (match-end 0) pos)
+       (narrow-to-region (match-end 0) (line-end-position)))
+      ((and (match-beginning 2)
+        (>= pos (match-beginning 2))
+        (< pos (match-end 2)))
+       (narrow-to-region (match-beginning 2) (match-end 2)))
+      (t (throw 'objects-forbidden element)))
+     ;; Also change type to retrieve correct restrictions.
+     (setq type 'keyword))
+    ;; At an item, objects can only be located within tag, if any.
+    ((eq type 'item)
+     (let ((tag (org-element-property :tag element)))
+       (if (or (not tag) (/= (line-beginning-position) post))
+           (throw 'objects-forbidden element)
+         (beginning-of-line)
+         (search-forward tag (line-end-position))
+         (goto-char (match-beginning 0))
+         (if (and (>= pos (point)) (< pos (match-end 0)))
+         (narrow-to-region (point) (match-end 0))
+           (throw 'objects-forbidden element)))))
+    ;; At an headline or inlinetask, objects are in title.
+    ((memq type '(headline inlinetask))
+     (let ((case-fold-search nil))
+       (goto-char (org-element-property :begin element))
+       (looking-at org-complex-heading-regexp)
+       (let ((end (match-end 4)))
+         (if (not end) (throw 'objects-forbidden element)
+           (goto-char (match-beginning 4))
+           (when (looking-at org-comment-string)
+         (goto-char (match-end 0)))
+           (if (>= (point) end) (throw 'objects-forbidden element)
+         (narrow-to-region (point) end))))))
+    ;; At a paragraph, a table-row or a verse block, objects are
+    ;; located within their contents.
+    ((memq type '(paragraph table-row verse-block))
+     (let ((cbeg (org-element-property :contents-begin element))
+           (cend (org-element-property :contents-end element)))
+       ;; CBEG is nil for table rules.
+       (if (and cbeg cend (>= pos cbeg)
+            (or (< pos cend) (and (= pos cend) (eobp))))
+           (narrow-to-region cbeg cend)
+         (throw 'objects-forbidden element))))
+    (t (throw 'objects-forbidden element)))
        (goto-char (point-min))
        (let ((restriction (org-element-restriction type))
-	     (parent element)
-	     last)
-	 (catch 'exit
-	   (while t
-	     (let ((next (org-element--object-lex restriction)))
-	       (when next (org-element-put-property next :parent parent))
-	       ;; Process NEXT, if any, in order to know if we need to
-	       ;; skip it, return it or move into it.
-	       (if (or (not next) (> (org-element-property :begin next) pos))
-		   (throw 'exit (or last parent))
-		 (let ((end (org-element-property :end next))
-		       (cbeg (org-element-property :contents-begin next))
-		       (cend (org-element-property :contents-end next)))
-		   (cond
-		    ;; Skip objects ending before point.  Also skip
-		    ;; objects ending at point unless it is also the
-		    ;; end of buffer, since we want to return the
-		    ;; innermost object.
-		    ((and (<= end pos) (/= (point-max) end))
-		     (goto-char end)
-		     ;; For convenience, when object ends at POS,
-		     ;; without any space, store it in LAST, as we
-		     ;; will return it if no object starts here.
-		     (when (and (= end pos)
-				(not (memq (char-before) '(?\s ?\t))))
-		       (setq last next)))
-		    ;; If POS is within a container object, move into
-		    ;; that object.
-		    ((and cbeg cend
-			  (>= pos cbeg)
-			  (or (< pos cend)
-			      ;; At contents' end, if there is no
-			      ;; space before point, also move into
-			      ;; object, for consistency with
-			      ;; convenience feature above.
-			      (and (= pos cend)
-				   (or (= (point-max) pos)
-				       (not (memq (char-before pos)
-						  '(?\s ?\t)))))))
-		     (goto-char cbeg)
-		     (narrow-to-region (point) cend)
-		     (setq parent next)
-		     (setq restriction (org-element-restriction next)))
-		    ;; Otherwise, return NEXT.
-		    (t (throw 'exit next)))))))))))))
+         (parent element)
+         last)
+     (catch 'exit
+       (while t
+         (let ((next (org-element--object-lex restriction)))
+           (when next (org-element-put-property next :parent parent))
+           ;; Process NEXT, if any, in order to know if we need to
+           ;; skip it, return it or move into it.
+           (if (or (not next) (> (org-element-property :begin next) pos))
+           (throw 'exit (or last parent))
+         (let ((end (org-element-property :end next))
+               (cbeg (org-element-property :contents-begin next))
+               (cend (org-element-property :contents-end next)))
+           (cond
+            ;; Skip objects ending before point.  Also skip
+            ;; objects ending at point unless it is also the
+            ;; end of buffer, since we want to return the
+            ;; innermost object.
+            ((and (<= end pos) (/= (point-max) end))
+             (goto-char end)
+             ;; For convenience, when object ends at POS,
+             ;; without any space, store it in LAST, as we
+             ;; will return it if no object starts here.
+             (when (and (= end pos)
+                (not (memq (char-before) '(?\s ?\t))))
+               (setq last next)))
+            ;; If POS is within a container object, move into
+            ;; that object.
+            ((and cbeg cend
+              (>= pos cbeg)
+              (or (< pos cend)
+                  ;; At contents' end, if there is no
+                  ;; space before point, also move into
+                  ;; object, for consistency with
+                  ;; convenience feature above.
+                  (and (= pos cend)
+                   (or (= (point-max) pos)
+                       (not (memq (char-before pos)
+                          '(?\s ?\t)))))))
+             (goto-char cbeg)
+             (narrow-to-region (point) cend)
+             (setq parent next)
+             (setq restriction (org-element-restriction next)))
+            ;; Otherwise, return NEXT.
+            (t (throw 'exit next)))))))))))))
 
 (defun org-element-lineage (datum &optional types with-self)
   "List all ancestors of a given element or object.
@@ -6171,7 +6178,7 @@ When DATUM is obtained through `org-element-context' or
 found.  There is no such limitation when DATUM belongs to a full
 parse tree."
   (let ((up (if with-self datum (org-element-property :parent datum)))
-	ancestors)
+    ancestors)
     (while (and up (not (memq (org-element-type up) types)))
       (unless types (push up ancestors))
       (setq up (org-element-property :parent up)))
@@ -6180,11 +6187,11 @@ parse tree."
 (defun org-element-nested-p (elem-A elem-B)
   "Non-nil when elements ELEM-A and ELEM-B are nested."
   (let ((beg-A (org-element-property :begin elem-A))
-	(beg-B (org-element-property :begin elem-B))
-	(end-A (org-element-property :end elem-A))
-	(end-B (org-element-property :end elem-B)))
+    (beg-B (org-element-property :begin elem-B))
+    (end-A (org-element-property :end elem-A))
+    (end-B (org-element-property :end elem-B)))
     (or (and (>= beg-A beg-B) (<= end-A end-B))
-	(and (>= beg-B beg-A) (<= end-B end-A)))))
+    (and (>= beg-B beg-A) (<= end-B end-A)))))
 
 (defun org-element-swap-A-B (elem-A elem-B)
   "Swap elements ELEM-A and ELEM-B.
@@ -6199,60 +6206,60 @@ end of ELEM-A."
     ;; a footnote definition is impossible: it cannot contain two
     ;; paragraphs in a row because it cannot contain a blank line.
     (when (and specialp
-	       (or (not (eq (org-element-type elem-B) 'paragraph))
-		   (/= (org-element-property :begin elem-B)
-		       (org-element-property :contents-begin elem-B))))
+           (or (not (eq (org-element-type elem-B) 'paragraph))
+           (/= (org-element-property :begin elem-B)
+               (org-element-property :contents-begin elem-B))))
       (error "Cannot swap elements"))
     ;; In a special situation, ELEM-A will have no indentation.  We'll
     ;; give it ELEM-B's (which will in, in turn, have no indentation).
     (let* ((ind-B (when specialp
-		    (goto-char (org-element-property :begin elem-B))
-		    (current-indentation)))
-	   (beg-A (org-element-property :begin elem-A))
-	   (end-A (save-excursion
-		    (goto-char (org-element-property :end elem-A))
-		    (skip-chars-backward " \r\t\n")
-		    (point-at-eol)))
-	   (beg-B (org-element-property :begin elem-B))
-	   (end-B (save-excursion
-		    (goto-char (org-element-property :end elem-B))
-		    (skip-chars-backward " \r\t\n")
-		    (point-at-eol)))
-	   ;; Store inner overlays responsible for visibility status.
-	   ;; We also need to store their boundaries as they will be
-	   ;; removed from buffer.
-	   (overlays
-	    (cons
-	     (delq nil
-		   (mapcar (lambda (o)
-			     (and (>= (overlay-start o) beg-A)
-				  (<= (overlay-end o) end-A)
-				  (list o (overlay-start o) (overlay-end o))))
-			   (overlays-in beg-A end-A)))
-	     (delq nil
-		   (mapcar (lambda (o)
-			     (and (>= (overlay-start o) beg-B)
-				  (<= (overlay-end o) end-B)
-				  (list o (overlay-start o) (overlay-end o))))
-			   (overlays-in beg-B end-B)))))
-	   ;; Get contents.
-	   (body-A (buffer-substring beg-A end-A))
-	   (body-B (delete-and-extract-region beg-B end-B)))
+            (goto-char (org-element-property :begin elem-B))
+            (current-indentation)))
+       (beg-A (org-element-property :begin elem-A))
+       (end-A (save-excursion
+            (goto-char (org-element-property :end elem-A))
+            (skip-chars-backward " \r\t\n")
+            (point-at-eol)))
+       (beg-B (org-element-property :begin elem-B))
+       (end-B (save-excursion
+            (goto-char (org-element-property :end elem-B))
+            (skip-chars-backward " \r\t\n")
+            (point-at-eol)))
+       ;; Store inner overlays responsible for visibility status.
+       ;; We also need to store their boundaries as they will be
+       ;; removed from buffer.
+       (overlays
+        (cons
+         (delq nil
+           (mapcar (lambda (o)
+                 (and (>= (overlay-start o) beg-A)
+                  (<= (overlay-end o) end-A)
+                  (list o (overlay-start o) (overlay-end o))))
+               (overlays-in beg-A end-A)))
+         (delq nil
+           (mapcar (lambda (o)
+                 (and (>= (overlay-start o) beg-B)
+                  (<= (overlay-end o) end-B)
+                  (list o (overlay-start o) (overlay-end o))))
+               (overlays-in beg-B end-B)))))
+       ;; Get contents.
+       (body-A (buffer-substring beg-A end-A))
+       (body-B (delete-and-extract-region beg-B end-B)))
       (goto-char beg-B)
       (when specialp
-	(setq body-B (replace-regexp-in-string "\\`[ \t]*" "" body-B))
-	(indent-to-column ind-B))
+    (setq body-B (replace-regexp-in-string "\\`[ \t]*" "" body-B))
+    (indent-to-column ind-B))
       (insert body-A)
       ;; Restore ex ELEM-A overlays.
       (let ((offset (- beg-B beg-A)))
-	(dolist (o (car overlays))
-	  (move-overlay (car o) (+ (nth 1 o) offset) (+ (nth 2 o) offset)))
-	(goto-char beg-A)
-	(delete-region beg-A end-A)
-	(insert body-B)
-	;; Restore ex ELEM-B overlays.
-	(dolist (o (cdr overlays))
-	  (move-overlay (car o) (- (nth 1 o) offset) (- (nth 2 o) offset))))
+    (dolist (o (car overlays))
+      (move-overlay (car o) (+ (nth 1 o) offset) (+ (nth 2 o) offset)))
+    (goto-char beg-A)
+    (delete-region beg-A end-A)
+    (insert body-B)
+    ;; Restore ex ELEM-B overlays.
+    (dolist (o (cdr overlays))
+      (move-overlay (car o) (- (nth 1 o) offset) (- (nth 2 o) offset))))
       (goto-char (org-element-property :end elem-B)))))
 
 
