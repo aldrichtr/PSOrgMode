@@ -85,7 +85,7 @@ param(
                 throw "$($p.Name) already exists.  use -Force to overwrite"
             }
         }
-        $Element.Properties.Add($p)
+        $Element.Properties.Add($p) | Out-Null
     }
 
     end {
