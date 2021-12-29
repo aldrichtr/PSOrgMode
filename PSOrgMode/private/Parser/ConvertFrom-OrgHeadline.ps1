@@ -10,19 +10,52 @@ Function ConvertFrom-OrgHeadline {
             Mandatory = $true,
             ValueFromPipeline = $true
         )]
-        [string]
-        $InputObject
+        [string[]]
+        $Buffer
     )
     begin {
-        Write-Debug "In $($PSCmdlet.MyInvocation.MyCommand.Name)`n$('-' * 78)"
+        #region Debug and Verbose output
+        # Store logging messages so that output can be formatted better than
+        # the default YELLOW YELLING
+
+        # A shortcut to add the debug message continuation line "heading"
+        # we want it to look like:
+        # <DEBUG or VERBOSE>: in the _loud yellow_
+        #  <function name> -----------------------------------------------------
+        #  Line | <message>
+        #       | <message>
+        #       | <message>
+        #  <function name> -----------------------------------------------------
+
+        # Function name
+        $fn = $PSCmdlet.MyInvocation.MyCommand.Name
+        # Debugging indent
+        $di = "$(' ' * 6)|"
+        # Erase 'DEBUG:'
+        $ed = "`e[2K`e[`G"
+
+        # Heading length
+        $hl = 78 - ($fn.Length + $di.Length)
+        # Debugging Headline
+        $dh = ("$ed`e[1;92m$di$fn $('-' * $hl)`e[0m")
+        # Debugging Footer
+        $df = ("$ed`e[1;92m$di$('-' * $hl) $fn`e[0m")
+        # Debugging continuation line
+        $dl = "$ed`e[92m$di      |`e[0m"
+        Write-Debug $dh
+        #endregion Debug and Verbose output
+
+
+        $line_number = 1
         $regex = Get-OrgModeRegexPattern -Type 'headline'
-        Write-Debug "state is $($regex.state)"
-        Write-Debug "priority is $($regex.priority)"
-        Write-Debug "track is $($regex.track)"
-        Write-Debug "tags is $($regex.tags)"
     }
     process {
-        $components = [System.Collections.ArrayList]($InputObject.Split(' '))
+        $current_line = $PSItem
+
+        Write-Debug "$ed`e[92m$di Line | `e[0m'$current_line'"
+        Write-Debug ("$ed`e[92m$di {0,4} |" -f $line_number)
+
+        $components = [System.Collections.ArrayList]($current_line.Split(' '))
         # confirm that the first component is only "stars"
         $stars = $components[0].ToCharArray()
         if (($stars -ne '*').Count -eq 0) {
@@ -51,7 +84,7 @@ Function ConvertFrom-OrgHeadline {
         $title = $components -join ' '
 
         $h = New-OrgElement -Type headline
-        $h.Content = $InputObject
+        $h.Content = $current_line
         $h.Level = $level
         $h.State = $state
         $h.Priority = $priority
@@ -60,17 +93,22 @@ Function ConvertFrom-OrgHeadline {
         foreach ($tag in ($tags -split ':')) {
             if ($tag -ne '') { $h.Tags += $tag }
         }
-        Write-Debug "'$InputObject' headline components:"
-        Write-Debug (("  Level: '{0}'",
-         "State: '{1}'",
-         "Priority: '{2}'",
-         "Title: '{3}'",
-         "Tracking: '{4}'",
-         "Tags: '{5}'") -f $h.Level, $h.State, $h.Priority, $h.Title,
-         $h.Tracking,($h.Tags -join ','))
+        ((
+         "$dl Level:    '{0}'",
+         "$dl State:    '{1}'",
+         "$dl Priority: '{2}'",
+         "$dl Title:    '{3}'",
+         "$dl Tracking: '{4}'",
+         "$dl Tags:     '{5}'") -join "`n"
+         ) -f $h.Level, $h.State,
+            $h.Priority, $h.Title,
+            $h.Tracking, ($h.Tags -join ',') | Write-Debug
+
+         $line_number++
+         Write-Output $h
+
     }
     end {
-        $h
-        Write-Debug "End $($PSCmdlet.MyInvocation.MyCommand.Name)`n$('-' * 78)"
+        Write-Debug $df
     }
 }

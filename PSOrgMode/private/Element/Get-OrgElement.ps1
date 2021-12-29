@@ -79,21 +79,22 @@ Function Get-OrgElement {
 
     process {
         if ($Recurse) {
-            Write-Debug "Recursion was specified"
             # If the Depth wasn't specified, then use 8 to start, but
             # we use this to pass to the next level
             if( -not $PSBoundParameters['Depth']) { $Depth = 8 }
             # Decrement the Depth
             $Depth = $Depth - 1
-            Write-Debug "Depth is now $Depth"
             if ($Depth -gt 0) {
                 foreach ($child in $From.Children) {
-                    $children += Get-OrgElement `
-                    -From $child `
-                    -Filter $Filter `
-                    -Recurse:$Recurse `
-                    -Type $Type `
-                    -Depth $Depth
+                    $options = @{
+                        From = $child
+                        Filter = $Filter
+                        Recurse = $Recurse
+                        Type = $Type
+                        Depth = $Depth
+
+                    }
+                    $children += Get-OrgElement @options
                 }
             }
         }
@@ -104,9 +105,7 @@ Function Get-OrgElement {
         if ($PSBoundParameters['Filter']) {
             foreach ($f in $Filter.Keys) {
                 if ($f -like "propert*") {
-                    Write-Debug "Filtering by property"
                     $props = $Filter[$f]
-                    Write-Debug "$($props.Keys) keys"
                     foreach ($p in $props.Keys) {
                         $criteria += (
                             '(',
@@ -116,7 +115,6 @@ Function Get-OrgElement {
                         ) -join ''
                     }
                 } else {
-                    Write-Debug "Filtering by attribute"
                     $criteria += (
                         '(',
                         '$_.', $f, ' -eq "', $Filter[$f], '"',
@@ -128,7 +126,6 @@ Function Get-OrgElement {
         if ($criteria.Length -gt 0) {
             $block_text = $criteria -join $criteria_join_type
             $block_text = "($block_text)"
-            Write-Debug "Filtering Children using:`n$block_text"
             $where_script = [scriptblock]::Create($block_text)
             $children += $From.Children.Where($where_script)
         } else {

@@ -65,13 +65,11 @@ function Add-OrgElement {
     # or fail out
     begin {}
     process {
-        Write-Debug "Adding $($Child.count) to $($Parent.type)"
         foreach ($c in $Child) {
             try {
                 $Parent.Children.Add($c) | Out-Null
                 $c.addParent($Parent)
 
-                Write-Debug "Parent set to : $($c.Parent.Type)"
             } catch {
                 Write-Error "Unable to add the $($c.Type) to $($Parent.Type)`n$_"
             }

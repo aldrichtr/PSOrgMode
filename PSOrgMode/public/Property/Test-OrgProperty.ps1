@@ -41,22 +41,16 @@ Function Test-OrgProperty {
     process {
         $p = $Element.Properties.Where( {$_.Name -eq $Name})
         if ($p) {
-            Write-Debug "$Name was found in .Where() search"
             if ($PSBoundParameters['Value']) {
-                Write-Debug "Looking for the property to have Value: $Value"
                 if ($p.Value -contains $Value) {
-                    Write-Debug "Property contained $Value"
                     $isFound = $true
                 } else {
-                    Write-Debug "Property did not contain $Value"
                     $isFound = $false
                 }
             } else {
-                Write-Debug "Not looking for a value."
                 $isFound = $true
             }
         } else {
-            Write-Debug "$Name was not found in .Where() search"
             $isFound = $false
         }
     }

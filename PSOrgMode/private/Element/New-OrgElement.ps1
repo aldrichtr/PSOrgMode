@@ -9,17 +9,14 @@ Function New-OrgElement {
     param(
         # The Element Type to create, default is 'orgdata'
         [Parameter(
-            Mandatory = $false,
-            ValueFromPipeline = $true
+            ValueFromPipeline
         )]
         [OrgType]
         $Type = [OrgType]::orgdata
     )
     begin {
-        Write-Debug "In $($PSCmdlet.MyInvocation.MyCommand.Name)`n$('-' * 78)"
     }
     process {
-        Write-Debug "Creating new $Type"
         switch ($Type) {
             headline {
                 $e = [OrgHeadline]::new()
@@ -29,7 +26,6 @@ Function New-OrgElement {
         }
     }
     end {
-        Write-Debug "End $($PSCmdlet.MyInvocation.MyCommand.Name)`n$('-' * 78)"
         $e
     }
 }
