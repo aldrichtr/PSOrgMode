@@ -27,14 +27,11 @@ Function Get-OrgProperty {
     process {
         $p = $Element.Properties.Where( { $_.Name -eq $Name })
         if ($p) {
-            Write-Debug "$Name was found in .Where() search"
             if ($null -eq $p.Value) {
                 $val = $true
             } else {
                 $val = $p.Value
             }
-        } else {
-            Write-Debug "$Name was not found in .Where() search"
         }
     }
     end {

@@ -48,11 +48,45 @@ Function ConvertFrom-OrgTimeStamp {
             Mandatory = $true,
             ValueFromPipeline = $true
         )]
-        [string]
-        $TimeStamp
+        [string[]]
+        $Buffer
     )
     begin {
+        #region Debug and Verbose output
+        # Store logging messages so that output can be formatted better than
+        # the default YELLOW YELLING
+
+        # A shortcut to add the debug message continuation line "heading"
+        # we want it to look like:
+        # <DEBUG or VERBOSE>: in the _loud yellow_
+        #  <function name> -----------------------------------------------------
+        #  Line | <message>
+        #       | <message>
+        #       | <message>
+        #  <function name> -----------------------------------------------------
+
+        # Function name
+        $fn = $PSCmdlet.MyInvocation.MyCommand.Name
+        # Debugging indent
+        $di = "$(' ' * 6)|"
+        # Erase 'DEBUG:'
+        $ed = "`e[2K`e[`G"
+
+        # Heading length
+        $hl = 78 - ($fn.Length + $di.Length)
+        # Debugging Headline
+        $dh = ("$ed`e[1;92m$di$fn $('-' * $hl)`e[0m")
+        # Debugging Footer
+        $df = ("$ed`e[1;92m$di$('-' * $hl) $fn`e[0m")
+        # Debugging continuation line
+        $dl = "$ed`e[92m$di      |`e[0m"
+        Write-Debug $dh
+        #endregion Debug and Verbose output
+
         $regex = Get-OrgModeRegexPattern -Type 'timestamp'
+        $line_number = 1
+
+
         function convertStamp([string]$t) {
             $null = $t -match $regex.timestamp.components
             if ($Matches.Count -gt 0) {
@@ -136,24 +170,31 @@ Function ConvertFrom-OrgTimeStamp {
         # This section is basically just a wrapper around the real work
         # which happens in the convertStamp and convertSpan inner-functions
         # defined above.
-        Write-Debug "looking for a timestamp in $TimeStamp"
-        switch -Regex ($TimeStamp) {
+        $current_line = $PSItem
+
+        Write-Debug "$ed`e[92m$di Line | `e[0m'$current_line'"
+        Write-Debug ("$ed`e[92m$di {0,4} |" -f $line_number)
+
+        switch -Regex ($current_line) {
             $regex.withAnchors($regex.timestamp.pattern) {
-                Write-Debug "  matches an org timestamp"
-                $ts = convertStamp($TimeStamp)
+                Write-Debug "$dl Token match: TIMESTAMP"
+                $ts = convertStamp($current_line)
                 continue
             }
             $regex.withAnchors($regex.timespan.pattern) {
-                Write-Debug "  matches an org timespan"
-                $ts = convertSpan($TimeStamp)
+                Write-Debug "$dl Token match: TIMESPAN"
+                $ts = convertSpan($current_line)
                 continue
             }
             Default {
-                Write-Error "$TimeStamp doesn't appear to be a valid TimeStamp"
+                Write-Error "$current_line doesn't appear to be a valid TIMESTAMP"
             }
         }
+
+        $line_number++
+        Write-Output $ts
     }
     end {
-        $ts
+        Write-Debug $df
     }
 }

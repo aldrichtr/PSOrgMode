@@ -3,10 +3,13 @@
 This is a section before the first headline
 * Level one headline
 <2021-09-27 Mon>
-* TODO [#A] Level one todo headline with priority
+* TODO [#A] Level one todo headline with priority :tag1:
  text in the todo headline
 
 * DONE Level one todo headline that is done :tag4:
+:PROPERTIES:
+:CATEGORY: garden
+:END:
 
 ** Level two headline with tags :tag1:tag2:
 
@@ -18,6 +21,12 @@ Get-ChildItem -Path "."
 #+BEGIN_EXAMPLE
 an Example
 #+END_EXAMPLE
+
+#+CAPTION: A nice table
+ | col 1 | col 2 |
+ |-------+-------|
+ | A     | B     |
+
 
 * Planning data headlines
 ** Scheduled for next year

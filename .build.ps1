@@ -16,4 +16,4 @@ param(
 
 . ./build/BuildTool.ps1
 
-task Test analyzer_test_source
+task Test unit_test_source

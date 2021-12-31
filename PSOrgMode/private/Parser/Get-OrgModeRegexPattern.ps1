@@ -34,7 +34,6 @@ Function Get-OrgModeRegexPattern {
     )
 
     begin {
-        Write-Debug "In $($PSCmdlet.MyInvocation.MyCommand.Name)`n$('-' * 78)"
         $TypeMap = @{
             'plaintext' = 'Build-OrgPlainTextRegex'
             'timestamp' = 'Build-OrgTimeStampRegex'

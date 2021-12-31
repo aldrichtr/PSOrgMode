@@ -245,7 +245,7 @@ InModuleScope -ModuleName PSOrgMode -ScriptBlock {
             }
         ) {
             BeforeAll {
-                $d = ConvertFrom-OrgTimeStamp $Stamp
+                $d = $Stamp | ConvertFrom-OrgTimeStamp
             }
             It "Sets the start date to '<Start>' using '<Stamp>'" {
                 $d.Start | Should -Be $Start
@@ -516,7 +516,7 @@ InModuleScope -ModuleName PSOrgMode -ScriptBlock {
             }
         ) {
             BeforeAll {
-                $d = ConvertFrom-OrgTimeStamp $Stamp
+                $d = $Stamp | ConvertFrom-OrgTimeStamp
             }
             It "Sets the start date to '<Start>' using '<Stamp>'" {
                 $d.Start | Should -Be $Start

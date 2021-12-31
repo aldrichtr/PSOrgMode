@@ -27,7 +27,7 @@ Describe "Testing private Parser function ConvertFrom-OrgHeadline" -Tags @('unit
         }
     ) {
         BeforeAll {
-            $h = ConvertFrom-OrgHeadline $Line
+            $h = $Line | ConvertFrom-OrgHeadline
         }
         It "Sets the Level to '<Level>' using '<Line>'" {
             $h.Level | Should -Be $Level
