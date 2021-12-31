@@ -145,7 +145,7 @@ Function ConvertFrom-OrgMode {
         )
 
         # Store them here until the element goes looking for them
-        [OrgProperty[]]$keywords = @()
+        $keywords = @()
 
         # Initially, we don't know the state of the Buffer
         # Once we encounter a headline, we set the HEADLINE flag

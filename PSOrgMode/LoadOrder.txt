@@ -1,41 +1,45 @@
-# Custom load order for PSOrgMode source files
 
 # Enum Types
-enum\OrgMode\OrgType.ps1
-enum\OrgMode\OrgTimeUnit.ps1
-enum\OrgMode\OrgRepeatType.ps1
-enum\OrgMode\OrgWarningType.ps1
+OrgMode\enum\OrgType.ps1
+OrgMode\enum\OrgTimeUnit.ps1
+OrgMode\enum\OrgRepeatType.ps1
+OrgMode\enum\OrgWarningType.ps1
 
 # Base classes need to be loaded first
-classes\OrgMode\OrgElement.ps1
-classes\OrgMode\OrgProperty.ps1
-classes\OrgMode\OrgRepeater.ps1
-classes\OrgMode\OrgWarning.ps1
-classes\OrgMode\OrgTimeStamp.ps1
-classes\OrgMode\OrgHeadline.ps1
+OrgMode\classes\OrgElement.ps1
+OrgMode\classes\OrgProperty.ps1
+OrgMode\classes\OrgRepeater.ps1
+OrgMode\classes\OrgWarning.ps1
+OrgMode\classes\OrgTimeStamp.ps1
+OrgMode\classes\OrgHeadline.ps1
 
 # private functions loaded next
-private\Get-OrgType.ps1
-private\Element\New-OrgElement.ps1
-private\Element\Add-OrgElement.ps1
-private\Element\Get-OrgElement.ps1
+OrgMode\private\Get-OrgType.ps1
+OrgMode\private\Element\New-OrgElement.ps1
+OrgMode\private\Element\Add-OrgElement.ps1
+OrgMode\private\Element\Get-OrgElement.ps1
 
-private\Parser\RegexPatterns\Build-OrgTimeStampRegex.ps1
-private\Parser\RegexPatterns\Build-OrgHeadlineRegex.ps1
-private\Parser\RegexPatterns\Build-OrgPlainTextRegex.ps1
-private\Parser\Get-OrgModeRegexPattern.ps1
+# visible functions
+OrgMode\public\Property\Add-OrgProperty.ps1
+OrgMode\public\Property\Get-OrgProperty.ps1
+OrgMode\public\Property\New-OrgProperty.ps1
+OrgMode\public\Property\Test-OrgProperty.ps1
 
-private\Parser\ConvertFrom-OrgSection.ps1
-private\Parser\ConvertFrom-OrgHeadline.ps1
-private\Parser\ConvertFrom-OrgTimeStamp.ps1
+OrgMode\public\Headline\Get-OrgHeadline.ps1
+
+#region Parser functions
+Parser\private\RegexPatterns\Build-OrgTimeStampRegex.ps1
+Parser\private\RegexPatterns\Build-OrgHeadlineRegex.ps1
+Parser\private\RegexPatterns\Build-OrgPlainTextRegex.ps1
+Parser\private\Get-OrgModeRegexPattern.ps1
+
+Parser\private\ConvertFrom-OrgSection.ps1
+Parser\private\ConvertFrom-OrgHeadline.ps1
+Parser\private\ConvertFrom-OrgTimeStamp.ps1
 
 
 # visible functions
-public\Property\Add-OrgProperty.ps1
-public\Property\Get-OrgProperty.ps1
-public\Property\New-OrgProperty.ps1
-public\Property\Test-OrgProperty.ps1
 
-public\Headline\Get-OrgHeadline.ps1
-
-public\Parser\ConvertFrom-OrgMode.ps1
+Parser\public\ConvertFrom-OrgMode.ps1
+#endregion Parser functions
+# Custom load order for PSOrgMode source files
