@@ -13,7 +13,19 @@ Function ConvertFrom-OrgSection {
         )]
         [AllowEmptyString()]
         [string[]]
-        $Buffer
+        $Buffer,
+
+        # Optionally set the starting position (line number) of the headline
+        [Parameter(
+        )]
+        [int]
+        $Begin,
+
+        # Optionally set the ending position (line number) of the headline
+        [Parameter(
+        )]
+        [int]
+        $End
 
     )
     begin {
@@ -66,6 +78,13 @@ Function ConvertFrom-OrgSection {
                 $Matches.val | Write-Debug
                 $element | Add-OrgProperty -Name $Matches.kword -Value $Matches.val
             }
+        }
+        if ($PSBoundParameters['Begin']) {
+            $element.Begin = $Begin
+        }
+
+        if ($PSBoundParameters['End']) {
+            $element.End = $End
         }
     }
     end {

@@ -12,6 +12,8 @@ Function ConvertFrom-OrgMode {
         the results into a single object and return it.
     .INPUTS
         String(s) containing text in orgmode format
+    .OUTPUTS
+        [OrgElement]
     .EXAMPLE
         PS C:\> $o = Get-Content '.\inbox.org' | ConvertFrom-OrgMode
     #>
@@ -172,9 +174,7 @@ Function ConvertFrom-OrgMode {
                 Write-Debug "$dl Token match: orgmode HEADLINE"
                 if ($content.Length -gt 0) {
                     Write-Debug ("$dl There are {0} lines of content" -f $content.Length)
-                    $s = $content | ConvertFrom-OrgSection
-                    $s.Begin = $content_start
-                    $s.End = $line_number - 1
+                    $s = $content | ConvertFrom-OrgSection -Begin $content_start -End ($line_number - 1)
                     if (-not($parse_state.hasFlag([ParseState]::HEADLINE))) {
                         <#------------------------------------------------------
                         This is the first headline we have seen, so unless we
@@ -203,7 +203,7 @@ Function ConvertFrom-OrgMode {
                 # reset content
                 $content = @()
                 $content_start = $line_number + 1
-                $h = $current_line | ConvertFrom-OrgHeadline
+                $h = $current_line | ConvertFrom-OrgHeadline -Begin $line_number -End $line_number
 
                 if ($h.Level -eq 1) {
                     <#----------------------------------------------------------

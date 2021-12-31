@@ -11,7 +11,19 @@ Function ConvertFrom-OrgHeadline {
             ValueFromPipeline = $true
         )]
         [string[]]
-        $Buffer
+        $Buffer,
+
+        # Optionally set the starting position (line number) of the headline
+        [Parameter(
+        )]
+        [int]
+        $Begin,
+
+        # Optionally set the ending position (line number) of the headline
+        [Parameter(
+        )]
+        [int]
+        $End
     )
     begin {
         #region Debug and Verbose output
@@ -93,6 +105,14 @@ Function ConvertFrom-OrgHeadline {
         foreach ($tag in ($tags -split ':')) {
             if ($tag -ne '') { $h.Tags += $tag }
         }
+        if ($PSBoundParameters['Begin']) {
+            $h.Begin = $Begin
+        }
+
+        if ($PSBoundParameters['End']) {
+            $h.End = $End
+        }
+
         ((
          "$dl Level:    '{0}'",
          "$dl State:    '{1}'",
