@@ -74,7 +74,6 @@ Function Get-OrgElement {
         # .Where() below
         $criteria = @()
         $criteria_join_type = ' -and '
-        $children = @()
     }
 
     process {
@@ -94,7 +93,7 @@ Function Get-OrgElement {
                         Depth = $Depth
 
                     }
-                    $children += Get-OrgElement @options
+                    Get-OrgElement @options | Write-Output
                 }
             }
         }
@@ -127,13 +126,11 @@ Function Get-OrgElement {
             $block_text = $criteria -join $criteria_join_type
             $block_text = "($block_text)"
             $where_script = [scriptblock]::Create($block_text)
-            $children += $From.Children.Where($where_script)
+             $From.Children.Where($where_script) | Write-Output
         } else {
             # no criteria was given, return them all
-            $children += $From.Children
+            $From.Children | Write-Output
         }
     }
-    end {
-        $children
-    }
+    end {}
 }
