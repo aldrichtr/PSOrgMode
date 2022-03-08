@@ -14,12 +14,12 @@ OrgMode\classes\OrgTimeStamp.ps1
 OrgMode\classes\OrgHeadline.ps1
 
 # private functions loaded next
-OrgMode\private\Get-OrgType.ps1
-OrgMode\private\Element\New-OrgElement.ps1
-OrgMode\private\Element\Add-OrgElement.ps1
-OrgMode\private\Element\Get-OrgElement.ps1
-
 # visible functions
+OrgMode\public\Element\Get-OrgType.ps1
+OrgMode\public\Element\New-OrgElement.ps1
+OrgMode\public\Element\Add-OrgElement.ps1
+OrgMode\public\Element\Get-OrgElement.ps1
+
 OrgMode\public\Property\Add-OrgProperty.ps1
 OrgMode\public\Property\Get-OrgProperty.ps1
 OrgMode\public\Property\New-OrgProperty.ps1
