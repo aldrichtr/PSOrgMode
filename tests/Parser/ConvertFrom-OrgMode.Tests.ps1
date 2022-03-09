@@ -1,7 +1,7 @@
 
 $testOptions = @{
     Name = "Testing public Parser function ConvertFrom-OrgMode"
-    Tags = @('unit', 'OrgMode', 'ConvertFrom' )
+    Tags = @('integration', 'OrgMode', 'ConvertFrom' )
 }
 Describe @testOptions {
     Context "Basic functionality" {
