@@ -1,9 +1,9 @@
 
 BeforeDiscovery {
-    . "$($Source.Path)\OrgMode\Classes\OrgProperty.ps1"
+    . "$($Source.Path)\OrgMode\classes\OrgProperty.ps1"
 }
 BeforeAll {
-    . "$($Source.Path)\OrgMode\Classes\OrgProperty.ps1"
+    . "$($Source.Path)\OrgMode\classes\OrgProperty.ps1"
 }
 
 Describe "Testing OrgMode class OrgProperty" -Tags @('unit', 'OrgProperty') {

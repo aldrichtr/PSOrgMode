@@ -1,16 +1,22 @@
 
 BeforeDiscovery {
+    # enums
     . "$($Source.Path)\OrgMode\enum\OrgType.ps1"
+    . "$($Source.Path)\OrgMode\enum\OrgTimeUnit.ps1"
     . "$($Source.Path)\OrgMode\enum\OrgRepeatType.ps1"
     . "$($Source.Path)\OrgMode\enum\OrgWarningType.ps1"
+    # classes
     . "$($Source.Path)\OrgMode\classes\OrgRepeater.ps1"
     . "$($Source.Path)\OrgMode\classes\OrgWarning.ps1"
     . "$($Source.Path)\OrgMode\classes\OrgTimeStamp.ps1"
 }
 BeforeAll {
+    # enums
     . "$($Source.Path)\OrgMode\enum\OrgType.ps1"
+    . "$($Source.Path)\OrgMode\enum\OrgTimeUnit.ps1"
     . "$($Source.Path)\OrgMode\enum\OrgRepeatType.ps1"
     . "$($Source.Path)\OrgMode\enum\OrgWarningType.ps1"
+    # classes
     . "$($Source.Path)\OrgMode\classes\OrgRepeater.ps1"
     . "$($Source.Path)\OrgMode\classes\OrgWarning.ps1"
     . "$($Source.Path)\OrgMode\classes\OrgTimeStamp.ps1"
