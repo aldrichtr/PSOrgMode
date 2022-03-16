@@ -1,6 +1,9 @@
 
+BeforeAll {
+    . "$($Source.Path)\Parser\private\RegexPatterns\Build-OrgTimeStampRegex.ps1"
+}
 
-Describe "Build-OrgModeTimeStampRegex function" -Tags @('unit', 'Build', 'OrgModeTimeStampRegex'){
+Describe "Build-OrgTimeStampRegex function" -Tags @('unit', 'Build', 'OrgTimeStampRegex'){
     Context "When the function is invoked" {
         BeforeAll {
             $t = Build-OrgTimeStampRegex

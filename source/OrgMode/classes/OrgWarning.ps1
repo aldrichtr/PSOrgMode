@@ -5,7 +5,7 @@ class OrgWarning {
     [int]$Value
 
     OrgWarning() {
-        $this.Value = $null
+        $this.Value = 0
         $this.Unit  = [OrgTimeUnit]::none
         $this.Type  = [OrgWarningType]::none
     }

@@ -1,5 +1,19 @@
 
+BeforeAll {
+    # enums
+    . "$($Source.Path)\OrgMode\enum\OrgType.ps1"
+    # classes
+    . "$($Source.Path)\OrgMode\classes\OrgElement.ps1"
+    . "$($Source.Path)\OrgMode\classes\OrgHeadline.ps1"
+    # functions
+    . "$($Source.Path)\OrgMode\public\Element\New-OrgElement.ps1"
 
+    . "$($Source.Path)\Parser\private\RegexPatterns\Build-OrgHeadlineRegex.ps1"
+    . "$($Source.Path)\Parser\private\Get-OrgModeRegexPattern.ps1"
+
+    . "$($Source.Path)\Parser\private\ConvertFrom-OrgHeadline.ps1"
+
+}
 Describe "Testing private Parser function ConvertFrom-OrgHeadline" -Tags @('unit', 'OrgHeadline', 'ConvertFrom' ) {
     Context "Basic functionality" {
         It "Should load without error" {
