@@ -1,0 +1,5 @@
+## Custom load order for the dev environment.
+## See the .psm1 for how this file is read.
+
+enum\ElementType.ps1
+classes\Element.psm1
