@@ -14,16 +14,10 @@
     #region Module Components
 
     RootModule = 'PSOrgMode.psm1'
-    ScriptsToProcess = @("scripts/loadSubModules.ps1")
+    ScriptsToProcess = @()
     # TypesToProcess = @()
     # FormatsToProcess = @()
-    NestedModules = @(
-      @{
-        ModuleName = 'OrgMode'
-        GUID = '318a6601-d6cb-431a-96a3-e12ffa11349d'
-        ModuleVersion = '0.1.0'
-      }
-    )
+    NestedModules = @()
 
     ModuleList = ''
     FileList = @()
@@ -51,7 +45,7 @@
     # PowershellHostName = ''
     # PowershellHestVersion = ''
     # RequiredModules = ''
-    # RequiredAssemblies = ''
+    RequiredAssemblies = @( '../assemblies/OrgMode.dll')
     # ProcessorArchitecture = ''
     # DotNetFrameworkVersion = ''
     # CLRVersion = ''
