@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+    <!-- Project directories -->
+    <PropertyGroup>
+        <RootDirectory>$(MSBuildThisFileDirectory)</RootDirectory>
+        <SourceDirectory>$(RootDirectory)\source</SourceDirectory>
+        <StageDirectory>$(RootDirectory)\stage</StageDirectory>
+
+        <!-- TODO: This isn't right.  Final product should be in out? -->
+        <!-- TODO: Maybe a release or a publish directory -->
+
+        <!-- Everything will be built in the out directory-->
+        <BaseOutputPath>$(RootDirectory)\out</BaseOutputPath>
+
+        <BaseIntermediateOutputPath>$(BaseOutputPath)\obj</BaseIntermediateOutputPath>
+        <OutDir>$(StageDirectory)\$(MSBuildProjectName)</OutDir>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    </PropertyGroup>
+</Project>
