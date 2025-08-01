@@ -4,21 +4,26 @@
         {
             "label": "Build the module",
             "type": "shell",
-            "command": "Invoke-Build Build"
-        },
-        {
-            "label": "Run tests",
-            "type":"shell",
-            "command": "Invoke-Build Test -TestTag ${input:TestTag}",
+            "command": "Invoke-Build Build",
             "group": {
-                "kind": "test",
+                "kind": "build",
                 "isDefault": true
             }
         },
         {
+            "label": "Run tests",
+            "type": "shell",
+            "command": "Invoke-Build Test",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": ["$pester"]
+        },
+        {
             "label": "Clean generated files",
             "type": "shell",
-            "command":"Invoke-Build Clean"
+            "command": "Invoke-Build Clean"
         }
     ],
     "inputs": [
