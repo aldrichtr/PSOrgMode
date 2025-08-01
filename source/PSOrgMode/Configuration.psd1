@@ -1,0 +1,5 @@
+@{
+  ToDo = @{
+    Keywords = @('TODO', 'DONE')
+  }
+}
